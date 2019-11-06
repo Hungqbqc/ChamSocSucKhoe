@@ -13,7 +13,9 @@ import DatePicker from 'react-native-datepicker';
 import RadioForm from 'react-native-simple-radio-button';
 import { Dropdown, DropDownData } from 'react-native-material-dropdown';
 import {
-  CAP_NHAT_THONG_TIN_CALO_THANH_VIEN_ACTION,
+  CAP_NHAT_THONG_TIN_CALO_THANH_VIEN,
+  DATE_FORMAT,
+  DATE_FORMAT_COMPARE
 } from '../../asset/MyConst';
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
@@ -59,7 +61,7 @@ class CaloComponent extends Component {
       ngaySinh:
         this.props.data.info.ngaySinh === ''
           ? moment()
-          : this.props.data.info.ngaySinh,
+          : moment(this.props.data.info.ngaySinh, DATE_FORMAT),
       chieuCao: this.props.data.info.chieuCao, // Chiều cao
       canNang: this.props.data.info.canNang, // Cân nặng
       mucDoHoatDong: Number(this.props.data.info.mucDoHoatDong), // Mức độ hoạt động thể chất
@@ -100,7 +102,7 @@ class CaloComponent extends Component {
         "',`GioiTinh`=" +
         this.state.gioiTinh +
         ',`NgaySinh`=' +
-        moment(this.state.ngaySinh, 'DD/MM/YYYY').format('DDMMYYYY') +
+        moment(this.state.ngaySinh, DATE_FORMAT).format(DATE_FORMAT_COMPARE) +
         ',`ChieuCao`=' +
         this.state.chieuCao +
         ',`CanNang`=' +
@@ -111,25 +113,8 @@ class CaloComponent extends Component {
         this.state.nhuCauNangLuong +
         ' WHERE Id = ' +
         this.state.id;
-      // fetch(this.URLLayThongTinThanhVien, {
-      //   method: 'POST',
-      //   headers: {
-      //     Accept: 'application/json',
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({
-      //     loai: '4',
-      //     sql_Query: sql_Query,
-      //   }),
-      // })
-      //   .then(response => response.json())
-      //   .then(responseJson => { })
-      //   .catch(error => {
-      //     console.error(error);
-      //   });
-
       this.props.capNhatThongTinCaloThanhVienAsync(
-        CAP_NHAT_THONG_TIN_CALO_THANH_VIEN_ACTION,
+        CAP_NHAT_THONG_TIN_CALO_THANH_VIEN,
         { query: sql_Query });
     }
   }
@@ -159,7 +144,7 @@ class CaloComponent extends Component {
     if (this.state.ngaySinh === '') {
       soTuoi = '0';
     } else {
-      soTuoi = year - moment(this.state.ngaySinh, 'DDMMYYYY').year();
+      soTuoi = year - moment(this.state.ngaySinh, DATE_FORMAT_COMPARE).year();
     }
     this.setState({
       soTuoi: soTuoi,
@@ -266,7 +251,7 @@ class CaloComponent extends Component {
                 date={this.state.ngaySinh}
                 style={styles.ngaySinh}
                 mode="date"
-                format="DD/MM/YYYY"
+                format="YYYY/MM/DD"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
                 onDateChange={date => {

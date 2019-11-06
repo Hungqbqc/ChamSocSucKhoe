@@ -90,19 +90,16 @@ const TabNavigator = createMaterialBottomTabNavigator(
     }
   },
   {
-    initialRouteName: 'DiaryScreen',
+    initialRouteName: 'CaloScreen',
     barStyle: { backgroundColor: '#3BAD87' }
   }
 )
 
 const AppContainer = createAppContainer(TabNavigator)
 
-class ManHinhChinhActivity extends React.Component {
+export default class ManHinhChinhActivity extends React.Component {
   constructor(props) {
     super(props)
-    // soThanhVien = this.props.soThanhVien;
-    // email = this.props.navigation.getParam('email');
-    // navigation = this.props.navigation;
   }
   static navigationOptions = {
     header: null
@@ -111,14 +108,3 @@ class ManHinhChinhActivity extends React.Component {
     return <AppContainer />
   }
 }
-
-function mapStateToProps(state) {
-  return {
-    myNavigation: state.myNavigation
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  actions
-)(ManHinhChinhActivity)

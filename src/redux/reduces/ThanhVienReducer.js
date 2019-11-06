@@ -12,8 +12,6 @@ export default function (state = initialState, action) {
       {
         return { ...state, soThanhVien: action.soThanhVien }
       }
-    // case LAY_THONG_TIN_CALO_THANH_VIEN:
-    //   return { ...state, thongTinThanhVien: action.thongTinThanhVien }
     default:
       return state
   }

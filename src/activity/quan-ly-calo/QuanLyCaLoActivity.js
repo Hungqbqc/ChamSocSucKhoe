@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import { TabView, SceneMap, TabViewAnimated } from 'react-native-tab-view'
 import CaloComponent from '../../components/quan-ly-calo/CaloComponent'
-import { LAY_THONG_TIN_CALO_THANH_VIEN_ACTION } from '../../asset/MyConst'
+import { LAY_THONG_TIN_CALO_THANH_VIEN } from '../../asset/MyConst'
 import { connect } from 'react-redux'
 import * as actions from '../../redux/actions'
 class QuanLyCaLoActivity extends React.Component {
@@ -25,11 +25,11 @@ class QuanLyCaLoActivity extends React.Component {
   }
 
   async componentDidMount() {
-    this.LayDuLieu();
+    await this.LayDuLieu()
   }
 
   async LayDuLieu() {
-    this.props.layThongTinThanhVienAsync(LAY_THONG_TIN_CALO_THANH_VIEN_ACTION, { email: this.props.email });
+    this.props.layThongTinThanhVienAsync(LAY_THONG_TIN_CALO_THANH_VIEN, { email: this.props.email })
   }
   _handleIndexChange = index => {
     this.props.chonTabThanhVien(index);
