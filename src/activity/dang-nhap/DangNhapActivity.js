@@ -16,7 +16,7 @@ import {
   COLOR_PINK_MEDIUM,
 } from '../../asset/MyColor';
 import {
-  DANG_NHAP_ACTION,
+  DANG_NHAP,
 } from "../../asset/MyConst";
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
@@ -27,8 +27,8 @@ class DangNhapActivity extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      email: '1',
-      password: '1',
+      email: '2',
+      password: '2',
       errorMessage: null
     }
   }
@@ -39,7 +39,7 @@ class DangNhapActivity extends Component {
   async handleLogin() {
     const { email, password } = this.state
     if (email.trim() !== '' && password.trim() !== '') {
-      this.props.dangNhapAsync(DANG_NHAP_ACTION, { email, password }).then(success => {
+      this.props.dangNhapAsync(DANG_NHAP, { email, password }).then(success => {
         if (this.props.trangThaiDangNhap) {
           if (this.props.soThanhVien > 0) {
             this.props.myNavigation.navigate('ManHinhChinhActivity')

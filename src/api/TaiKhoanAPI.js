@@ -1,4 +1,4 @@
-import { DANG_NHAP_ACTION, DANG_KY_ACTION, URL_DANG_NHAP, URL_DANG_KY } from "../asset/MyConst";
+import { DANG_NHAP, DANG_KY, URL_DANG_NHAP, URL_DANG_KY } from "../asset/MyConst";
 import moment from 'moment';
 function DangNhap(email, password) {
     return fetch(URL_DANG_NHAP, {
@@ -37,9 +37,9 @@ function DangKy(data) {
 
 export default function taiKhoan(type, data) {
     switch (type) {
-        case DANG_NHAP_ACTION:
+        case DANG_NHAP:
             return DangNhap(data.email, data.password)
-        case DANG_KY_ACTION:
+        case DANG_KY:
             return DangKy(data)
     }
 }

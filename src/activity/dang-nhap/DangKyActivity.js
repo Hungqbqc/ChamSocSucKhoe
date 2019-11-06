@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import { DANG_KY_ACTION } from '../../asset/MyConst';
+import { DANG_KY } from '../../asset/MyConst';
 import {
   COLOR_DEEPSKY_BLUE,
 } from '../../asset/MyColor';
@@ -28,7 +28,7 @@ class DangKyActivity extends Component {
   handleSignUp = () => {
     const { email, password, name } = this.state;
     if (email.trim() != '' && password.trim() != '') {
-      this.props.dangKyAsync(DANG_KY_ACTION, { email, password, name }).then(success => {
+      this.props.dangKyAsync(DANG_KY, { email, password, name }).then(success => {
         if (this.props.trangThaiDangKy) {
           Alert.alert('Đăng ký thành công!');
           this.props.navigation.navigate('DangNhapActivity');

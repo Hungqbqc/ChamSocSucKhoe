@@ -1,20 +1,26 @@
+// import {
+//   DEM_SO_THANH_VIEN,
+//   CHON_TAB_THANH_VIEN,
+//   DANG_NHAP,
+//   DANG_KY,
+//   KHOI_DONG_APP,
+//   LAY_THONG_TIN_CALO_THANH_VIEN,
+//   THEM_SO_THANH_VIEN,
+//   LAY_THUC_DON,
+//   CHON_NGAY_THUC_DON,
+//   CHON_BUA_AN
+// } from './type'
 import {
-  DEM_THANH_VIEN,
+  DEM_SO_THANH_VIEN,
   CHON_TAB_THANH_VIEN,
   DANG_NHAP,
   DANG_KY,
   KHOI_DONG_APP,
   LAY_THONG_TIN_CALO_THANH_VIEN,
-  THEM_THANH_VIEN,
+  THEM_SO_THANH_VIEN,
   LAY_THUC_DON,
   CHON_NGAY_THUC_DON,
   CHON_BUA_AN
-} from './type'
-import {
-  DANG_NHAP_ACTION,
-  DANG_KY_ACTION,
-  THEM_SO_THANH_VIEN_ACTION,
-  DEM_SO_THANH_VIEN_ACTION
 } from "../../asset/MyConst";
 
 // import * as thanhVien from './thanhVienAction'
@@ -39,7 +45,7 @@ export function dangNhapAsync(type, data) {
         dispatch(demSoThanhVien(0))
       } else {
         dispatch(dangNhap(data.email, data.password, true))
-        await thongTinThanhVien(DEM_SO_THANH_VIEN_ACTION, data).then(result => {
+        await thongTinThanhVien(DEM_SO_THANH_VIEN, data).then(result => {
           dispatch(demSoThanhVien(result))
         })
       }
@@ -66,7 +72,7 @@ export function dangKyAsync(type, data) {
 
 // Quản lý thành viên
 // export const demSoThanhVien = soThanhVien => ({
-//   type: DEM_THANH_VIEN,
+//   type: DEM_SO_THANH_VIEN,
 //   soThanhVien
 // })
 
@@ -82,7 +88,7 @@ export const layThongTinCaloThanhVien = routes => ({
 
 // Đếm số thành viên
 export const demSoThanhVien = soThanhVien => ({
-  type: DEM_THANH_VIEN,
+  type: DEM_SO_THANH_VIEN,
   soThanhVien
 })
 export function demSoThanhVienAsync(type, data) {
@@ -95,10 +101,13 @@ export function demSoThanhVienAsync(type, data) {
 
 // Thêm số thành viên
 export const themSoThanhVien = (soThanhVien) => ({
-  type: THEM_THANH_VIEN,
+  type: THEM_SO_THANH_VIEN,
   soThanhVien,
 })
 export function themSoThanhVienAsync(type, data) {
+  console.log('themSoThanhVienAsync',type);
+  console.log('themSoThanhVienAsync',data);
+  
   return async dispatch => {
     await thongTinThanhVien(type, data).then(result => {
       dispatch(themSoThanhVien(data.soThanhVien))

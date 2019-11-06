@@ -1,4 +1,4 @@
-import { CHON_TAB_THANH_VIEN, LAY_THONG_TIN_CALO_THANH_VIEN } from '../actions/type'
+import { CHON_TAB_THANH_VIEN, LAY_THONG_TIN_CALO_THANH_VIEN } from '../../asset/MyConst'
 
 const initialState = {
   index: 0,

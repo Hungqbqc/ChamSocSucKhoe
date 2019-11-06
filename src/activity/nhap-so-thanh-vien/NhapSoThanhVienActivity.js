@@ -7,7 +7,7 @@ import {
   COLOR_WHITE,
 } from '../../asset/MyColor';
 
-import { THEM_SO_THANH_VIEN_ACTION } from "../../asset/MyConst";
+import { THEM_SO_THANH_VIEN } from "../../asset/MyConst";
 import NumericInput from 'react-native-numeric-input';
 import { connect } from 'react-redux'
 import * as actions from '../../redux/actions'
@@ -28,16 +28,10 @@ class NhapSoThanhVienActivity extends Component {
     await this.setStateAsync({ soThanhVien: value < 0 ? 0 : value });
   }
 
-  componentDidMount(
-
-  ) {
-  }
-
-
   // Nhấn nút Next thì chuyển sang màn hình k
   onPress = () => {
     const { soThanhVien } = this.state;
-    this.props.themSoThanhVienAsync(THEM_SO_THANH_VIEN_ACTION, { email: this.props.email, soThanhVien: soThanhVien }).then(() => {
+    this.props.themSoThanhVienAsync(THEM_SO_THANH_VIEN, { email: this.props.email, soThanhVien: soThanhVien }).then(() => {
       if (this.props.soThanhVien > 0) {
         this.props.myNavigation.navigate('ManHinhChinhActivity')
       }

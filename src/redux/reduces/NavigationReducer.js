@@ -1,4 +1,4 @@
-import { KHOI_DONG_APP } from '../actions/type'
+import { KHOI_DONG_APP } from '../../asset/MyConst'
 
 const initialState = null
 

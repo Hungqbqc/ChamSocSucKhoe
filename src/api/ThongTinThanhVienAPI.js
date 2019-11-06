@@ -1,9 +1,9 @@
 import {
-  DEM_SO_THANH_VIEN_ACTION,
-  LAY_THONG_TIN_CALO_THANH_VIEN_ACTION,
-  THEM_SO_THANH_VIEN_ACTION,
+  DEM_SO_THANH_VIEN,
+  LAY_THONG_TIN_CALO_THANH_VIEN,
+  THEM_SO_THANH_VIEN,
   URL_THONG_TIN_THANH_VIEN,
-  CAP_NHAT_THONG_TIN_CALO_THANH_VIEN_ACTION
+  CAP_NHAT_THONG_TIN_CALO_THANH_VIEN
 } from '../asset/MyConst'
 
 function LaySoThanhVien(email) {
@@ -15,7 +15,7 @@ function LaySoThanhVien(email) {
     },
     body: JSON.stringify({
       email: email,
-      loai: DEM_SO_THANH_VIEN_ACTION
+      loai: DEM_SO_THANH_VIEN
     })
   })
     .then(response => response.json())
@@ -30,7 +30,7 @@ function LayThongTinThanhVien(email) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      loai: LAY_THONG_TIN_CALO_THANH_VIEN_ACTION,
+      loai: LAY_THONG_TIN_CALO_THANH_VIEN,
       email: email
     })
   })
@@ -68,7 +68,7 @@ function ThemThanhVien(email, soThanhVien) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      loai: THEM_SO_THANH_VIEN_ACTION,
+      loai: THEM_SO_THANH_VIEN,
       email: email,
       soNguoi: soThanhVien,
     }),
@@ -85,7 +85,7 @@ function CapNhatThongTinThanhVien(query) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      loai: CAP_NHAT_THONG_TIN_CALO_THANH_VIEN_ACTION,
+      loai: CAP_NHAT_THONG_TIN_CALO_THANH_VIEN,
       sql_Query: query,
     }),
   })
@@ -99,13 +99,13 @@ function CapNhatThongTinThanhVien(query) {
 
 export default function thongTinThanhVien(type = 1, data) {
   switch (type) {
-    case DEM_SO_THANH_VIEN_ACTION:
+    case DEM_SO_THANH_VIEN:
       return LaySoThanhVien(data.email);
-    case LAY_THONG_TIN_CALO_THANH_VIEN_ACTION:
+    case LAY_THONG_TIN_CALO_THANH_VIEN:
       return LayThongTinThanhVien(data.email);
-    case THEM_SO_THANH_VIEN_ACTION:
+    case THEM_SO_THANH_VIEN:
       return ThemThanhVien(data.email, data.soThanhVien);
-    case CAP_NHAT_THONG_TIN_CALO_THANH_VIEN_ACTION:
+    case CAP_NHAT_THONG_TIN_CALO_THANH_VIEN:
       return CapNhatThongTinThanhVien(data.query);
 
   };

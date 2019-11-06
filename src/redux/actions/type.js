@@ -7,9 +7,9 @@ export const KHOI_DONG_APP = 'KHOI_DONG_APP';
 
 /* Quản lý thành viên   */
 // Đếm số thành viên
-export const DEM_THANH_VIEN = 'DEM_THANH_VIEN';
+export const DEM_SO_THANH_VIEN = 'DEM_SO_THANH_VIEN';
 // Thêm thành viên khi chọn số người
-export const THEM_THANH_VIEN = 'THEM_THANH_VIEN';
+export const THEM_SO_THANH_VIEN = 'THEM_SO_THANH_VIEN';
 // lấy thông tin thành viên
 export const LAY_THONG_TIN_THANH_VIEN = 'LAY_THONG_TIN_THANH_VIEN';
 // Cập nhật thông tin thành viên

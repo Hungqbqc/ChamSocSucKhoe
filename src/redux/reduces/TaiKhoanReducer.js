@@ -1,4 +1,4 @@
-import { DANG_NHAP, DANG_KY } from '../actions/type';
+import { DANG_NHAP, DANG_KY } from '../../asset/MyConst'
 
 const initialState = {
   email: '',

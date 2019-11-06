@@ -1,4 +1,4 @@
-import { LAY_THUC_DON, CHON_NGAY_THUC_DON, CHON_BUA_AN } from '../actions/type';
+import { LAY_THUC_DON, CHON_NGAY_THUC_DON, CHON_BUA_AN } from '../../asset/MyConst'
 import moment from 'moment';
 
 const initialState = {
