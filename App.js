@@ -10,7 +10,7 @@ import ManHinhChinhActivity from './src/activity/man-hinh-chinh/ManHinhChinhActi
 import DanhSachDanhMucMonAnActivity from './src/activity/quan-ly-thuc-don/DanhSachDanhMucMonAnActivity';
 import DanhSachMonAnActivity from './src/activity/quan-ly-thuc-don/DanhSachMonAnActivity';
 import ChiTietMonAnActivity from './src/activity/quan-ly-thuc-don/ChiTietMonAnActivity';
-import DemoActivity from './src/activity/DemoActivity';
+import Demo from './src/activity/quan-ly-calo/Demo';
 import {Provider} from 'react-redux';
 import store from './src/redux/store/store';
 const RootStack = createStackNavigator(
@@ -23,10 +23,10 @@ const RootStack = createStackNavigator(
     BaoCaoActivity: BaoCaoActivity,
     DanhSachMonAnActivity: DanhSachMonAnActivity,
     ChiTietMonAnActivity: ChiTietMonAnActivity,
-    DemoActivity: DemoActivity,
+    Demo: Demo,
   },
   {
-    initialRouteName: 'DemoActivity',
+    initialRouteName: 'DangNhapActivity',
   },
 );
 

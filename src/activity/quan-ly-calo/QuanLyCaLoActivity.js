@@ -9,7 +9,9 @@ import {
 import {TabView, SceneMap, TabViewAnimated} from 'react-native-tab-view';
 import {CaloComponent} from '../../components/quan-ly-calo/CaloComponent';
 import {IP_SERVER, URLThongTinThanhVien} from '../../asset/MyColor';
-export class QuanLyCaLoActivity extends React.Component {
+import { connect } from 'react-redux'
+import * as actions from '../../redux/actions'
+class QuanLyCaLoActivity extends React.Component {
   URLLayThongTinThanhVien = IP_SERVER + URLThongTinThanhVien;
 
   static navigationOptions = {
@@ -43,7 +45,7 @@ export class QuanLyCaLoActivity extends React.Component {
       body: JSON.stringify({
         loai: '2',
         email: this.props.email,
-        soNguoi: this.state.soThanhVien,
+        soNguoi: this.props.soThanhVien,
       }),
     })
       .then(response => response.json())
@@ -90,5 +92,16 @@ export class QuanLyCaLoActivity extends React.Component {
     });
   }
 }
+function mapStateToProps (state) {
+  return {
+    email: state.taiKhoan.email,
+    soThanhVien: state.soThanhVien,
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  actions
+)(QuanLyCaLoActivity)
 
 const styles = StyleSheet.create({});
