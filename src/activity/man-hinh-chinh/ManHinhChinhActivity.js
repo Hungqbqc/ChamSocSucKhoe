@@ -4,10 +4,11 @@ import { View, Text, StyleSheet, processColor } from 'react-native'
 
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs'
 import Icon from 'react-native-vector-icons/Ionicons'
-import  QuanLyCaLoActivity  from '../quan-ly-calo/QuanLyCaLoActivity'
+import QuanLyCaLoActivity from '../quan-ly-calo/QuanLyCaLoActivity'
 import { QuanLyThongTinCaNhanActivity } from '../quan-ly-thong-tin-ca-nhan/QuanLyThongTinCaNhanActivity'
 import { QuanLyThucDonActivity } from '../quan-ly-thuc-don/QuanLyThucDonActivity'
-import DangNhapActivity from '../dang-nhap/DangNhapActivity'
+import { connect } from 'react-redux'
+import * as actions from '../../redux/actions'
 var soThanhVien = 1
 var email = ''
 var navigation = null
@@ -96,7 +97,7 @@ const TabNavigator = createMaterialBottomTabNavigator(
 
 const AppContainer = createAppContainer(TabNavigator)
 
-export default class ManHinhChinhActivity extends React.Component {
+class ManHinhChinhActivity extends React.Component {
   constructor (props) {
     super(props)
     // soThanhVien = this.props.soThanhVien;
@@ -110,3 +111,16 @@ export default class ManHinhChinhActivity extends React.Component {
     return <AppContainer />
   }
 }
+
+
+function mapStateToProps (state) {
+  return {
+    myNavigation: state.myNavigation,
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  actions
+)(ManHinhChinhActivity)
+

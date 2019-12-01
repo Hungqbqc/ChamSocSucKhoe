@@ -54,7 +54,7 @@ export class QuanLyThucDonActivity extends Component {
   async componentDidMount() {
     await this.layDuLieu(moment().format('DD/MM/YYYY'));
     this.focusListener = this.state.navigation.addListener('didFocus', () => {
-      this.dem += 1;
+      alert(1)
       this.layDuLieu(this.state.ngayChon);
     });
   }
