@@ -16,7 +16,7 @@ var navigation = null
 // Tab calo
 class CaloScreen extends React.Component {
   render () {
-    return <QuanLyCaLoActivity soThanhVien={soThanhVien} email={email} />
+    return <QuanLyCaLoActivity />
   }
 }
 
@@ -112,10 +112,9 @@ class ManHinhChinhActivity extends React.Component {
   }
 }
 
-
 function mapStateToProps (state) {
   return {
-    myNavigation: state.myNavigation,
+    myNavigation: state.myNavigation
   }
 }
 
@@ -123,4 +122,3 @@ export default connect(
   mapStateToProps,
   actions
 )(ManHinhChinhActivity)
-

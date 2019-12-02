@@ -8,6 +8,7 @@ import CaloReducer from './CaloReducer'
 export default combineReducers({
   counter: counterReducer,
   taiKhoan: TaiKhoanReducer,
+  thanhVien: ThanhVienReducer,
   myNavigation: NavigationReducer,
   quanLyCalo: CaloReducer
 })

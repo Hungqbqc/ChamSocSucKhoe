@@ -6,8 +6,8 @@ import {
   LAY_THONG_TIN_CALO_THANH_VIEN
 } from './type'
 
-import taiKhoan from '../../api/TaiKhoanAPI';
-import thongTinThanhVien from '../../api/ThongTinThanhVienAPI';
+import taiKhoan from '../../api/TaiKhoanAPI'
+import thongTinThanhVien from '../../api/ThongTinThanhVienAPI'
 
 export const counterIncrease = () => ({ type: INCREASE })
 export const dangNhap = (email, password) => ({
@@ -28,28 +28,26 @@ export const layThongTinCaloThanhVien = routes => ({
   routes
 })
 
-export function dangNhapAsync(type, data) {
+export function dangNhapAsync (type, data) {
   return async dispatch => {
-    await taiKhoan(type, data)
-      .then(e => {
-        if (e === 0) {
-          dispatch(dangNhap('', ''))
-        } else {
-          dispatch(dangNhap(data.email, data.password))
-          thongTinThanhVien(type, data)
-            .then(result => {
-              dispatch(demSoThanhVien(result))
-            })
-        }
-      })
-  };
+    await taiKhoan(type, data).then(async e => {
+      if (e === 0) {
+        dispatch(dangNhap('', ''))
+        dispatch(demSoThanhVien(0))
+      } else {
+        dispatch(dangNhap(data.email, data.password))
+        await thongTinThanhVien(type, data).then(result => {
+          dispatch(demSoThanhVien(result))
+        })
+      }
+    })
+  }
 }
 
-export function demSoThanhVienAsync(type, data) {
+export function demSoThanhVienAsync (type, data) {
   return async dispatch => {
-    await thongTinThanhVien(type, data)
-      .then(result => {
-        dispatch(demSoThanhVien(e))
-      })
-  };
+    await thongTinThanhVien(type, data).then(result => {
+      dispatch(demSoThanhVien(result))
+    })
+  }
 }

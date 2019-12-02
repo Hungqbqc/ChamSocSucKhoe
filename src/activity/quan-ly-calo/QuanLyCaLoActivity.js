@@ -8,11 +8,11 @@ import {
 } from 'react-native'
 import { TabView, SceneMap, TabViewAnimated } from 'react-native-tab-view'
 import { CaloComponent } from '../../components/quan-ly-calo/CaloComponent'
-import { IP_SERVER, URLThongTinThanhVien } from '../../asset/MyColor'
+import { IP_SERVER, URL_THONG_TIN_THANH_VIEN } from '../../asset/MyColor'
 import { connect } from 'react-redux'
 import * as actions from '../../redux/actions'
 class QuanLyCaLoActivity extends React.Component {
-  URLLayThongTinThanhVien = IP_SERVER + URLThongTinThanhVien
+  URLLayThongTinThanhVien = IP_SERVER + URL_THONG_TIN_THANH_VIEN
 
   static navigationOptions = {
     header: null
@@ -27,7 +27,7 @@ class QuanLyCaLoActivity extends React.Component {
   }
 
   async componentDidMount () {
-    this.LayDuLieu()
+    // this.LayDuLieu()
     // this.props.myNavigation.addListener('didFocus', () => {
     //   debugger
     //   console.log(5555)
