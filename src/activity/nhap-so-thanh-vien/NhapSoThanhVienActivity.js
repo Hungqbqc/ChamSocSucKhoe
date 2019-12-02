@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import {Button} from 'react-native-elements';
+import React, { Component } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { Button } from 'react-native-elements';
 import {
   COLOR_DEEPSKY_BLUE,
   COLOR_BLUE,
@@ -9,7 +9,9 @@ import {
   URLThongTinThanhVien,
 } from '../../asset/MyColor';
 import NumericInput from 'react-native-numeric-input';
-export default class NhapSoThanhVienActivity extends Component {
+import { connect } from 'react-redux'
+import * as actions from '../../redux/actions'
+class NhapSoThanhVienActivity extends Component {
   URLLayThongTinThanhVien = IP_SERVER + URLThongTinThanhVien;
 
   constructor(props) {
@@ -21,6 +23,9 @@ export default class NhapSoThanhVienActivity extends Component {
     this.state = {
       email: this.props.navigation.getParam('email'),
     };
+
+    this.props.myNavigation.navigate('ManHinhChinhActivity')
+
   }
   static navigationOptions = {
     header: null,
@@ -28,7 +33,12 @@ export default class NhapSoThanhVienActivity extends Component {
 
   // Lưu lại số người
   async numericInputOnchange(value) {
-    await this.setStateAsync({soThanhVien: value < 0 ? 0 : value});
+    await this.setStateAsync({ soThanhVien: value < 0 ? 0 : value });
+  }
+
+  componentDidMount(
+
+  ) {
   }
 
   // Nhấn nút Next thì chuyển sang màn hình k
@@ -90,6 +100,21 @@ export default class NhapSoThanhVienActivity extends Component {
     });
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    myNavigation: state.myNavigation,
+    email: state.taiKhoan.email,
+    password: state.taiKhoan.password
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  actions
+)(NhapSoThanhVienActivity)
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

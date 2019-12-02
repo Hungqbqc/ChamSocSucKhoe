@@ -19,14 +19,14 @@ import {
 } from '../../asset/MyColor'
 import { connect } from 'react-redux'
 import * as actions from '../../redux/actions'
-  class DangNhapActivity extends Component {
+class DangNhapActivity extends Component {
   static navigationOptions = {
     header: null
   }
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
-      email: 'hung',
+      email: '1',
       password: '1',
       errorMessage: null
     }
@@ -34,66 +34,77 @@ import * as actions from '../../redux/actions'
   URLDangNhap = IP_SERVER + 'DangNhap.php'
   URLLaySoThanhVien = IP_SERVER + URLThongTinThanhVien
 
-  handleLogin = () => {
+  componentDidMount() {
+    this.props.khoiDongApp(this.props.navigation)
+  }
+  async handleLogin() {
     const { email, password } = this.state
     if (email.trim() !== '' && password.trim() !== '') {
-      fetch(this.URLDangNhap, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password
-        })
-      })
-        .then(response => response.json())
-        .then(responseJson => {
-          // Nếu đúng tài khoản và mật khẩu
-          if (responseJson === 0) {
-            Alert.alert('Thông báo', 'Đăng nhập thất bại')
-          } else {
-            this.props.dangNhap(email, password)
-            this.props.khoiDongApp(this.props.navigation)
-            fetch(this.URLLaySoThanhVien, {
-              method: 'POST',
-              headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                email: this.state.email,
-                loai: '1'
-              })
-            })
-              .then(response => response.json())
-              .then(json => {
-                if (json !== 0) {
-                  this.props.demSoThanhVien(Number(json))
-                  this.props.myNavigation.navigate('ManHinhChinhActivity')
-                } else {
-                  this.props.demSoThanhVien(0)
-                  this.props.myNavigation.navigate('NhapSoThanhVienActivity')
-                }
-              })
-              .catch(error => {
-                console.error(error)
-              })
-          }
-        })
+      // fetch(this.URLDangNhap, {
+      //   method: 'POST',
+      //   headers: {
+      //     Accept: 'application/json',
+      //     'Content-Type': 'application/json'
+      //   },
+      //   body: JSON.stringify({
+      //     email: email,
+      //     password: password
+      //   })
+      // })
+      //   .then(response => response.json())
+      //   .then(responseJson => {
+      //     // Nếu đúng tài khoản và mật khẩu
+      //     if (responseJson === 0) {
+      //       Alert.alert('Thông báo', 'Đăng nhập thất bại')
+      //     } else {
+      //       this.props.dangNhap(email, password)
+      //       this.props.khoiDongApp(this.props.navigation)
+      //       fetch(this.URLLaySoThanhVien, {
+      //         method: 'POST',
+      //         headers: {
+      //           Accept: 'application/json',
+      //           'Content-Type': 'application/json'
+      //         },
+      //         body: JSON.stringify({
+      //           email: this.state.email,
+      //           loai: '1'
+      //         })
+      //       })
+      //         .then(response => response.json())
+      //         .then(json => {
+      //           if (json !== 0) {
+      //             this.props.demSoThanhVien(Number(json))
+      //             this.props.myNavigation.navigate('ManHinhChinhActivity')
+      //           } else {
+      //             this.props.demSoThanhVien(0)
+      //             this.props.myNavigation.navigate('NhapSoThanhVienActivity')
+      //           }
+      //         })
+      //         .catch(error => {
+      //           console.error(error)
+      //         })
+      //     }
+      //   })
 
-        .catch(error => {
-          console.error(error)
-        })
+      //   .catch(error => {
+      //     console.error(error)
+      //   })
+
+      this.props.dangNhapAsync(1, { email, password }).then((success) => {
+        if (this.props.email != '' && this.props.password != '') {
+          this.props.myNavigation.navigate('NhapSoThanhVienActivity')
+        }
+        else {
+          Alert.alert('Thông báo', 'Đăng nhập thất bại')
+        }
+      })
     } else {
       Alert.alert('Chú ý!', 'Email hoặc mật khẩu không được để trống', {
         cancelable: true
       })
     }
   }
-
-  render () {
+  render() {
     return (
       // Donot dismis Keyboard when click outside of TextInput
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -131,7 +142,7 @@ import * as actions from '../../redux/actions'
               />
             </View>
             <TouchableOpacity
-              onPress={this.handleLogin}
+              onPress={() => this.handleLogin()}
               style={styles.loginButton}
             >
               <Text style={styles.loginButtonTitle}>Đăng nhập</Text>
@@ -155,9 +166,11 @@ import * as actions from '../../redux/actions'
   }
 }
 
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   return {
     myNavigation: state.myNavigation,
+    email: state.taiKhoan.email,
+    password: state.taiKhoan.password
   }
 }
 

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import {IP_SERVER, DATE_FORMAT_COMPARE} from '../../asset/MyColor';
+import { IP_SERVER, DATE_FORMAT_COMPARE } from '../../asset/MyColor';
 import moment from 'moment';
 import {
   COLOR_PINK,
@@ -28,8 +28,12 @@ export default class DangKyActivity extends Component {
   };
   URLDangKy = IP_SERVER + 'DangKy.php';
   handleSignUp = () => {
-    const {email, password, name} = this.state;
+    const { email, password, name } = this.state;
     if (email.trim() != '' && password.trim() != '') {
+      console.log(1, email);
+      console.log(2, password);
+      console.log(3, name);
+
       fetch(this.URLDangKy, {
         method: 'POST',
         headers: {
@@ -45,6 +49,8 @@ export default class DangKyActivity extends Component {
       })
         .then(response => response.json())
         .then(responseJson => {
+          console.log(22, responseJson);
+
           if (responseJson === 1) {
             // Lấy thông tin thành viên để chuyển trang
             Alert.alert('Đăng ký thành công!');
@@ -62,16 +68,16 @@ export default class DangKyActivity extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={{fontSize: 25, marginBottom: 30}}>Đăng ký</Text>
+        <Text style={{ fontSize: 25, marginBottom: 30 }}>Đăng ký</Text>
         {this.state.errorMessage && (
-          <Text style={{color: 'red'}}>{this.state.errorMessage}</Text>
+          <Text style={{ color: 'red' }}>{this.state.errorMessage}</Text>
         )}
         <View style={styles.hoTen}>
           <Text>Họ tên</Text>
           <TextInput
             autoCapitalize="none"
             style={styles.textInput}
-            onChangeText={name => this.setState({name})}
+            onChangeText={name => this.setState({ name })}
             value={this.state.name}
           />
         </View>
@@ -80,7 +86,7 @@ export default class DangKyActivity extends Component {
           <TextInput
             autoCapitalize="none"
             style={styles.textInput}
-            onChangeText={email => this.setState({email})}
+            onChangeText={email => this.setState({ email })}
             value={this.state.email}
           />
         </View>
@@ -90,7 +96,7 @@ export default class DangKyActivity extends Component {
             secureTextEntry
             autoCapitalize="none"
             style={styles.textInput}
-            onChangeText={password => this.setState({password})}
+            onChangeText={password => this.setState({ password })}
             value={this.state.password}
           />
         </View>
@@ -100,7 +106,7 @@ export default class DangKyActivity extends Component {
             secureTextEntry
             autoCapitalize="none"
             style={styles.textInput}
-            onChangeText={confirmPass => this.setState({confirmPass})}
+            onChangeText={confirmPass => this.setState({ confirmPass })}
             value={this.state.confirmPass}
           />
         </View>
@@ -108,14 +114,14 @@ export default class DangKyActivity extends Component {
         <TouchableOpacity
           onPress={this.handleSignUp}
           style={styles.signInButton}>
-          <Text style={{fontSize: 20}}>Đăng ký</Text>
+          <Text style={{ fontSize: 20 }}>Đăng ký</Text>
         </TouchableOpacity>
         <Text>
           {' '}
           Đã có tài khoản?{' '}
           <Text
             onPress={() => this.props.navigation.navigate('DangNhapActivity')}
-            style={{color: '#e93766', fontSize: 18}}>
+            style={{ color: '#e93766', fontSize: 18 }}>
             {' '}
             Đăng nhập{' '}
           </Text>

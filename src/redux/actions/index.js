@@ -6,6 +6,9 @@ import {
   LAY_THONG_TIN_CALO_THANH_VIEN
 } from './type'
 
+import taiKhoan from '../../api/TaiKhoanAPI';
+import thongTinThanhVien from '../../api/ThongTinThanhVienAPI';
+
 export const counterIncrease = () => ({ type: INCREASE })
 export const dangNhap = (email, password) => ({
   type: DANG_NHAP,
@@ -24,3 +27,29 @@ export const layThongTinCaloThanhVien = routes => ({
   type: LAY_THONG_TIN_CALO_THANH_VIEN,
   routes
 })
+
+export function dangNhapAsync(type, data) {
+  return async dispatch => {
+    await taiKhoan(type, data)
+      .then(e => {
+        if (e === 0) {
+          dispatch(dangNhap('', ''))
+        } else {
+          dispatch(dangNhap(data.email, data.password))
+          thongTinThanhVien(type, data)
+            .then(result => {
+              dispatch(demSoThanhVien(result))
+            })
+        }
+      })
+  };
+}
+
+export function demSoThanhVienAsync(type, data) {
+  return async dispatch => {
+    await thongTinThanhVien(type, data)
+      .then(result => {
+        dispatch(demSoThanhVien(e))
+      })
+  };
+}
