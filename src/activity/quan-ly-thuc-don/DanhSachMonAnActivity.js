@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import {IP_SERVER} from '../../asset/MyColor';
+import {IP_SERVER} from '../../asset/MyConst';
 export default class DanhSachMonAnActivity extends Component {
   static navigationOptions = {
     title: 'Món chay',

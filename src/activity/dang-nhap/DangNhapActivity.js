@@ -14,10 +14,10 @@ import {
   COLOR_PINK,
   COLOR_PINK_LIGHT,
   COLOR_PINK_MEDIUM,
-  IP_SERVER,
-  URLThongTinThanhVien
 } from '../../asset/MyColor';
-import { DANG_NHAP_ACTION } from "../../asset/MyConst";
+import {
+  DANG_NHAP_ACTION,
+} from "../../asset/MyConst";
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
 class DangNhapActivity extends Component {
@@ -32,9 +32,6 @@ class DangNhapActivity extends Component {
       errorMessage: null
     }
   }
-  URLDangNhap = IP_SERVER + 'DangNhap.php'
-  URLLaySoThanhVien = IP_SERVER + URLThongTinThanhVien
-
   componentDidMount() {
     this.props.khoiDongApp(this.props.navigation)
   }
@@ -44,9 +41,6 @@ class DangNhapActivity extends Component {
     if (email.trim() !== '' && password.trim() !== '') {
       this.props.dangNhapAsync(DANG_NHAP_ACTION, { email, password }).then(success => {
         if (this.props.email != '' && this.props.password != '') {
-          // debugger;
-          console.log('soThanhVien', this.props.soThanhVien);
-
           if (this.props.soThanhVien > 0) {
             this.props.myNavigation.navigate('ManHinhChinhActivity')
           } else {

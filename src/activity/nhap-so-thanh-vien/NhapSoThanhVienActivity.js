@@ -5,8 +5,6 @@ import {
   COLOR_DEEPSKY_BLUE,
   COLOR_BLUE,
   COLOR_WHITE,
-  IP_SERVER,
-  URLThongTinThanhVien,
 } from '../../asset/MyColor';
 
 import { THEM_SO_THANH_VIEN_ACTION } from "../../asset/MyConst";
@@ -14,8 +12,6 @@ import NumericInput from 'react-native-numeric-input';
 import { connect } from 'react-redux'
 import * as actions from '../../redux/actions'
 class NhapSoThanhVienActivity extends Component {
-  URLLayThongTinThanhVien = IP_SERVER + URLThongTinThanhVien;
-
   constructor(props) {
     super(props);
     this.state = {

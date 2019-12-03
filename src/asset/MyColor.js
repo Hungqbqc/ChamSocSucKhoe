@@ -7,12 +7,4 @@ export const COLOR_PINK_LIGHT = 'rgb(234, 195, 176)';
 export const COLOR_FACEBOOK = '#3b5998';
 export const COLOR_FIREBRICK = 'rgb(178,34,34)';
 export const COLOR_PINK_MEDIUM = 'rgb(255,119,34)';
-export const IP_SERVER = 'http://192.168.0.161/ChamSocSucKhoe/';
-// export const IP_SERVER = 'http://192.168.0.129:8080/ChamSocSucKhoe/';
-// export const IP_SERVER = 'https://chedodinhduong.000webhostapp.com/';
-export const DATE_FORMAT = 'YYYY/MM/DD';
-export const DATE_FORMAT_COMPARE = 'YYYYMMDD';
-export const URL_DANG_NHAP = IP_SERVER + 'DangNhap.php';
-export const URL_DANG_KY = IP_SERVER + 'DangKy.php';
-export const URLThucDon = IP_SERVER + 'ThucDon.php';
-export const URL_THONG_TIN_THANH_VIEN = IP_SERVER + 'LayThongTinThanhVien.php';
+

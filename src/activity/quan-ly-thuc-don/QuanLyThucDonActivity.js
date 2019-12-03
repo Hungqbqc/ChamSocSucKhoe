@@ -1,20 +1,22 @@
-import React, {Component} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, FlatList} from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, FlatList } from 'react-native';
 import {
   COLOR_DEEPSKY_BLUE,
+} from '../../asset/MyColor';
+import {
   IP_SERVER,
   URLThucDon,
   DATE_FORMAT,
   DATE_FORMAT_COMPARE,
-} from '../../asset/MyColor';
-import {DanhSachBuaAnComponent} from '../../components/quan-ly-thuc-don/DanhSachBuaAnComponent';
-import {ScrollView} from 'react-native';
+} from '../../asset/MyConst';
+import { DanhSachBuaAnComponent } from '../../components/quan-ly-thuc-don/DanhSachBuaAnComponent';
+import { ScrollView } from 'react-native';
 import * as Progress from 'react-native-progress';
 import DatePicker from 'react-native-datepicker';
 import moment from 'moment';
 
 export class QuanLyThucDonActivity extends Component {
-  menuList = [{id: '1'}, {id: '2'}, {id: '3'}, {id: '4'}];
+  menuList = [{ id: '1' }, { id: '2' }, { id: '3' }, { id: '4' }];
 
   setStateAsync(state) {
     return new Promise(resolve => {
@@ -36,10 +38,10 @@ export class QuanLyThucDonActivity extends Component {
         NgayTao: '',
         TongNangLuong: '0',
         DanhSachMon: [
-          {LoaiBua: '1', Mon: []},
-          {LoaiBua: '2', Mon: []},
-          {LoaiBua: '3', Mon: []},
-          {LoaiBua: '4', Mon: []},
+          { LoaiBua: '1', Mon: [] },
+          { LoaiBua: '2', Mon: [] },
+          { LoaiBua: '3', Mon: [] },
+          { LoaiBua: '4', Mon: [] },
         ],
       },
       totalCalo: 0,
@@ -171,8 +173,8 @@ export class QuanLyThucDonActivity extends Component {
               this.state.btnSelected === moment(item, 'DD/MM/YYYY').format('DD')
                 ? styles.btnSelected
                 : styles.btnNotSelected,
-              {marginTop: 3},
-              {backgroundColor: 'transparent'},
+              { marginTop: 3 },
+              { backgroundColor: 'transparent' },
             ]}>
             {moment(item, 'DD/MM/YYYY').format('DD')}
           </Text>
@@ -183,22 +185,22 @@ export class QuanLyThucDonActivity extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.calendar}>
-          <View style={{flex: 1, flexDirection: 'row'}}>
-            <View style={{flex: 7}}>
+          <View style={{ flex: 1, flexDirection: 'row' }}>
+            <View style={{ flex: 7 }}>
               <Progress.Bar
                 progress={this.state.progress}
                 width={300}
                 height={25}
               />
             </View>
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
               <DatePicker
                 minDate={this.state.Obj.NgayTao}
                 mode="date"
                 format="DD/MM/YYYY"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
-                style={{width: 25, height: 25}}
+                style={{ width: 25, height: 25 }}
                 customStyles={{
                   dateIcon: {
                     width: 25,
@@ -218,7 +220,7 @@ export class QuanLyThucDonActivity extends Component {
               />
             </View>
           </View>
-          <View style={{flex: 1, alignItems: 'center', marginTop: 5}}>
+          <View style={{ flex: 1, alignItems: 'center', marginTop: 5 }}>
             <Text>
               Tuần {this.tinhSoTuan()}-{' '}
               {moment(this.state.ngayChon, 'DD/MM/YYYY').format('DD/MM/YYYY')}{' '}
@@ -278,7 +280,7 @@ export class QuanLyThucDonActivity extends Component {
           <FlatList
             keyExtractor={(item, index) => index.toString()}
             data={this.menuList.map(item => item)}
-            renderItem={({item, index}) => {
+            renderItem={({ item, index }) => {
               return (
                 <DanhSachBuaAnComponent
                   key={item.id}
@@ -306,7 +308,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 5,
   },
-  calendar: {flex: 2, borderBottomWidth: 2, marginBottom: 5},
+  calendar: { flex: 2, borderBottomWidth: 2, marginBottom: 5 },
   calo: {
     flex: 3,
     borderWidth: 2,
@@ -334,7 +336,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: -5,
   },
-  menuFood: {flex: 10},
+  menuFood: { flex: 10 },
   lableTitle: {
     color: COLOR_DEEPSKY_BLUE,
     fontSize: 30,

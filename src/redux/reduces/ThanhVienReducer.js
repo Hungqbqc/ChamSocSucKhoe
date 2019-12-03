@@ -1,4 +1,4 @@
-import { THEM_THANH_VIEN, DEM_THANH_VIEN } from '../actions/type'
+import { THEM_THANH_VIEN, DEM_THANH_VIEN, LAY_THONG_TIN_CALO_THANH_VIEN } from '../actions/type'
 
 const initialState = {
   soThanhVien: 0,
@@ -12,7 +12,7 @@ export default function (state = initialState, action) {
       {
         return { ...state, soThanhVien: action.soThanhVien }
       }
-    // case DEM_THANH_VIEN:
+    // case LAY_THONG_TIN_CALO_THANH_VIEN:
     //   return { ...state, thongTinThanhVien: action.thongTinThanhVien }
     default:
       return state

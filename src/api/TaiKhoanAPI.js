@@ -1,5 +1,4 @@
-import { URL_DANG_NHAP, URL_DANG_KY } from "../asset/MyColor";
-import { DANG_NHAP_ACTION, DANG_KY_ACTION } from "../asset/MyConst";
+import { DANG_NHAP_ACTION, DANG_KY_ACTION, URL_DANG_NHAP, URL_DANG_KY } from "../asset/MyConst";
 
 function DangNhap(email, password) {
     return fetch(URL_DANG_NHAP, {

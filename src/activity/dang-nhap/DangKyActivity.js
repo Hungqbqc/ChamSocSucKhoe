@@ -7,12 +7,10 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import { IP_SERVER, DATE_FORMAT_COMPARE } from '../../asset/MyColor';
+import { IP_SERVER, DATE_FORMAT_COMPARE } from '../../asset/MyConst';
 import moment from 'moment';
 import {
-  COLOR_PINK,
   COLOR_DEEPSKY_BLUE,
-  COLOR_PINK_MEDIUM,
 } from '../../asset/MyColor';
 export default class DangKyActivity extends Component {
   static navigationOptions = {
@@ -30,10 +28,6 @@ export default class DangKyActivity extends Component {
   handleSignUp = () => {
     const { email, password, name } = this.state;
     if (email.trim() != '' && password.trim() != '') {
-      console.log(1, email);
-      console.log(2, password);
-      console.log(3, name);
-
       fetch(this.URLDangKy, {
         method: 'POST',
         headers: {
@@ -49,8 +43,6 @@ export default class DangKyActivity extends Component {
       })
         .then(response => response.json())
         .then(responseJson => {
-          console.log(22, responseJson);
-
           if (responseJson === 1) {
             // Lấy thông tin thành viên để chuyển trang
             Alert.alert('Đăng ký thành công!');

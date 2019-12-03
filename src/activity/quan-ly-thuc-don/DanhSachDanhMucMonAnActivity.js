@@ -7,7 +7,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import {IP_SERVER} from '../../asset/MyColor';
+import {IP_SERVER} from '../../asset/MyConst';
 class FlatListItem extends Component {
   constructor(props) {
     super(props);

@@ -14,9 +14,8 @@ import RadioForm from 'react-native-simple-radio-button';
 import {Dropdown, DropDownData} from 'react-native-material-dropdown';
 import {
   IP_SERVER,
-  DATE_FORMAT,
   URLThongTinThanhVien,
-} from '../../asset/MyColor';
+} from '../../asset/MyConst';
 
 export class CaloComponent extends Component {
   URLLayThongTinThanhVien = IP_SERVER + URLThongTinThanhVien;
@@ -147,7 +146,7 @@ export class CaloComponent extends Component {
   }
 
   componentDidMount() {
-    this.calulate();
+    // this.calulate();
   }
 
   // Tính tuổi

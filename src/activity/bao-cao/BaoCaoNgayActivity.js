@@ -15,7 +15,7 @@ import {
   URLThucDon,
   DATE_FORMAT,
   DATE_FORMAT_COMPARE,
-} from '../../asset/MyColor';
+} from '../../asset/MyConst';
 export class BaoCaoNgayActivity extends Component {
   temp: 10;
   constructor(props) {

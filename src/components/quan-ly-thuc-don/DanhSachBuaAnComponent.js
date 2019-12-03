@@ -3,7 +3,7 @@ import {StyleSheet, Text, View, Alert, FlatList} from 'react-native';
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import {Button} from 'react-native-elements';
 import ThongTinMonAnComponent from './ThongTinMonAnComponent';
-import {IP_SERVER, URLThucDon} from '../../asset/MyColor';
+import {IP_SERVER, URLThucDon} from '../../asset/MyConst';
 export class DanhSachBuaAnComponent extends Component {
   constructor(props) {
     super(props);

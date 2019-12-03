@@ -29,7 +29,6 @@ export function dangNhapAsync(type, data) {
       } else {
         dispatch(dangNhap(data.email, data.password))
         await thongTinThanhVien(DEM_SO_THANH_VIEN_ACTION, data).then(result => {
-          console.log('thongTinThanhVien', result);
           dispatch(demSoThanhVien(result))
         })
       }
@@ -52,6 +51,8 @@ export const layThongTinCaloThanhVien = routes => ({
 
 
 /* Quản lý thành viên */
+
+// Đếm số thành viên
 export const demSoThanhVien = soThanhVien => ({
   type: DEM_THANH_VIEN,
   soThanhVien
@@ -73,6 +74,19 @@ export function themSoThanhVienAsync(type, data) {
   return async dispatch => {
     await thongTinThanhVien(type, data).then(result => {
       dispatch(themSoThanhVien(data.soThanhVien))
+    })
+  }
+}
+
+// Lấy thông tin calo các thành viên
+export const layThongTinThanhVien = (routes) => ({
+  type: LAY_THONG_TIN_CALO_THANH_VIEN,
+  routes,
+})
+export function layThongTinThanhVienAsync(type, data) {
+  return async dispatch => {
+    await thongTinThanhVien(type, data).then(result => {
+      dispatch(layThongTinThanhVien(result))
     })
   }
 }

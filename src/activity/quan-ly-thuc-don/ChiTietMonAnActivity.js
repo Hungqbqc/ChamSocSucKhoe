@@ -1,14 +1,16 @@
-import React, {Component} from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import React, { Component } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import NumericInput from 'react-native-numeric-input';
-import {Button} from 'react-native-elements';
+import { Button } from 'react-native-elements';
 import {
   COLOR_FIREBRICK,
+} from '../../asset/MyColor';
+import {
   IP_SERVER,
   URLThucDon,
   COLOR_WHITE,
   DATE_FORMAT_COMPARE,
-} from '../../asset/MyColor';
+} from '../../asset/MyConst';
 import moment from 'moment';
 
 export default class ChiTietMonAnActivity extends Component {
@@ -39,7 +41,7 @@ export default class ChiTietMonAnActivity extends Component {
 
   // Lưu lại số người
   numericInputOnchange(value) {
-    this.setState({soLuong: value < 0 ? 0 : value});
+    this.setState({ soLuong: value < 0 ? 0 : value });
   }
 
   _onPress = () => {
@@ -114,12 +116,12 @@ export default class ChiTietMonAnActivity extends Component {
               totalHeight={40}
               initValue={this.state.soLuong}
             />
-            <Text style={{marginLeft: 20, marginTop: 10, fontSize: 16}}>
+            <Text style={{ marginLeft: 20, marginTop: 10, fontSize: 16 }}>
               {this.state.monAn.DonViTinh.split(' ')[1].trim()}
             </Text>
           </View>
           <TouchableOpacity onPress={this._onPress} style={styles.buttonluu}>
-            <Text style={{fontSize: 20}}>Lưu</Text>
+            <Text style={{ fontSize: 20 }}>Lưu</Text>
           </TouchableOpacity>
         </View>
       </View>
