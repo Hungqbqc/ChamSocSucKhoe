@@ -1,6 +1,5 @@
 import { URL_DANG_NHAP, URL_DANG_KY } from "../asset/MyColor";
-const DANG_NHAP = 1;
-const DANG_KY = 1;
+import { DANG_NHAP_ACTION, DANG_KY_ACTION } from "../asset/MyConst";
 
 function DangNhap(email, password) {
     return fetch(URL_DANG_NHAP, {
@@ -22,11 +21,11 @@ function DangKy(email, password, hoTen, ngayTao) {
 }
 
 
-export default function taiKhoan(type = 1, data) {
+export default function taiKhoan(type, data) {
     switch (type) {
-        case DANG_NHAP:
+        case DANG_NHAP_ACTION:
             return DangNhap(data.email, data.password)
-        case DANG_KY:
+        case DANG_KY_ACTION:
             return DangKy(email, password, hoTen, ngayTao)
     }
 }

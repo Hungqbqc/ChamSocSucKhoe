@@ -8,6 +8,8 @@ import {
   IP_SERVER,
   URLThongTinThanhVien,
 } from '../../asset/MyColor';
+
+import { THEM_SO_THANH_VIEN_ACTION } from "../../asset/MyConst";
 import NumericInput from 'react-native-numeric-input';
 import { connect } from 'react-redux'
 import * as actions from '../../redux/actions'
@@ -19,12 +21,6 @@ class NhapSoThanhVienActivity extends Component {
     this.state = {
       soThanhVien: 0,
     };
-
-    this.state = {
-      email: this.props.navigation.getParam('email'),
-    };
-
-    this.props.myNavigation.navigate('ManHinhChinhActivity')
 
   }
   static navigationOptions = {
@@ -41,33 +37,18 @@ class NhapSoThanhVienActivity extends Component {
   ) {
   }
 
+
   // Nhấn nút Next thì chuyển sang màn hình k
   onPress = () => {
-    fetch(this.URLLayThongTinThanhVien, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        loai: '3',
-        email: this.state.email,
-        soNguoi: this.state.soThanhVien,
-      }),
+    const { soThanhVien } = this.state;
+    this.props.themSoThanhVienAsync(THEM_SO_THANH_VIEN_ACTION, { email: this.props.email, soThanhVien: soThanhVien }).then(() => {
+      if (this.props.soThanhVien > 0) {
+        this.props.myNavigation.navigate('ManHinhChinhActivity')
+      }
+      else {
+        alert('Thêm thành viên thất bại!');
+      }
     })
-      .then(response => response.json())
-      .then(responseJson => {
-        if (responseJson === 1) {
-          this.props.navigation.navigate('ManHinhChinhActivity', {
-            soThanhVien: this.state.soThanhVien,
-            email: this.state.email,
-          });
-        } else {
-        }
-      })
-      .catch(error => {
-        console.error(error);
-      });
   };
 
   render() {
@@ -105,7 +86,7 @@ function mapStateToProps(state) {
   return {
     myNavigation: state.myNavigation,
     email: state.taiKhoan.email,
-    password: state.taiKhoan.password
+    soThanhVien: state.thanhVien.soThanhVien
   }
 }
 

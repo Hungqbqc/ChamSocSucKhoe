@@ -16,14 +16,15 @@ import {
   COLOR_PINK_MEDIUM,
   IP_SERVER,
   URLThongTinThanhVien
-} from '../../asset/MyColor'
-import { connect } from 'react-redux'
-import * as actions from '../../redux/actions'
+} from '../../asset/MyColor';
+import { DANG_NHAP_ACTION } from "../../asset/MyConst";
+import { connect } from 'react-redux';
+import * as actions from '../../redux/actions';
 class DangNhapActivity extends Component {
   static navigationOptions = {
     header: null
   }
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       email: '1',
@@ -34,16 +35,18 @@ class DangNhapActivity extends Component {
   URLDangNhap = IP_SERVER + 'DangNhap.php'
   URLLaySoThanhVien = IP_SERVER + URLThongTinThanhVien
 
-  componentDidMount () {
+  componentDidMount() {
     this.props.khoiDongApp(this.props.navigation)
   }
   // hàm đăng nhập
-  async handleLogin () {
+  async handleLogin() {
     const { email, password } = this.state
     if (email.trim() !== '' && password.trim() !== '') {
-      this.props.dangNhapAsync(1, { email, password }).then(success => {
+      this.props.dangNhapAsync(DANG_NHAP_ACTION, { email, password }).then(success => {
         if (this.props.email != '' && this.props.password != '') {
           // debugger;
+          console.log('soThanhVien', this.props.soThanhVien);
+
           if (this.props.soThanhVien > 0) {
             this.props.myNavigation.navigate('ManHinhChinhActivity')
           } else {
@@ -59,7 +62,7 @@ class DangNhapActivity extends Component {
       })
     }
   }
-  render () {
+  render() {
     return (
       // Donot dismis Keyboard when click outside of TextInput
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -121,7 +124,7 @@ class DangNhapActivity extends Component {
   }
 }
 
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   return {
     myNavigation: state.myNavigation,
     email: state.taiKhoan.email,

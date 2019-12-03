@@ -1,8 +1,7 @@
 import { URL_THONG_TIN_THANH_VIEN } from '../asset/MyColor'
-const DEM_SO_THANH_VIEN = 1
-const LAY_THONG_TIN_THANH_VIEN = 2
+import { DEM_SO_THANH_VIEN_ACTION, LAY_THONG_TIN_THANH_VIEN_ACTION, THEM_SO_THANH_VIEN_ACTION } from '../asset/MyConst'
 
-function LaySoThanhVien (email) {
+function LaySoThanhVien(email) {
   return fetch(URL_THONG_TIN_THANH_VIEN, {
     method: 'POST',
     headers: {
@@ -11,14 +10,14 @@ function LaySoThanhVien (email) {
     },
     body: JSON.stringify({
       email: email,
-      loai: DEM_SO_THANH_VIEN
+      loai: DEM_SO_THANH_VIEN_ACTION
     })
   })
     .then(response => response.json())
     .then(responseJson => responseJson)
 }
 
-function LayThongTinThanhVien (email) {
+function LayThongTinThanhVien(email) {
   return fetch(URL_THONG_TIN_THANH_VIEN, {
     method: 'POST',
     headers: {
@@ -26,7 +25,7 @@ function LayThongTinThanhVien (email) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      loai: LAY_THONG_TIN_THANH_VIEN,
+      loai: LAY_THONG_TIN_THANH_VIEN_ACTION,
       email: email
     })
   })
@@ -56,11 +55,33 @@ function LayThongTinThanhVien (email) {
       console.error(error)
     })
 }
-export default function thongTinThanhVien (type = 1, data) {
+
+function ThemThanhVien(email, soThanhVien) {
+  debugger;
+  return fetch(URL_THONG_TIN_THANH_VIEN, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      loai: THEM_SO_THANH_VIEN_ACTION,
+      email: email,
+      soNguoi: soThanhVien,
+    }),
+  })
+    .then(response => response.json())
+    .then(responseJson => responseJson)
+}
+
+
+export default function thongTinThanhVien(type = 1, data) {
   switch (type) {
-    case DEM_SO_THANH_VIEN:
+    case DEM_SO_THANH_VIEN_ACTION:
       return LaySoThanhVien(data.email)
-    case LAY_THONG_TIN_THANH_VIEN:
+    case LAY_THONG_TIN_THANH_VIEN_ACTION:
       return LayThongTinThanhVien(data.email)
+    case THEM_SO_THANH_VIEN_ACTION:
+      return ThemThanhVien(data.email, data.soThanhVien)
   }
 }
