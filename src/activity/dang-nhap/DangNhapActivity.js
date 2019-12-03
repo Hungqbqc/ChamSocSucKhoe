@@ -40,7 +40,7 @@ class DangNhapActivity extends Component {
     const { email, password } = this.state
     if (email.trim() !== '' && password.trim() !== '') {
       this.props.dangNhapAsync(DANG_NHAP_ACTION, { email, password }).then(success => {
-        if (this.props.email != '' && this.props.password != '') {
+        if (this.props.trangThaiDangNhap) {
           if (this.props.soThanhVien > 0) {
             this.props.myNavigation.navigate('ManHinhChinhActivity')
           } else {
@@ -122,6 +122,7 @@ function mapStateToProps(state) {
   return {
     myNavigation: state.myNavigation,
     email: state.taiKhoan.email,
+    trangThaiDangNhap: state.taiKhoan.trangThaiDangNhap,
     password: state.taiKhoan.password,
     soThanhVien: state.thanhVien.soThanhVien
   }

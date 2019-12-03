@@ -2,6 +2,7 @@ import {
   DEM_THANH_VIEN,
   CHON_TAB_THANH_VIEN,
   DANG_NHAP,
+  DANG_KY,
   KHOI_DONG_APP,
   LAY_THONG_TIN_CALO_THANH_VIEN,
   THEM_THANH_VIEN
@@ -14,23 +15,41 @@ import thongTinThanhVien from '../../api/ThongTinThanhVienAPI'
 
 
 // Đăng nhập
-export const dangNhap = (email, password) => ({
+export const khoiDongApp = navigation => ({ type: KHOI_DONG_APP, navigation })
+export const dangNhap = (email, password, trangThaiDangNhap) => ({
   type: DANG_NHAP,
   email,
-  password
+  password,
+  trangThaiDangNhap
 })
-export const khoiDongApp = navigation => ({ type: KHOI_DONG_APP, navigation })
 export function dangNhapAsync(type, data) {
   return async dispatch => {
     await taiKhoan(type, data).then(async e => {
       if (e === 0) {
-        dispatch(dangNhap('', ''))
+        dispatch(dangNhap('', '', false))
         dispatch(demSoThanhVien(0))
       } else {
-        dispatch(dangNhap(data.email, data.password))
+        dispatch(dangNhap(data.email, data.password, true))
         await thongTinThanhVien(DEM_SO_THANH_VIEN_ACTION, data).then(result => {
           dispatch(demSoThanhVien(result))
         })
+      }
+    })
+  }
+}
+
+// Đăng ký
+export const dangKy = (trangThaiDangKy) => ({
+  type: DANG_KY,
+  trangThaiDangKy,
+})
+export function dangKyAsync(type, data) {
+  return async dispatch => {
+    await taiKhoan(type, data).then(e => {
+      if (e === 0) {
+        dispatch(dangKy(false))
+      } else {
+        dispatch(dangKy(true))
       }
     })
   }

@@ -7,53 +7,35 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import { IP_SERVER, DATE_FORMAT_COMPARE } from '../../asset/MyConst';
-import moment from 'moment';
+import { DANG_KY_ACTION } from '../../asset/MyConst';
 import {
   COLOR_DEEPSKY_BLUE,
 } from '../../asset/MyColor';
-export default class DangKyActivity extends Component {
+import { connect } from 'react-redux';
+import * as actions from '../../redux/actions';
+class DangKyActivity extends Component {
   static navigationOptions = {
     header: null,
   };
 
   state = {
-    email: '',
-    password: '',
-    name: '',
-    confirmPass: '',
+    email: '2',
+    password: '2',
+    name: '2',
+    confirmPass: '2',
     errorMessage: null,
   };
-  URLDangKy = IP_SERVER + 'DangKy.php';
   handleSignUp = () => {
     const { email, password, name } = this.state;
     if (email.trim() != '' && password.trim() != '') {
-      fetch(this.URLDangKy, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-          name: name,
-          ngayTao: moment().format('DDMMYYYY'),
-        }),
-      })
-        .then(response => response.json())
-        .then(responseJson => {
-          if (responseJson === 1) {
-            // Lấy thông tin thành viên để chuyển trang
-            Alert.alert('Đăng ký thành công!');
-            this.props.navigation.navigate('DangNhapActivity');
-          } else {
-            Alert.alert('Đăng ký thất bại!');
-          }
-        })
-        .catch(error => {
-          console.error(error);
-        });
+      this.props.dangKyAsync(DANG_KY_ACTION, { email, password, name }).then(success => {
+        if (this.props.trangThaiDangKy) {
+          Alert.alert('Đăng ký thành công!');
+          this.props.navigation.navigate('DangNhapActivity');
+        } else {
+          alert('Đăng ký thất bại!');
+        }
+      });
     }
   };
 
@@ -122,6 +104,20 @@ export default class DangKyActivity extends Component {
     );
   }
 }
+
+
+
+function mapStateToProps(state) {
+  return {
+    myNavigation: state.myNavigation,
+    trangThaiDangKy: state.taiKhoan.trangThaiDangKy,
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  actions
+)(DangKyActivity)
 const styles = StyleSheet.create({
   container: {
     flex: 1,
