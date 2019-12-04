@@ -7,7 +7,12 @@ import {
   LAY_THONG_TIN_CALO_THANH_VIEN,
   THEM_THANH_VIEN
 } from './type'
-import { DANG_NHAP_ACTION, DANG_KY_ACTION, THEM_SO_THANH_VIEN_ACTION, DEM_SO_THANH_VIEN_ACTION } from "../../asset/MyConst";
+import {
+  DANG_NHAP_ACTION,
+  DANG_KY_ACTION,
+  THEM_SO_THANH_VIEN_ACTION,
+  DEM_SO_THANH_VIEN_ACTION
+} from "../../asset/MyConst";
 
 // import * as thanhVien from './thanhVienAction'
 import taiKhoan from '../../api/TaiKhoanAPI'
@@ -109,3 +114,10 @@ export function layThongTinThanhVienAsync(type, data) {
     })
   }
 }
+
+export function capNhatThongTinCaloThanhVienAsync(type, data) {
+  return async dispatch => {
+    await thongTinThanhVien(type, data);
+  }
+}
+

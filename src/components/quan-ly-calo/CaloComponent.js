@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import moment from 'moment';
 import {
   View,
@@ -8,27 +8,26 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import {COLOR_BLUE} from '../../asset/MyColor';
+import { COLOR_BLUE } from '../../asset/MyColor';
 import DatePicker from 'react-native-datepicker';
 import RadioForm from 'react-native-simple-radio-button';
-import {Dropdown, DropDownData} from 'react-native-material-dropdown';
+import { Dropdown, DropDownData } from 'react-native-material-dropdown';
 import {
-  IP_SERVER,
-  URLThongTinThanhVien,
+  CAP_NHAT_THONG_TIN_CALO_THANH_VIEN_ACTION,
 } from '../../asset/MyConst';
-
-export class CaloComponent extends Component {
-  URLLayThongTinThanhVien = IP_SERVER + URLThongTinThanhVien;
+import { connect } from 'react-redux';
+import * as actions from '../../redux/actions';
+class CaloComponent extends Component {
 
   static navigationOptions = {
     header: null,
   };
 
   radio_props = [
-    {label: 'Nam', value: 0},
-    {label: 'Nữ', value: 1},
+    { label: 'Nam', value: 0 },
+    { label: 'Nữ', value: 1 },
   ];
-  data: DropDownData[] = [
+  data = [
     {
       value: 1,
       label: 'Ít vận động',
@@ -112,26 +111,30 @@ export class CaloComponent extends Component {
         this.state.nhuCauNangLuong +
         ' WHERE Id = ' +
         this.state.id;
-      fetch(this.URLLayThongTinThanhVien, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          loai: '4',
-          sql_Query: sql_Query,
-        }),
-      })
-        .then(response => response.json())
-        .then(responseJson => {})
-        .catch(error => {
-          console.error(error);
-        });
+      // fetch(this.URLLayThongTinThanhVien, {
+      //   method: 'POST',
+      //   headers: {
+      //     Accept: 'application/json',
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     loai: '4',
+      //     sql_Query: sql_Query,
+      //   }),
+      // })
+      //   .then(response => response.json())
+      //   .then(responseJson => { })
+      //   .catch(error => {
+      //     console.error(error);
+      //   });
+
+      this.props.capNhatThongTinCaloThanhVienAsync(
+        CAP_NHAT_THONG_TIN_CALO_THANH_VIEN_ACTION,
+        { query: sql_Query });
     }
   }
 
-  batLoi(loai: Number): Boolean {
+  batLoi(loai) {
     if (loai !== 0) {
       if (Number(this.state.chieuCao) === 0) {
         alert('Bạn chưa nhập chiều cao');
@@ -146,7 +149,7 @@ export class CaloComponent extends Component {
   }
 
   componentDidMount() {
-    // this.calulate();
+    this.calulate();
   }
 
   // Tính tuổi
@@ -211,7 +214,7 @@ export class CaloComponent extends Component {
         break;
       }
     }
-    await this.setStateAsync({nhuCauNangLuong: Math.round(nhuCauNangLuong)});
+    await this.setStateAsync({ nhuCauNangLuong: Math.round(nhuCauNangLuong) });
   }
 
   // Tính chỉ số BMI
@@ -222,20 +225,20 @@ export class CaloComponent extends Component {
         (this.state.canNang / (this.state.chieuCao * this.state.chieuCao)) *
         10000;
     }
-    await this.setStateAsync({chiSoBMI: Math.round(chiSoBMI)});
+    await this.setStateAsync({ chiSoBMI: Math.round(chiSoBMI) });
   }
 
   render() {
     let tilteInput;
     if (this.state.chucDanh === 'Tôi') {
-      tilteInput = <Text style={{marginLeft: 10}}>Tôi</Text>;
+      tilteInput = <Text style={{ marginLeft: 10 }}>Tôi</Text>;
     } else {
       tilteInput = (
         <View style={styles.textInputContainer}>
           <TextInput
             style={styles.textInput}
             placeholder="Nhập chức danh thành viên"
-            onChangeText={text => this.setStateAsync({chucDanh: text})}
+            onChangeText={text => this.setStateAsync({ chucDanh: text })}
             value={this.state.chucDanh}
           />
         </View>
@@ -254,7 +257,7 @@ export class CaloComponent extends Component {
               initial={this.state.gioiTinh}
               buttonSize={10}
               onPress={value => {
-                this.setStateAsync({gioiTinh: value});
+                this.setStateAsync({ gioiTinh: value });
               }}
             />
             <Text>Ngày sinh *</Text>
@@ -267,7 +270,7 @@ export class CaloComponent extends Component {
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
                 onDateChange={date => {
-                  this.setStateAsync({ngaySinh: date});
+                  this.setStateAsync({ ngaySinh: date });
                 }}
               />
             </View>
@@ -320,7 +323,7 @@ export class CaloComponent extends Component {
             <ScrollView>
               <Text
                 style={
-                  ([styles.textResult], {fontWeight: 'bold', fontSize: 18})
+                  ([styles.textResult], { fontWeight: 'bold', fontSize: 18 })
                 }>
                 Kết quả :{' '}
               </Text>
@@ -349,6 +352,11 @@ export class CaloComponent extends Component {
     });
   }
 }
+
+export default connect(
+  null,
+  actions
+)(CaloComponent)
 
 const styles = StyleSheet.create({
   container: {

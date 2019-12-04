@@ -1,4 +1,10 @@
-import { DEM_SO_THANH_VIEN_ACTION, LAY_THONG_TIN_CALO_THANH_VIEN_ACTION, THEM_SO_THANH_VIEN_ACTION, URL_THONG_TIN_THANH_VIEN } from '../asset/MyConst'
+import {
+  DEM_SO_THANH_VIEN_ACTION,
+  LAY_THONG_TIN_CALO_THANH_VIEN_ACTION,
+  THEM_SO_THANH_VIEN_ACTION,
+  URL_THONG_TIN_THANH_VIEN,
+  CAP_NHAT_THONG_TIN_CALO_THANH_VIEN_ACTION
+} from '../asset/MyConst'
 
 function LaySoThanhVien(email) {
   return fetch(URL_THONG_TIN_THANH_VIEN, {
@@ -55,7 +61,6 @@ function LayThongTinThanhVien(email) {
 }
 
 function ThemThanhVien(email, soThanhVien) {
-  debugger;
   return fetch(URL_THONG_TIN_THANH_VIEN, {
     method: 'POST',
     headers: {
@@ -72,14 +77,40 @@ function ThemThanhVien(email, soThanhVien) {
     .then(responseJson => responseJson)
 }
 
+function CapNhatThongTinThanhVien(query) {
+  console.log(123,query);
+  
+  fetch(URL_THONG_TIN_THANH_VIEN, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      loai: CAP_NHAT_THONG_TIN_CALO_THANH_VIEN_ACTION,
+      sql_Query: query,
+    }),
+  })
+    .then(response => response.json())
+    .then(responseJson => { })
+    .catch(error => {
+      console.error(error);
+    });
+  console.log(123);
+
+}
+
 
 export default function thongTinThanhVien(type = 1, data) {
   switch (type) {
     case DEM_SO_THANH_VIEN_ACTION:
-      return LaySoThanhVien(data.email)
+      return LaySoThanhVien(data.email);
     case LAY_THONG_TIN_CALO_THANH_VIEN_ACTION:
-      return LayThongTinThanhVien(data.email)
+      return LayThongTinThanhVien(data.email);
     case THEM_SO_THANH_VIEN_ACTION:
-      return ThemThanhVien(data.email, data.soThanhVien)
-  }
+      return ThemThanhVien(data.email, data.soThanhVien);
+    case CAP_NHAT_THONG_TIN_CALO_THANH_VIEN_ACTION:
+      return CapNhatThongTinThanhVien(data.query);
+
+  };
 }

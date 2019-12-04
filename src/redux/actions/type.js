@@ -1,12 +1,19 @@
-export const INCREASE = 'INCREASE';
+// Đăng nhập
 export const DANG_NHAP = 'DANG_NHAP';
+// Đăng ký
 export const DANG_KY = 'DANG_KY';
-export const KHOI_DONG_APP = 'KHOI_DONG_APP'; // lưu lại navigation
+// lưu lại navigation
+export const KHOI_DONG_APP = 'KHOI_DONG_APP'; 
 
-// Quản lý thành viên
-export const DEM_THANH_VIEN = 'DEM_THANH_VIEN'; // lưu lại số người
-export const THEM_THANH_VIEN = 'THEM_THANH_VIEN'; // lưu lại số người
-export const LAY_THONG_TIN_THANH_VIEN = 'LAY_THONG_TIN_THANH_VIEN'; // lưu lại số người
+/* Quản lý thành viên   */
+// Đếm số thành viên
+export const DEM_THANH_VIEN = 'DEM_THANH_VIEN'; 
+// Thêm thành viên khi chọn số người
+export const THEM_THANH_VIEN = 'THEM_THANH_VIEN';
+// lấy thông tin thành viên
+export const LAY_THONG_TIN_THANH_VIEN = 'LAY_THONG_TIN_THANH_VIEN'; 
+// Cập nhật thông tin thành viên
+export const CAP_NHAT_THONG_TIN_CALO_THANH_VIEN = 'CAP_NHAT_THONG_TIN_CALO_THANH_VIEN';
 
 
 // Quản lý calo

@@ -7,7 +7,7 @@ import {
   ProfileActivity
 } from 'react-native'
 import { TabView, SceneMap, TabViewAnimated } from 'react-native-tab-view'
-import { CaloComponent } from '../../components/quan-ly-calo/CaloComponent'
+import CaloComponent from '../../components/quan-ly-calo/CaloComponent'
 import { LAY_THONG_TIN_CALO_THANH_VIEN_ACTION } from '../../asset/MyConst'
 import { connect } from 'react-redux'
 import * as actions from '../../redux/actions'

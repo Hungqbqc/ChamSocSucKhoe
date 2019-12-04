@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {createAppContainer} from 'react-navigation';
-import {createStackNavigator} from 'react-navigation-stack';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 // import FoodCategory from './src/components/diary/FoodCategory';
 import DangNhapActivity from './src/activity/dang-nhap/DangNhapActivity';
 import BaoCaoActivity from './src/activity/bao-cao/BaoCaoActivity';
@@ -10,8 +10,7 @@ import ManHinhChinhActivity from './src/activity/man-hinh-chinh/ManHinhChinhActi
 import DanhSachDanhMucMonAnActivity from './src/activity/quan-ly-thuc-don/DanhSachDanhMucMonAnActivity';
 import DanhSachMonAnActivity from './src/activity/quan-ly-thuc-don/DanhSachMonAnActivity';
 import ChiTietMonAnActivity from './src/activity/quan-ly-thuc-don/ChiTietMonAnActivity';
-import Demo from './src/activity/quan-ly-calo/Demo';
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
 import store from './src/redux/store/store';
 const RootStack = createStackNavigator(
   {
@@ -23,7 +22,6 @@ const RootStack = createStackNavigator(
     BaoCaoActivity: BaoCaoActivity,
     DanhSachMonAnActivity: DanhSachMonAnActivity,
     ChiTietMonAnActivity: ChiTietMonAnActivity,
-    Demo: Demo,
   },
   {
     initialRouteName: 'DangNhapActivity',
@@ -34,10 +32,10 @@ const AppContainer = createAppContainer(RootStack);
 
 export default class App extends React.Component {
   render() {
-    return(
-    <Provider store={store}>
-      <AppContainer />
-    </Provider>
+    return (
+      <Provider store={store}>
+        <AppContainer />
+      </Provider>
     );
   }
 }
