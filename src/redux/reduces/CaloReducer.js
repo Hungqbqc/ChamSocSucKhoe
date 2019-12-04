@@ -10,7 +10,6 @@ export default function (state = initialState, action) {
     case CHON_TAB_THANH_VIEN:
       return { ...state, index: action.index }
     case LAY_THONG_TIN_CALO_THANH_VIEN: {
-      debugger;
       return { ...state, routes: action.routes }
     }
     default:

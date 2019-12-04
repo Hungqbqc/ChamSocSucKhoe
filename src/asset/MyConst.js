@@ -21,3 +21,4 @@ export const CAP_NHAT_THONG_TIN_CALO_THANH_VIEN_ACTION = 4;
 
 
 
+export const LAY_THUC_DON_ACTION = 2;

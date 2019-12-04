@@ -5,7 +5,7 @@ import {
 } from '../../asset/MyColor';
 import {
   IP_SERVER,
-  URLThucDon,
+  LAY_THUC_DON_ACTION,
   DATE_FORMAT,
   DATE_FORMAT_COMPARE,
 } from '../../asset/MyConst';
@@ -14,8 +14,9 @@ import { ScrollView } from 'react-native';
 import * as Progress from 'react-native-progress';
 import DatePicker from 'react-native-datepicker';
 import moment from 'moment';
-
-export class QuanLyThucDonActivity extends Component {
+import { connect } from 'react-redux';
+import * as actions from '../../redux/actions';
+class QuanLyThucDonActivity extends Component {
   menuList = [{ id: '1' }, { id: '2' }, { id: '3' }, { id: '4' }];
 
   setStateAsync(state) {
@@ -33,32 +34,15 @@ export class QuanLyThucDonActivity extends Component {
       ngayChon: moment().format('DD/MM/YYYY'),
       btnSelected: moment().format('DD'),
       dayOfWeek: this.taoLich(moment().format('DD/MM/YYYY')),
-      Obj: {
-        Email: '',
-        NgayTao: '',
-        TongNangLuong: '0',
-        DanhSachMon: [
-          { LoaiBua: '1', Mon: [] },
-          { LoaiBua: '2', Mon: [] },
-          { LoaiBua: '3', Mon: [] },
-          { LoaiBua: '4', Mon: [] },
-        ],
-      },
       totalCalo: 0,
     };
   }
 
-  // async componentWillMount() {
-  // await this.layDuLieu(moment().format('DD/MM/YYYY'));
-  // }
-  dem = 0;
-
   async componentDidMount() {
     await this.layDuLieu(moment().format('DD/MM/YYYY'));
-    this.focusListener = this.state.navigation.addListener('didFocus', () => {
-      alert(1)
-      this.layDuLieu(this.state.ngayChon);
-    });
+    // this.focusListener = this.state.navigation.addListener('didFocus', () => {      
+    //   this.layDuLieu(this.state.ngayChon);
+    // });
   }
 
   async onPress(item) {
@@ -70,38 +54,45 @@ export class QuanLyThucDonActivity extends Component {
     await this.layDuLieu(item);
   }
   async layDuLieu(ngayChon) {
-    fetch(IP_SERVER + URLThucDon, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        loai: 2,
-        email: this.state.email,
-        ngayAn: moment(ngayChon, 'DD/MM/YYYY').format(DATE_FORMAT_COMPARE),
-      }),
-    })
-      .then(response => response.json())
-      .then(responseJson => {
-        // Láy dữ liệu thành công
-        if (responseJson !== 0) {
-          this.setState({
-            Obj: responseJson,
-          });
-          this.tinhCaloCacDaChon();
-        }
-      })
-      .catch(error => {
-        console.error(error);
-      });
+    // fetch(IP_SERVER + URLThucDon, {
+    //   method: 'POST',
+    //   headers: {
+    //     Accept: 'application/json',
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     loai: 2,
+    //     email: this.state.email,
+    //     ngayAn: moment(ngayChon, 'DD/MM/YYYY').format(DATE_FORMAT_COMPARE),
+    //   }),
+    // })
+    //   .then(response => response.json())
+    //   .then(responseJson => {
+    //     // Láy dữ liệu thành công
+    //     if (responseJson !== 0) {
+    //       // this.setState({
+    //       //   thucDon: responseJson,
+    //       // });
+    //       this.tinhCaloCacDaChon();
+    //     }
+    //   })
+    //   .catch(error => {
+    //     console.error(error);
+    //   });
+    console.log(1);
+    
+    this.props.layThucDonAsync(LAY_THUC_DON_ACTION, {
+      email: this.props.email,
+      ngayAn: moment(ngayChon, 'DD/MM/YYYY').format(DATE_FORMAT_COMPARE),
+    });
+    console.log('TTTTT',this.props.thucDon);
   }
 
   // Tính toán lượng calo mà người dùng đã chọn
   async tinhCaloCacDaChon() {
     let totalCalo = 0;
-    if (this.state.Obj !== null) {
-      this.state.Obj.DanhSachMon.forEach((element: any) => {
+    if (this.props.thucDon !== null) {
+      this.props.thucDon.DanhSachMon.forEach((element) => {
         element.Mon.map(w => {
           totalCalo += w.SoLuong * w.Calo;
         });
@@ -109,10 +100,10 @@ export class QuanLyThucDonActivity extends Component {
       await this.setStateAsync({
         totalCalo: totalCalo,
         progress:
-          this.state.Obj.TongNangLuong !== null
-            ? totalCalo / this.state.Obj.TongNangLuong > 1
+          this.props.thucDon.TongNangLuong !== null
+            ? totalCalo / this.props.thucDon.TongNangLuong > 1
               ? 1
-              : totalCalo / this.state.Obj.TongNangLuong
+              : totalCalo / this.props.thucDon.TongNangLuong
             : 0,
       });
     }
@@ -142,10 +133,10 @@ export class QuanLyThucDonActivity extends Component {
     return dayOfWeek;
   }
 
-  tinhSoTuan(): Number {
+  tinhSoTuan() {
     return (
       moment(this.state.ngayChon, 'DD/MM/YYYY').weeks() -
-      moment(this.state.Obj.NgayTao, 'DD/MM/YYYY').weeks() +
+      moment(this.props.thucDon.NgayTao, 'YYYYMMDD').weeks() +
       1
     );
   }
@@ -195,7 +186,7 @@ export class QuanLyThucDonActivity extends Component {
             </View>
             <View style={{ flex: 1 }}>
               <DatePicker
-                minDate={this.state.Obj.NgayTao}
+                // minDate={this.props.thucDon.NgayTao}
                 mode="date"
                 format="DD/MM/YYYY"
                 confirmBtnText="Confirm"
@@ -239,19 +230,19 @@ export class QuanLyThucDonActivity extends Component {
         <View style={styles.calo}>
           <View style={styles.caloTop}>
             <Text style={styles.caloTopText}>
-              {this.state.Obj === null || this.state.Obj.TongNangLuong === null
+              {this.props.thucDon === null || this.props.thucDon.TongNangLuong === null
                 ? 0
-                : this.state.Obj.TongNangLuong}
+                : this.props.thucDon.TongNangLuong}
             </Text>
             <Text style={styles.caloTopText}> - </Text>
             <Text style={styles.caloTopText}>
-              {this.state.Obj === null ? 0 : this.state.totalCalo}
+              {this.props.thucDon === null ? 0 : this.state.totalCalo}
             </Text>
             <Text style={styles.caloTopText}> = </Text>
             <Text style={styles.caloTopText}>
-              {this.state.Obj === null
+              {this.props.thucDon === null
                 ? 0
-                : this.state.Obj.TongNangLuong - this.state.totalCalo}
+                : this.props.thucDon.TongNangLuong - this.state.totalCalo}
             </Text>
           </View>
           <View style={styles.caloMid}>
@@ -288,9 +279,9 @@ export class QuanLyThucDonActivity extends Component {
                   ngayAn={this.state.ngayChon}
                   email={this.state.email}
                   navigation={this.state.navigation}
-                  caloTarget={this.state.Obj.TongNangLuong}
-                  listFood={this.state.Obj.DanhSachMon.find(
-                    (w: any) => w.LoaiBua === item.id,
+                  caloTarget={this.props.thucDon.TongNangLuong}
+                  listFood={this.props.thucDon.DanhSachMon.find(
+                    (w) => w.LoaiBua === item.id,
                   )}
                   parentFlatList={this}
                 />
@@ -302,6 +293,19 @@ export class QuanLyThucDonActivity extends Component {
     );
   }
 }
+function mapStateToProps(state) {
+  return {
+    myNavigation: state.myNavigation,
+    thucDon: state.thucDon.thucDon,
+    email: state.taiKhoan.email
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  actions
+)(QuanLyThucDonActivity)
+
 
 const styles = StyleSheet.create({
   container: {

@@ -78,8 +78,6 @@ function ThemThanhVien(email, soThanhVien) {
 }
 
 function CapNhatThongTinThanhVien(query) {
-  console.log(123,query);
-  
   fetch(URL_THONG_TIN_THANH_VIEN, {
     method: 'POST',
     headers: {
@@ -96,8 +94,6 @@ function CapNhatThongTinThanhVien(query) {
     .catch(error => {
       console.error(error);
     });
-  console.log(123);
-
 }
 
 

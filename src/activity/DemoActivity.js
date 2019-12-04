@@ -15,7 +15,6 @@ class DemoActivity extends Component {
 
   handleDecrease = () => {
     // this.props.counterDecrease()
-    this.props.dangNhap('123', '567')
 
   }
 

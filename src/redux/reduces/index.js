@@ -4,11 +4,13 @@ import TaiKhoanReducer from './TaiKhoanReducer'
 import NavigationReducer from './NavigationReducer'
 import ThanhVienReducer from './ThanhVienReducer'
 import CaloReducer from './CaloReducer'
+import ThucDonReduce from './ThucDonReduce';
 
 export default combineReducers({
   counter: counterReducer,
   taiKhoan: TaiKhoanReducer,
   thanhVien: ThanhVienReducer,
   myNavigation: NavigationReducer,
-  quanLyCalo: CaloReducer
+  quanLyCalo: CaloReducer,
+  thucDon: ThucDonReduce,
 })

@@ -5,7 +5,8 @@ import {
   DANG_KY,
   KHOI_DONG_APP,
   LAY_THONG_TIN_CALO_THANH_VIEN,
-  THEM_THANH_VIEN
+  THEM_THANH_VIEN,
+  LAY_THUC_DON
 } from './type'
 import {
   DANG_NHAP_ACTION,
@@ -16,6 +17,7 @@ import {
 
 // import * as thanhVien from './thanhVienAction'
 import taiKhoan from '../../api/TaiKhoanAPI'
+import thucDon from '../../api/ThucDonAPI'
 import thongTinThanhVien from '../../api/ThongTinThanhVienAPI'
 
 
@@ -121,3 +123,13 @@ export function capNhatThongTinCaloThanhVienAsync(type, data) {
   }
 }
 
+
+/* Thực đơn */
+export const layThucDon = thucDon => ({ type: LAY_THUC_DON, thucDon })
+export function layThucDonAsync(type, data) {
+  return async dispatch => {
+    await thucDon(type, data).then(result => {
+      dispatch(layThucDon(result))
+    })
+  }
+}

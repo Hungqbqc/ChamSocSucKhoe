@@ -6,7 +6,7 @@ import { createMaterialBottomTabNavigator } from 'react-navigation-material-bott
 import Icon from 'react-native-vector-icons/Ionicons'
 import QuanLyCaLoActivity from '../quan-ly-calo/QuanLyCaLoActivity'
 import { QuanLyThongTinCaNhanActivity } from '../quan-ly-thong-tin-ca-nhan/QuanLyThongTinCaNhanActivity'
-import { QuanLyThucDonActivity } from '../quan-ly-thuc-don/QuanLyThucDonActivity'
+import QuanLyThucDonActivity from '../quan-ly-thuc-don/QuanLyThucDonActivity'
 import { connect } from 'react-redux'
 import * as actions from '../../redux/actions'
 var soThanhVien = 1
@@ -15,14 +15,14 @@ var navigation = null
 
 // Tab calo
 class CaloScreen extends React.Component {
-  render () {
+  render() {
     return <QuanLyCaLoActivity />
   }
 }
 
 // Tab thông tin người dùng
 class ProfileScreen extends React.Component {
-  render () {
+  render() {
     return (
       <QuanLyThongTinCaNhanActivity navigation={navigation} email={email} />
     )
@@ -31,7 +31,7 @@ class ProfileScreen extends React.Component {
 
 // Tab thực đơn
 class DiaryScreen extends React.Component {
-  render () {
+  render() {
     return <QuanLyThucDonActivity navigation={navigation} email={email} />
   }
 }
@@ -90,7 +90,7 @@ const TabNavigator = createMaterialBottomTabNavigator(
     }
   },
   {
-    initialRouteName: 'CaloScreen',
+    initialRouteName: 'DiaryScreen',
     barStyle: { backgroundColor: '#3BAD87' }
   }
 )
@@ -98,7 +98,7 @@ const TabNavigator = createMaterialBottomTabNavigator(
 const AppContainer = createAppContainer(TabNavigator)
 
 class ManHinhChinhActivity extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     // soThanhVien = this.props.soThanhVien;
     // email = this.props.navigation.getParam('email');
@@ -107,12 +107,12 @@ class ManHinhChinhActivity extends React.Component {
   static navigationOptions = {
     header: null
   }
-  render () {
+  render() {
     return <AppContainer />
   }
 }
 
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   return {
     myNavigation: state.myNavigation
   }
