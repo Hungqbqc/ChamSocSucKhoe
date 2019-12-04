@@ -9,7 +9,7 @@ import {
   DATE_FORMAT,
   DATE_FORMAT_COMPARE,
 } from '../../asset/MyConst';
-import { DanhSachBuaAnComponent } from '../../components/quan-ly-thuc-don/DanhSachBuaAnComponent';
+import DanhSachBuaAnComponent from '../../components/quan-ly-thuc-don/DanhSachBuaAnComponent';
 import { ScrollView } from 'react-native';
 import * as Progress from 'react-native-progress';
 import DatePicker from 'react-native-datepicker';
@@ -41,12 +41,13 @@ class QuanLyThucDonActivity extends Component {
   async componentDidMount() {
     await this.layDuLieu(moment().format('DD/MM/YYYY'));
     // this.focusListener = this.state.navigation.addListener('didFocus', () => {      
-    //   this.layDuLieu(this.state.ngayChon);
+    //   this.layDuLieu(this.props.ngayChon);
     // });
   }
 
   async onPress(item) {
     // Gán ngày đã chọn trong tuần
+    await this.props.chonNgayThucDon(item);
     await this.setStateAsync({
       btnSelected: moment(item, 'DD/MM/YYYY').format('DD'),
       ngayChon: item,
@@ -54,38 +55,12 @@ class QuanLyThucDonActivity extends Component {
     await this.layDuLieu(item);
   }
   async layDuLieu(ngayChon) {
-    // fetch(IP_SERVER + URLThucDon, {
-    //   method: 'POST',
-    //   headers: {
-    //     Accept: 'application/json',
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     loai: 2,
-    //     email: this.state.email,
-    //     ngayAn: moment(ngayChon, 'DD/MM/YYYY').format(DATE_FORMAT_COMPARE),
-    //   }),
-    // })
-    //   .then(response => response.json())
-    //   .then(responseJson => {
-    //     // Láy dữ liệu thành công
-    //     if (responseJson !== 0) {
-    //       // this.setState({
-    //       //   thucDon: responseJson,
-    //       // });
-    //       this.tinhCaloCacDaChon();
-    //     }
-    //   })
-    //   .catch(error => {
-    //     console.error(error);
-    //   });
-    console.log(1);
-    
     this.props.layThucDonAsync(LAY_THUC_DON_ACTION, {
       email: this.props.email,
       ngayAn: moment(ngayChon, 'DD/MM/YYYY').format(DATE_FORMAT_COMPARE),
+    }).then(() => {
+      this.tinhCaloCacDaChon();
     });
-    console.log('TTTTT',this.props.thucDon);
   }
 
   // Tính toán lượng calo mà người dùng đã chọn
@@ -135,7 +110,7 @@ class QuanLyThucDonActivity extends Component {
 
   tinhSoTuan() {
     return (
-      moment(this.state.ngayChon, 'DD/MM/YYYY').weeks() -
+      moment(this.props.ngayChon, 'DD/MM/YYYY').weeks() -
       moment(this.props.thucDon.NgayTao, 'YYYYMMDD').weeks() +
       1
     );
@@ -214,7 +189,7 @@ class QuanLyThucDonActivity extends Component {
           <View style={{ flex: 1, alignItems: 'center', marginTop: 5 }}>
             <Text>
               Tuần {this.tinhSoTuan()}-{' '}
-              {moment(this.state.ngayChon, 'DD/MM/YYYY').format('DD/MM/YYYY')}{' '}
+              {moment(this.props.ngayChon, 'DD/MM/YYYY').format('DD/MM/YYYY')}{' '}
             </Text>
           </View>
           <View
@@ -255,8 +230,8 @@ class QuanLyThucDonActivity extends Component {
           <View style={styles.caloBottom}>
             <TouchableOpacity
               onPress={() => {
-                this.props.navigation.navigate('BaoCaoActivity', {
-                  ngayChon: moment(this.state.ngayChon, 'DD/MM/YYYY').format(
+                this.props.myNavigation.navigate('BaoCaoActivity', {
+                  ngayChon: moment(this.props.ngayChon, 'DD/MM/YYYY').format(
                     DATE_FORMAT,
                   ),
                   email: this.state.email,
@@ -276,10 +251,10 @@ class QuanLyThucDonActivity extends Component {
                 <DanhSachBuaAnComponent
                   key={item.id}
                   buaAnId={item.id}
-                  ngayAn={this.state.ngayChon}
-                  email={this.state.email}
-                  navigation={this.state.navigation}
-                  caloTarget={this.props.thucDon.TongNangLuong}
+                  // ngayAn={this.props.ngayChon}
+                  // email={this.state.email}
+                  // navigation={this.state.navigation}
+                  // caloTarget={this.props.thucDon.TongNangLuong}
                   listFood={this.props.thucDon.DanhSachMon.find(
                     (w) => w.LoaiBua === item.id,
                   )}
@@ -297,6 +272,7 @@ function mapStateToProps(state) {
   return {
     myNavigation: state.myNavigation,
     thucDon: state.thucDon.thucDon,
+    ngayChon: state.thucDon.ngayChon,
     email: state.taiKhoan.email
   }
 }

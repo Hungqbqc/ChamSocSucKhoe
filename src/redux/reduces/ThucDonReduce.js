@@ -1,4 +1,4 @@
-import { LAY_THUC_DON, DANG_KY } from '../actions/type';
+import { LAY_THUC_DON, CHON_NGAY_THUC_DON, CHON_BUA_AN } from '../actions/type';
 import moment from 'moment';
 
 const initialState = {
@@ -13,13 +13,26 @@ const initialState = {
             { LoaiBua: '4', Mon: [] },
         ],
     },
+    ngayChon: '',
+    buaAn: {
+        loaiBua: 1,
+        tenBua: 'Breakfast'
+    }
 }
 
 export default function (state = initialState, action) {
     switch (action.type) {
         case LAY_THUC_DON:
             return {
-                thucDon: action.thucDon
+                ...state, thucDon: action.thucDon
+            };
+        case CHON_NGAY_THUC_DON:
+            return {
+                ...state, ngayChon: action.ngayChon
+            };
+        case CHON_BUA_AN:
+            return {
+                ...state, buaAn: action.buaAn
             };
         default:
             return state;

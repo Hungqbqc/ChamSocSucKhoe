@@ -6,7 +6,9 @@ import {
   KHOI_DONG_APP,
   LAY_THONG_TIN_CALO_THANH_VIEN,
   THEM_THANH_VIEN,
-  LAY_THUC_DON
+  LAY_THUC_DON,
+  CHON_NGAY_THUC_DON,
+  CHON_BUA_AN
 } from './type'
 import {
   DANG_NHAP_ACTION,
@@ -131,5 +133,13 @@ export function layThucDonAsync(type, data) {
     await thucDon(type, data).then(result => {
       dispatch(layThucDon(result))
     })
+  }
+}
+
+export const chonNgayThucDon = ngayChon => ({ type: CHON_NGAY_THUC_DON, ngayChon })
+export const chonBuaAn = (buaAn) => ({ type: CHON_BUA_AN, buaAn })
+export function chonBuaAnAsync(buaAn) {
+  return async dispatch => {
+    await dispatch(chonBuaAn(buaAn))
   }
 }

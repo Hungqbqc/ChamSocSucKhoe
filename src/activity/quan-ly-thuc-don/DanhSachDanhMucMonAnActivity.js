@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   FlatList,
   StyleSheet,
@@ -7,7 +7,9 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import {IP_SERVER} from '../../asset/MyConst';
+import { IP_SERVER } from '../../asset/MyConst';
+import { connect } from 'react-redux';
+import * as actions from '../../redux/actions';
 class FlatListItem extends Component {
   constructor(props) {
     super(props);
@@ -27,8 +29,8 @@ class FlatListItem extends Component {
             flexDirection: 'row',
           }}>
           <Image
-            source={{uri: this.props.item.anhDanhMuc}}
-            style={{width: 100, height: 100, margin: 5}}
+            source={{ uri: this.props.item.anhDanhMuc }}
+            style={{ width: 100, height: 100, margin: 5 }}
           />
           <View
             style={{
@@ -60,11 +62,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class DanhSachDanhMucMonAnActivity extends Component {
+class DanhSachDanhMucMonAnActivity extends Component {
   flatListDanhMucMonAn = [];
   URLLayDanhMucMonAn = IP_SERVER + 'MonAn.php?loai=1';
 
-  static navigationOptions = ({navigation}) => ({
+  static navigationOptions = ({ navigation }) => ({
     title: `${navigation.state.params.title}`,
     headerStyle: {
       backgroundColor: '#f4511e',
@@ -113,11 +115,11 @@ export default class DanhSachDanhMucMonAnActivity extends Component {
 
   render() {
     return (
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <FlatList
           keyExtractor={(item, index) => index.toString()}
           data={this.state.flatListDanhMucMonAn}
-          renderItem={({item, index}) => {
+          renderItem={({ item, index }) => {
             return (
               <TouchableOpacity onPress={() => this.chonDanhMuc(item.id)}>
                 <FlatListItem key={item.Id} item={item} />
@@ -129,3 +131,14 @@ export default class DanhSachDanhMucMonAnActivity extends Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    myNavigation: state.myNavigation,
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  actions
+)(DanhSachDanhMucMonAnActivity)

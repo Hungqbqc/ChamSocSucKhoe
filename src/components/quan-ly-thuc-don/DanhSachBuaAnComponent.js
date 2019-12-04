@@ -1,10 +1,12 @@
-import React, {Component} from 'react';
-import {StyleSheet, Text, View, Alert, FlatList} from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet, Text, View, Alert, FlatList } from 'react-native';
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
-import {Button} from 'react-native-elements';
+import { Button } from 'react-native-elements';
 import ThongTinMonAnComponent from './ThongTinMonAnComponent';
-import {IP_SERVER, URLThucDon} from '../../asset/MyConst';
-export class DanhSachBuaAnComponent extends Component {
+import { IP_SERVER, URLThucDon } from '../../asset/MyConst';
+import { connect } from 'react-redux';
+import * as actions from '../../redux/actions';
+class DanhSachBuaAnComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,17 +18,17 @@ export class DanhSachBuaAnComponent extends Component {
     };
   }
 
-  async componentWillReceiveProps(nextProps) {
-    if (nextProps !== undefined) {
-      await this.setStateAsync({
-        email: nextProps.email,
-        listFood: nextProps.listFood,
-        buaAnId: nextProps.buaAnId,
-        ngayAn: nextProps.ngayAn,
-      });
-      await this.tinhCaloCacDaChon();
-    }
-  }
+  // async componentWillReceiveProps(nextProps) {
+  //   if (nextProps !== undefined) {
+  //     await this.setStateAsync({
+  //       email: nextProps.email,
+  //       listFood: nextProps.listFood,
+  //       buaAnId: nextProps.buaAnId,
+  //       ngayAn: nextProps.ngayAn,
+  //     });
+  //     await this.tinhCaloCacDaChon();
+  //   }
+  // }
 
   async componentDidMount() {
     await this.tinhCaloCacDaChon();
@@ -35,7 +37,7 @@ export class DanhSachBuaAnComponent extends Component {
   percentCalo = 0;
   suggestions = '';
   isLoad = true;
-  getSuggestion(): String {
+  getSuggestion() {
     switch (this.props.buaAnId) {
       case '1': {
         this.suggestions =
@@ -68,7 +70,7 @@ export class DanhSachBuaAnComponent extends Component {
     }
     return this.suggestions;
   }
-  getMealName(): String {
+  getMealName() {
     let mealName = '';
     switch (this.props.buaAnId) {
       case '1': {
@@ -94,10 +96,10 @@ export class DanhSachBuaAnComponent extends Component {
   // Tính toán lượng calo mà người dùng đã chọn
   async tinhCaloCacDaChon() {
     let totalCalo = 0;
-    this.state.listFood.Mon.forEach((element: any) => {
+    this.state.listFood.Mon.forEach((element) => {
       totalCalo += element.SoLuong * element.Calo;
     });
-    await this.setStateAsync({totalCalo: totalCalo});
+    await this.setStateAsync({ totalCalo: totalCalo });
   }
 
   ThemMoiMonAn() {
@@ -122,7 +124,13 @@ export class DanhSachBuaAnComponent extends Component {
       default:
         break;
     }
-    this.props.navigation.navigate('DanhSachDanhMucMonAnActivity', {
+    this.props.chonBuaAnAsync({
+      loaiBua: this.state.buaAnId,
+      tenBua: result
+    })
+    console.log('chonBuaAn', this.props.buaAn);
+
+    this.props.myNavigation.navigate('DanhSachDanhMucMonAnActivity', {
       email: this.state.email,
       buaAnId: this.state.buaAnId,
       ngayAn: this.state.ngayAn,
@@ -136,7 +144,7 @@ export class DanhSachBuaAnComponent extends Component {
         <FlatList
           keyExtractor={(item, index) => index.toString()}
           data={this.state.listFood.Mon.map(obj => obj)}
-          renderItem={({item, index}) => {
+          renderItem={({ item, index }) => {
             //console.log(`Item = ${JSON.stringify(item)}, index = ${index}`);
             return (
               <ThongTinMonAnComponent
@@ -180,13 +188,13 @@ export class DanhSachBuaAnComponent extends Component {
       <View style={styles.container}>
         <View style={styles.top}>
           <View style={styles.rightTop}>
-            <Text style={{fontSize: 16}}>{this.getMealName()}</Text>
-            <Text style={{fontSize: 20, color: 'red'}}>
+            <Text style={{ fontSize: 16 }}>{this.getMealName()}</Text>
+            <Text style={{ fontSize: 20, color: 'red' }}>
               {this.state.totalCalo}
             </Text>
           </View>
           <View style={styles.rightBottom}>
-            <Text style={{fontSize: 13, margin: -1}}>
+            <Text style={{ fontSize: 13, margin: -1 }}>
               {this.getSuggestion()}
             </Text>
           </View>
@@ -205,7 +213,7 @@ export class DanhSachBuaAnComponent extends Component {
                 name="plus"
                 size={16}
                 color="white"
-                style={{textAlign: 'center'}}
+                style={{ textAlign: 'center' }}
               />
             }
             title="Thêm"
@@ -227,6 +235,17 @@ export class DanhSachBuaAnComponent extends Component {
     });
   }
 }
+function mapStateToProps(state) {
+  return {
+    myNavigation: state.myNavigation,
+    buaAn: state.thucDon.buaAn
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  actions
+)(DanhSachBuaAnComponent)
 
 const styles = StyleSheet.create({
   container: {
