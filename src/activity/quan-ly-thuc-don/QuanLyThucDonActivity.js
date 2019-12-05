@@ -5,7 +5,7 @@ import {
 } from '../../asset/MyColor';
 import {
   IP_SERVER,
-  LAY_THUC_DON_ACTION,
+  LAY_THUC_DON,
   DATE_FORMAT,
   DATE_FORMAT_COMPARE,
 } from '../../asset/MyConst';
@@ -28,45 +28,66 @@ class QuanLyThucDonActivity extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: this.props.email,
-      navigation: this.props.navigation,
       progress: 0.1,
-      ngayChon: moment().format('DD/MM/YYYY'),
       btnSelected: moment().format('DD'),
-      dayOfWeek: this.taoLich(moment().format('DD/MM/YYYY')),
+      dayOfWeek: this.taoLich(moment().format(DATE_FORMAT)),
       totalCalo: 0,
     };
   }
 
+  // sau khi màn hình hiển thị lên thì lấy dữ liệu thực đơn từ trên server về
   async componentDidMount() {
-    await this.layDuLieu(moment().format('DD/MM/YYYY'));
-    // this.focusListener = this.state.navigation.addListener('didFocus', () => {      
-    //   this.layDuLieu(this.props.ngayChon);
-    // });
+    await this.layDuLieu(moment().format(DATE_FORMAT));
+    console.log(this.props.myNavigation);
+
+    this.focusListener = this.props.myNavigation.addListener('didFocus', () => {
+      console.log('focusListener');
+
+      // this.layDuLieu(this.props.ngayChon);
+    });
   }
 
+  // Nếu có dữ liệu thì cấp nhật lại giao diện
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.props.thucDon === nextProps.thucDon) {
+      return false;
+    }
+    return true
+  }
+
+  // Khi chọn ngày từ nút bấm
   async onPress(item) {
+    debugger;
+
     // Gán ngày đã chọn trong tuần
     await this.props.chonNgayThucDon(item);
     await this.setStateAsync({
-      btnSelected: moment(item, 'DD/MM/YYYY').format('DD'),
+      btnSelected: moment(item, DATE_FORMAT).format('DD'),
       ngayChon: item,
     });
+    // Lấy dữ liệu
     await this.layDuLieu(item);
   }
+
+  // Lấy dữ liệu từ trên server về
   async layDuLieu(ngayChon) {
-    this.props.layThucDonAsync(LAY_THUC_DON_ACTION, {
+    console.log('layDuLieu', ngayChon);
+
+    await this.props.layThucDonAsync(LAY_THUC_DON, {
       email: this.props.email,
-      ngayAn: moment(ngayChon, 'DD/MM/YYYY').format(DATE_FORMAT_COMPARE),
-    }).then(() => {
-      this.tinhCaloCacDaChon();
+      ngayAn: moment(ngayChon, DATE_FORMAT).format(DATE_FORMAT_COMPARE),
+    }).then(async () => {
+      await this.tinhCaloCacDaChon();
     });
   }
 
   // Tính toán lượng calo mà người dùng đã chọn
   async tinhCaloCacDaChon() {
+    debugger;
+    console.log('tinhCaloCacDaChon', JSON.stringify(this.props.thucDon));
     let totalCalo = 0;
-    if (this.props.thucDon !== null) {
+    // if (this.props.thucDon !== null) 
+    {
       this.props.thucDon.DanhSachMon.forEach((element) => {
         element.Mon.map(w => {
           totalCalo += w.SoLuong * w.Calo;
@@ -86,9 +107,10 @@ class QuanLyThucDonActivity extends Component {
 
   // Chọn ngày ở lịch
   async chonNgay(date) {
+    await this.props.chonNgayThucDon(moment(date, DATE_FORMAT).format(DATE_FORMAT));
     await this.setStateAsync({
-      ngayChon: moment(date, 'DD/MM/YYYY').format('DD/MM/YYYY'), // lưu lại ngày đã chọn
-      btnSelected: moment(date, 'DD/MM/YYYY').format('DD'), // lưu lại ngày chọn để sáng nút
+      ngayChon: moment(date, DATE_FORMAT).format(DATE_FORMAT), // lưu lại ngày đã chọn
+      btnSelected: moment(date, DATE_FORMAT).format('DD'), // lưu lại ngày chọn để sáng nút
       dayOfWeek: this.taoLich(date), // tạo mảng các nút ngày trong tuần
     });
     await this.layDuLieu(date);
@@ -97,20 +119,20 @@ class QuanLyThucDonActivity extends Component {
   // Tạo ra các button ngày trong tuần
   taoLich(date) {
     // Lấy ngày đầu tuần của ngày đã chọn
-    let start = moment(date, 'DD/MM/YYYY').startOf('isoWeek');
+    let start = moment(date, DATE_FORMAT).startOf('isoWeek');
     // Lấy ngày cuối tuần của ngày đã chọn
-    let end = moment(date, 'DD/MM/YYYY').endOf('isoWeek');
+    let end = moment(date, DATE_FORMAT).endOf('isoWeek');
     // Tạo mảng các ngày trong tuần đã chọn
     let dayOfWeek = [];
     for (let index = start; index <= end; index.add(1, 'day')) {
-      dayOfWeek.push(index.format('DD/MM/YYYY'));
+      dayOfWeek.push(index.format(DATE_FORMAT));
     }
     return dayOfWeek;
   }
 
   tinhSoTuan() {
     return (
-      moment(this.props.ngayChon, 'DD/MM/YYYY').weeks() -
+      moment(this.props.ngayChon, DATE_FORMAT).weeks() -
       moment(this.props.thucDon.NgayTao, 'YYYYMMDD').weeks() +
       1
     );
@@ -122,7 +144,7 @@ class QuanLyThucDonActivity extends Component {
         <TouchableOpacity
           key={item}
           style={[
-            this.state.btnSelected === moment(item, 'DD/MM/YYYY').format('DD')
+            this.state.btnSelected === moment(item, DATE_FORMAT).format('DD')
               ? styles.btnSelected
               : styles.btnNotSelected,
             {
@@ -136,13 +158,13 @@ class QuanLyThucDonActivity extends Component {
           onPress={() => this.onPress(item)}>
           <Text
             style={[
-              this.state.btnSelected === moment(item, 'DD/MM/YYYY').format('DD')
+              this.state.btnSelected === moment(item, DATE_FORMAT).format('DD')
                 ? styles.btnSelected
                 : styles.btnNotSelected,
               { marginTop: 3 },
               { backgroundColor: 'transparent' },
             ]}>
-            {moment(item, 'DD/MM/YYYY').format('DD')}
+            {moment(item, DATE_FORMAT).format('DD')}
           </Text>
         </TouchableOpacity>
       );
@@ -163,7 +185,7 @@ class QuanLyThucDonActivity extends Component {
               <DatePicker
                 // minDate={this.props.thucDon.NgayTao}
                 mode="date"
-                format="DD/MM/YYYY"
+                format={DATE_FORMAT}
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
                 style={{ width: 25, height: 25 }}
@@ -188,8 +210,8 @@ class QuanLyThucDonActivity extends Component {
           </View>
           <View style={{ flex: 1, alignItems: 'center', marginTop: 5 }}>
             <Text>
-              Tuần {this.tinhSoTuan()}-{' '}
-              {moment(this.props.ngayChon, 'DD/MM/YYYY').format('DD/MM/YYYY')}{' '}
+              Tuần {this.tinhSoTuan()} - {' '}
+              {moment(this.props.ngayChon, DATE_FORMAT).format('DD/MM/YYYY')}{' '}
             </Text>
           </View>
           <View
@@ -231,40 +253,46 @@ class QuanLyThucDonActivity extends Component {
             <TouchableOpacity
               onPress={() => {
                 this.props.myNavigation.navigate('BaoCaoActivity', {
-                  ngayChon: moment(this.props.ngayChon, 'DD/MM/YYYY').format(
+                  ngayChon: moment(this.props.ngayChon, DATE_FORMAT).format(
                     DATE_FORMAT,
                   ),
                   email: this.state.email,
                 });
               }}
               style={styles.loginButton}>
-              <Text style={styles.lableTitle}>CHI TIẾT</Text>
+              <Text style={styles.lableTitle}>CHI TIẾT </Text>
             </TouchableOpacity>
           </View>
         </View>
         <View style={styles.menuFood}>
-          <FlatList
-            keyExtractor={(item, index) => index.toString()}
-            data={this.menuList.map(item => item)}
-            renderItem={({ item, index }) => {
-              return (
-                <DanhSachBuaAnComponent
-                  key={item.id}
-                  buaAnId={item.id}
-                  // ngayAn={this.props.ngayChon}
-                  // email={this.state.email}
-                  // navigation={this.state.navigation}
-                  // caloTarget={this.props.thucDon.TongNangLuong}
-                  listFood={this.props.thucDon.DanhSachMon.find(
-                    (w) => w.LoaiBua === item.id,
-                  )}
-                  parentFlatList={this}
-                />
-              );
-            }}
-          />
+          {this.renderFood()}
         </View>
       </View>
+    );
+  }
+
+  renderFood() {
+    return (
+      <FlatList
+        keyExtractor={(item, index) => index.toString()}
+        data={this.menuList.map(item => item)}
+        renderItem={({ item, index }) => {
+          return (
+            <DanhSachBuaAnComponent
+              key={item.id}
+              buaAnId={item.id}
+              // ngayAn={this.props.ngayChon}
+              // email={this.state.email}
+              // navigation={this.state.navigation}
+              // caloTarget={this.props.thucDon.TongNangLuong}
+              listFood={this.props.thucDon.DanhSachMon.find(
+                (w) => w.LoaiBua === item.id,
+              )}
+              parentFlatList={this}
+            />
+          );
+        }}
+      />
     );
   }
 }

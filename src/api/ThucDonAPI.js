@@ -1,5 +1,5 @@
 import {
-    LAY_THUC_DON_ACTION,
+    LAY_THUC_DON,
     URLThucDon,
     // URL_DANG_KY
 } from "../asset/MyConst";
@@ -13,7 +13,7 @@ function LayThucDon(data) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            loai: LAY_THUC_DON_ACTION,
+            loai: LAY_THUC_DON,
             email: data.email,
             ngayAn: data.ngayAn
         })
@@ -24,9 +24,7 @@ function LayThucDon(data) {
 
 export default function thucDon(type, data) {
     switch (type) {
-        case LAY_THUC_DON_ACTION:
+        case LAY_THUC_DON:
             return LayThucDon(data);
-        // case DANG_KY_ACTION:
-        //     return DangKy(data)
     }
 }

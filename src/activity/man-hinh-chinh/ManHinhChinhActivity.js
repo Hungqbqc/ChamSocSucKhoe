@@ -24,7 +24,7 @@ class CaloScreen extends React.Component {
 class ProfileScreen extends React.Component {
   render() {
     return (
-      <QuanLyThongTinCaNhanActivity navigation={navigation} email={email} />
+      <QuanLyThongTinCaNhanActivity />
     )
   }
 }
@@ -32,7 +32,7 @@ class ProfileScreen extends React.Component {
 // Tab thực đơn
 class DiaryScreen extends React.Component {
   render() {
-    return <QuanLyThucDonActivity navigation={navigation} email={email} />
+    return <QuanLyThucDonActivity />
   }
 }
 const styles = StyleSheet.create({
@@ -90,7 +90,7 @@ const TabNavigator = createMaterialBottomTabNavigator(
     }
   },
   {
-    initialRouteName: 'CaloScreen',
+    initialRouteName: 'DiaryScreen',
     barStyle: { backgroundColor: '#3BAD87' }
   }
 )

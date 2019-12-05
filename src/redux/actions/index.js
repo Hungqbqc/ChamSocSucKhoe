@@ -70,12 +70,6 @@ export function dangKyAsync(type, data) {
   }
 }
 
-// Quản lý thành viên
-// export const demSoThanhVien = soThanhVien => ({
-//   type: DEM_SO_THANH_VIEN,
-//   soThanhVien
-// })
-
 // Quản lý calo
 export const chonTabThanhVien = index => ({ type: CHON_TAB_THANH_VIEN, index })
 export const layThongTinCaloThanhVien = routes => ({
@@ -105,9 +99,6 @@ export const themSoThanhVien = (soThanhVien) => ({
   soThanhVien,
 })
 export function themSoThanhVienAsync(type, data) {
-  console.log('themSoThanhVienAsync',type);
-  console.log('themSoThanhVienAsync',data);
-  
   return async dispatch => {
     await thongTinThanhVien(type, data).then(result => {
       dispatch(themSoThanhVien(data.soThanhVien))
@@ -139,8 +130,8 @@ export function capNhatThongTinCaloThanhVienAsync(type, data) {
 export const layThucDon = thucDon => ({ type: LAY_THUC_DON, thucDon })
 export function layThucDonAsync(type, data) {
   return async dispatch => {
-    await thucDon(type, data).then(result => {
-      dispatch(layThucDon(result))
+    await thucDon(type, data).then(async result => {
+      await dispatch(layThucDon(result))
     })
   }
 }

@@ -16,19 +16,21 @@ class DanhSachBuaAnComponent extends Component {
       buaAnId: this.props.buaAnId,
       totalCalo: 0,
     };
+    console.log('listFood', this.props.listFood);
+
   }
 
-  // async componentWillReceiveProps(nextProps) {
-  //   if (nextProps !== undefined) {
-  //     await this.setStateAsync({
-  //       email: nextProps.email,
-  //       listFood: nextProps.listFood,
-  //       buaAnId: nextProps.buaAnId,
-  //       ngayAn: nextProps.ngayAn,
-  //     });
-  //     await this.tinhCaloCacDaChon();
-  //   }
-  // }
+  async componentWillReceiveProps(nextProps) {
+    if (nextProps !== undefined) {
+      await this.setStateAsync({
+        email: nextProps.email,
+        listFood: nextProps.listFood,
+        buaAnId: nextProps.buaAnId,
+        ngayAn: nextProps.ngayAn,
+      });
+      await this.tinhCaloCacDaChon();
+    }
+  }
 
   async componentDidMount() {
     await this.tinhCaloCacDaChon();
@@ -139,6 +141,7 @@ class DanhSachBuaAnComponent extends Component {
   }
 
   renderFood() {
+    // console.log('renderFood', JSON.stringify(this.props.thucDon.DanhSachMon));
     return (
       <View style={styles.MainContainer}>
         <FlatList
