@@ -1,17 +1,11 @@
-import React, { Component } from 'react'
-import { createAppContainer, SafeAreaView } from 'react-navigation'
-import { View, Text, StyleSheet, processColor } from 'react-native'
-
+import React from 'react'
+import { createAppContainer } from 'react-navigation'
+import { View, StyleSheet, } from 'react-native'
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs'
 import Icon from 'react-native-vector-icons/Ionicons'
 import QuanLyCaLoActivity from '../quan-ly-calo/QuanLyCaLoActivity'
 import { QuanLyThongTinCaNhanActivity } from '../quan-ly-thong-tin-ca-nhan/QuanLyThongTinCaNhanActivity'
 import QuanLyThucDonActivity from '../quan-ly-thuc-don/QuanLyThucDonActivity'
-import { connect } from 'react-redux'
-import * as actions from '../../redux/actions'
-var soThanhVien = 1
-var email = ''
-var navigation = null
 
 // Tab calo
 class CaloScreen extends React.Component {
@@ -90,7 +84,7 @@ const TabNavigator = createMaterialBottomTabNavigator(
     }
   },
   {
-    initialRouteName: 'DiaryScreen',
+    initialRouteName: 'CaloScreen',
     barStyle: { backgroundColor: '#3BAD87' }
   }
 )

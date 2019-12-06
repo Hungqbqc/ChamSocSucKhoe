@@ -16,8 +16,6 @@ class DanhSachBuaAnComponent extends Component {
       buaAnId: this.props.buaAnId,
       totalCalo: 0,
     };
-    console.log('listFood', this.props.listFood);
-
   }
 
   async componentWillReceiveProps(nextProps) {
@@ -241,7 +239,8 @@ class DanhSachBuaAnComponent extends Component {
 function mapStateToProps(state) {
   return {
     myNavigation: state.myNavigation,
-    buaAn: state.thucDon.buaAn
+    buaAn: state.thucDon.buaAn,
+    caloTarget : state.thucDon.thucDon.TongNangLuong,
   }
 }
 

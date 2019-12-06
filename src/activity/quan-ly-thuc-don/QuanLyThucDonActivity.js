@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, FlatList } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
 import {
   COLOR_DEEPSKY_BLUE,
 } from '../../asset/MyColor';
@@ -10,12 +10,13 @@ import {
   DATE_FORMAT_COMPARE,
 } from '../../asset/MyConst';
 import DanhSachBuaAnComponent from '../../components/quan-ly-thuc-don/DanhSachBuaAnComponent';
-import { ScrollView } from 'react-native';
 import * as Progress from 'react-native-progress';
 import DatePicker from 'react-native-datepicker';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
+import Loader from '../../components/Loader';
+
 class QuanLyThucDonActivity extends Component {
   menuList = [{ id: '1' }, { id: '2' }, { id: '3' }, { id: '4' }];
 
@@ -32,24 +33,18 @@ class QuanLyThucDonActivity extends Component {
       btnSelected: moment().format('DD'),
       dayOfWeek: this.taoLich(moment().format(DATE_FORMAT)),
       totalCalo: 0,
+      isLoading: false
     };
   }
 
   // sau khi màn hình hiển thị lên thì lấy dữ liệu thực đơn từ trên server về
   async componentDidMount() {
     await this.layDuLieu(moment().format(DATE_FORMAT));
-    console.log(this.props.myNavigation);
-
-    this.focusListener = this.props.myNavigation.addListener('didFocus', () => {
-      console.log('focusListener');
-
-      // this.layDuLieu(this.props.ngayChon);
-    });
   }
 
   // Nếu có dữ liệu thì cấp nhật lại giao diện
   shouldComponentUpdate(nextProps, nextState) {
-    if (this.props.thucDon === nextProps.thucDon) {
+    if (this.state.isLoading === nextState.isLoading) {
       return false;
     }
     return true
@@ -57,13 +52,11 @@ class QuanLyThucDonActivity extends Component {
 
   // Khi chọn ngày từ nút bấm
   async onPress(item) {
-    debugger;
-
     // Gán ngày đã chọn trong tuần
-    await this.props.chonNgayThucDon(item);
+    await this.props.chonNgayThucDon(moment(item, DATE_FORMAT).format(DATE_FORMAT_COMPARE));
     await this.setStateAsync({
       btnSelected: moment(item, DATE_FORMAT).format('DD'),
-      ngayChon: item,
+      ngayChon:item,
     });
     // Lấy dữ liệu
     await this.layDuLieu(item);
@@ -71,20 +64,18 @@ class QuanLyThucDonActivity extends Component {
 
   // Lấy dữ liệu từ trên server về
   async layDuLieu(ngayChon) {
-    console.log('layDuLieu', ngayChon);
-
+    this.setState({ isLoading: true })
     await this.props.layThucDonAsync(LAY_THUC_DON, {
       email: this.props.email,
       ngayAn: moment(ngayChon, DATE_FORMAT).format(DATE_FORMAT_COMPARE),
     }).then(async () => {
       await this.tinhCaloCacDaChon();
+      await this.setState({ isLoading: false })
     });
   }
 
   // Tính toán lượng calo mà người dùng đã chọn
   async tinhCaloCacDaChon() {
-    debugger;
-    console.log('tinhCaloCacDaChon', JSON.stringify(this.props.thucDon));
     let totalCalo = 0;
     // if (this.props.thucDon !== null) 
     {
@@ -107,7 +98,7 @@ class QuanLyThucDonActivity extends Component {
 
   // Chọn ngày ở lịch
   async chonNgay(date) {
-    await this.props.chonNgayThucDon(moment(date, DATE_FORMAT).format(DATE_FORMAT));
+    await this.props.chonNgayThucDon(moment(date, DATE_FORMAT).format(DATE_FORMAT_COMPARE));
     await this.setStateAsync({
       ngayChon: moment(date, DATE_FORMAT).format(DATE_FORMAT), // lưu lại ngày đã chọn
       btnSelected: moment(date, DATE_FORMAT).format('DD'), // lưu lại ngày chọn để sáng nút
@@ -138,7 +129,10 @@ class QuanLyThucDonActivity extends Component {
     );
   }
 
+
   render() {
+
+
     const items = this.state.dayOfWeek.map(item => {
       return (
         <TouchableOpacity
@@ -174,6 +168,13 @@ class QuanLyThucDonActivity extends Component {
       <View style={styles.container}>
         <View style={styles.calendar}>
           <View style={{ flex: 1, flexDirection: 'row' }}>
+            <View >
+              {
+                this.state.isLoading ? <View style={{ flex: 1, justifyContent: "center", alignContent: "center" }}>
+                  <Loader />
+                </View> : null
+              }
+            </View>
             <View style={{ flex: 7 }}>
               <Progress.Bar
                 progress={this.state.progress}
@@ -267,6 +268,7 @@ class QuanLyThucDonActivity extends Component {
         <View style={styles.menuFood}>
           {this.renderFood()}
         </View>
+
       </View>
     );
   }
