@@ -128,7 +128,6 @@ class DanhSachBuaAnComponent extends Component {
       loaiBua: this.state.buaAnId,
       tenBua: result
     })
-    console.log('chonBuaAn', this.props.buaAn);
 
     this.props.myNavigation.navigate('DanhSachDanhMucMonAnActivity', {
       email: this.state.email,
@@ -139,14 +138,12 @@ class DanhSachBuaAnComponent extends Component {
   }
 
   renderFood() {
-    // console.log('renderFood', JSON.stringify(this.props.thucDon.DanhSachMon));
     return (
       <View style={styles.MainContainer}>
         <FlatList
           keyExtractor={(item, index) => index.toString()}
           data={this.state.listFood.Mon.map(obj => obj)}
           renderItem={({ item, index }) => {
-            //console.log(`Item = ${JSON.stringify(item)}, index = ${index}`);
             return (
               <ThongTinMonAnComponent
                 key={item.Id}

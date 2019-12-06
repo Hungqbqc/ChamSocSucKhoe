@@ -1,4 +1,4 @@
-import { LAY_THUC_DON, CHON_NGAY_THUC_DON, CHON_BUA_AN, DATE_FORMAT_COMPARE } from '../../asset/MyConst'
+import { LAY_THUC_DON, CHON_NGAY_THUC_DON, CHON_BUA_AN, DATE_FORMAT_COMPARE, LOADING } from '../../asset/MyConst'
 import moment from 'moment';
 
 const initialState = {
@@ -17,7 +17,8 @@ const initialState = {
     buaAn: {
         loaiBua: 1,
         tenBua: 'Breakfast'
-    }
+    },
+    isLoading: false
 }
 
 export default function (state = initialState, action) {
@@ -34,6 +35,11 @@ export default function (state = initialState, action) {
             return {
                 ...state, buaAn: action.buaAn
             };
+        case LOADING: {
+            return {
+                ...state, isLoading: action.isLoading
+            };
+        }
         default:
             return state;
     }

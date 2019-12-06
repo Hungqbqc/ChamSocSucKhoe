@@ -1,6 +1,16 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Modal, ActivityIndicator } from 'react-native';
-
+import {
+  BallIndicator,
+  BarIndicator,
+  DotIndicator,
+  MaterialIndicator,
+  PacmanIndicator,
+  PulseIndicator,
+  SkypeIndicator,
+  UIActivityIndicator,
+  WaveIndicator,
+} from 'react-native-indicators';
 const Loader = props => {
   const { loading, ...attributes } = props;
 
@@ -8,13 +18,20 @@ const Loader = props => {
     <Modal
       transparent={true}
       animationType={'none'}
-      visible={loading}
+      visible={true}
       onRequestClose={() => {
         console.log('close modal');
       }}>
       <View style={styles.modalBackground}>
         <View style={styles.activityIndicatorWrapper}>
-          <ActivityIndicator size={60} color="#0000ff" />
+          {/* <BallIndicator color='blue' /> */}
+          <PacmanIndicator size={80} color='blue' />
+          {/* <DotIndicator color='blue' /> */}
+          {/* <MaterialIndicator color='blue' /> */}
+          {/* <PacmanIndicator color='blue' /> */}
+          {/* <SkypeIndicator color='blue' /> */}
+          {/* <UIActivityIndicator color='blue' /> */}
+          {/* <WaveIndicator color='blue' /> */}
         </View>
       </View>
     </Modal>

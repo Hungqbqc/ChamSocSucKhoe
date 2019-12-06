@@ -7,10 +7,10 @@ import {
 } from '../../asset/MyColor';
 import {
   IP_SERVER,
-  URLThucDon,
+  LAY_THUC_DON,
   COLOR_WHITE,
   DATE_FORMAT_COMPARE,
-  DATE_FORMAT,
+  URLThucDon,
 } from '../../asset/MyConst';
 import moment from 'moment';
 import { connect } from 'react-redux';
@@ -35,14 +35,29 @@ class ChiTietMonAnActivity extends Component {
     };
   }
 
-  URLThucDon = IP_SERVER + 'ThucDon.php';
 
   // Lưu lại số người
   numericInputOnchange(value) {
     this.setState({ soLuong: value < 0 ? 0 : value });
   }
 
-  _onPress = () => {
+  async _onPress() {
+    // this.props.themMonAnAsync(
+    //   JSON.stringify({
+    //     loai: 1,
+    //     ChuTaiKhoanId: this.props.email,
+    //     BuaAnId: this.props.buaAn.loaiBua,
+    //     MonAnId: this.state.monAn.Id,
+    //     NgayAn: this.props.ngayChon,
+    //     SoLuong: this.state.soLuong,
+    //   }));
+    // await this.props.layThucDonAsync(LAY_THUC_DON, {
+    //   email: this.props.email,
+    //   ngayAn: this.props.ngayChon
+    // }).then(async () => {
+    //   this.props.myNavigation.navigate('ManHinhChinhActivity');
+    // });
+
     fetch(URLThucDon, {
       method: 'POST',
       headers: {
@@ -62,7 +77,13 @@ class ChiTietMonAnActivity extends Component {
       .then(responseJson => {
         // Thêm món ăn thành công
         if (responseJson !== 0) {
-          this.props.myNavigation.navigate('ManHinhChinhActivity');
+          this.props.layThucDonAsync(LAY_THUC_DON, {
+            email: this.props.email,
+            ngayAn: this.props.ngayChon
+          }).then(async () => {
+            this.props.taiLaiTrang(true)
+            this.props.myNavigation.navigate('ManHinhChinhActivity');
+          });
         } else {
           alert('Thêm món ăn thất bại!');
         }
@@ -72,7 +93,6 @@ class ChiTietMonAnActivity extends Component {
       });
 
     console.log(this.props.ngayChon);
-
   };
 
   render() {
@@ -119,7 +139,7 @@ class ChiTietMonAnActivity extends Component {
               {this.state.monAn.DonViTinh.split(' ')[1].trim()}
             </Text>
           </View>
-          <TouchableOpacity onPress={this._onPress} style={styles.buttonluu}>
+          <TouchableOpacity onPress={() => this._onPress()} style={styles.buttonluu}>
             <Text style={{ fontSize: 20 }}>Lưu</Text>
           </TouchableOpacity>
         </View>

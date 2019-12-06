@@ -35,6 +35,8 @@ class QuanLyThucDonActivity extends Component {
       totalCalo: 0,
       isLoading: false
     };
+
+    this.renderFood = this.renderFood.bind(this);
   }
 
   // sau khi màn hình hiển thị lên thì lấy dữ liệu thực đơn từ trên server về
@@ -43,11 +45,12 @@ class QuanLyThucDonActivity extends Component {
   }
 
   // Nếu có dữ liệu thì cấp nhật lại giao diện
-  shouldComponentUpdate(nextProps, nextState) {
-    if (this.state.isLoading === nextState.isLoading) {
-      return false;
+  async  shouldComponentUpdate(nextProps, nextState) {
+    if (this.props.isLoading !== nextProps.isLoading) {
+      this.props.taiLaiTrang(false)
+      return true;
     }
-    return true
+    return false;
   }
 
   // Khi chọn ngày từ nút bấm
@@ -56,7 +59,7 @@ class QuanLyThucDonActivity extends Component {
     await this.props.chonNgayThucDon(moment(item, DATE_FORMAT).format(DATE_FORMAT_COMPARE));
     await this.setStateAsync({
       btnSelected: moment(item, DATE_FORMAT).format('DD'),
-      ngayChon:item,
+      ngayChon: item,
     });
     // Lấy dữ liệu
     await this.layDuLieu(item);
@@ -64,13 +67,13 @@ class QuanLyThucDonActivity extends Component {
 
   // Lấy dữ liệu từ trên server về
   async layDuLieu(ngayChon) {
-    this.setState({ isLoading: true })
+    this.props.taiLaiTrang(true);
     await this.props.layThucDonAsync(LAY_THUC_DON, {
       email: this.props.email,
       ngayAn: moment(ngayChon, DATE_FORMAT).format(DATE_FORMAT_COMPARE),
     }).then(async () => {
       await this.tinhCaloCacDaChon();
-      await this.setState({ isLoading: false })
+      this.props.taiLaiTrang(false);
     });
   }
 
@@ -170,7 +173,7 @@ class QuanLyThucDonActivity extends Component {
           <View style={{ flex: 1, flexDirection: 'row' }}>
             <View >
               {
-                this.state.isLoading ? <View style={{ flex: 1, justifyContent: "center", alignContent: "center" }}>
+                this.props.isLoading ? <View style={{ flex: 1, justifyContent: "center", alignContent: "center" }}>
                   <Loader />
                 </View> : null
               }
@@ -278,6 +281,7 @@ class QuanLyThucDonActivity extends Component {
       <FlatList
         keyExtractor={(item, index) => index.toString()}
         data={this.menuList.map(item => item)}
+        refreshing={this.state.isLoading}
         renderItem={({ item, index }) => {
           return (
             <DanhSachBuaAnComponent
@@ -303,7 +307,8 @@ function mapStateToProps(state) {
     myNavigation: state.myNavigation,
     thucDon: state.thucDon.thucDon,
     ngayChon: state.thucDon.ngayChon,
-    email: state.taiKhoan.email
+    email: state.taiKhoan.email,
+    isLoading: state.thucDon.isLoading,
   }
 }
 

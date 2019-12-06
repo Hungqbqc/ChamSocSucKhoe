@@ -20,16 +20,19 @@ import {
   THEM_SO_THANH_VIEN,
   LAY_THUC_DON,
   CHON_NGAY_THUC_DON,
-  CHON_BUA_AN
+  CHON_BUA_AN,
+  LOADING,
+  URLThucDon
 } from "../../asset/MyConst";
 
 // import * as thanhVien from './thanhVienAction'
+import callApi from '../../api/apiCaller'
 import taiKhoan from '../../api/TaiKhoanAPI'
 import thucDon from '../../api/ThucDonAPI'
 import thongTinThanhVien from '../../api/ThongTinThanhVienAPI'
 
 
-// Đăng nhập
+//#region  Đăng nhập
 export const khoiDongApp = navigation => ({ type: KHOI_DONG_APP, navigation })
 export const dangNhap = (email, password, trangThaiDangNhap) => ({
   type: DANG_NHAP,
@@ -69,16 +72,19 @@ export function dangKyAsync(type, data) {
     })
   }
 }
+//#endregion
 
-// Quản lý calo
+//#region  Quản lý calo
 export const chonTabThanhVien = index => ({ type: CHON_TAB_THANH_VIEN, index })
 export const layThongTinCaloThanhVien = routes => ({
   type: LAY_THONG_TIN_CALO_THANH_VIEN,
   routes
 })
 
+//#endregion
 
-/* Quản lý thành viên */
+
+//#region Quản lý thành viên
 
 // Đếm số thành viên
 export const demSoThanhVien = soThanhVien => ({
@@ -124,9 +130,12 @@ export function capNhatThongTinCaloThanhVienAsync(type, data) {
     await thongTinThanhVien(type, data);
   }
 }
+//#endregion
 
 
-/* Thực đơn */
+//#region Thực đơn
+// Tải lại màn hình thực đơn
+export const taiLaiTrang = isLoading => ({ type: LOADING, isLoading })
 export const layThucDon = thucDon => ({ type: LAY_THUC_DON, thucDon })
 export function layThucDonAsync(type, data) {
   return async dispatch => {
@@ -143,3 +152,14 @@ export function chonBuaAnAsync(buaAn) {
     await dispatch(chonBuaAn(buaAn))
   }
 }
+
+export function themMonAnAsync(monAn) {
+  console.log('themMonAnAsync', monAn);
+  return dispatch => {
+    return callApi(URLThucDon, 'POST', monAn).then(async res => {
+      // console.log(1221, res);
+      dispatch(taiLaiTrang(true))
+    });
+  }
+}
+//#endregion

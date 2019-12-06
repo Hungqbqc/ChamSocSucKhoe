@@ -49,8 +49,11 @@ export const CHON_TAB_THANH_VIEN = 'CHON_TAB_THANH_VIEN';
 export const LAY_THONG_TIN_CALO_THANH_VIEN = 'LAY_THONG_TIN_CALO_THANH_VIEN';
 
 /* Thực đơn */
+export const LOADING = 'LOADING';
 export const LAY_THUC_DON = 'LAY_THUC_DON';
 // chọn ngày để lấy thực đơn
 export const CHON_NGAY_THUC_DON = 'CHON_NGAY_THUC_DON';
 // Lưu bữa ăn
 export const CHON_BUA_AN = 'CHON_BUA_AN';
+// Thêm món ăn vào thực đơn
+export const THEM_MON_AN = 'THEM_MON_AN';
