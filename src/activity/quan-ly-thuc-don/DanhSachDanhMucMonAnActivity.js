@@ -10,57 +10,7 @@ import {
 import { IP_SERVER } from '../../asset/MyConst';
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
-class FlatListItem extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return (
-      <View
-        key={this.props.item.Id}
-        style={{
-          flex: 1,
-          flexDirection: 'column',
-        }}>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-          }}>
-          <Image
-            source={{ uri: this.props.item.anhDanhMuc }}
-            style={{ width: 100, height: 100, margin: 5 }}
-          />
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'column',
-              height: 100,
-              justifyContent: 'center',
-            }}>
-            <Text style={styles.flatListItem}>
-              {this.props.item.tenDanhMucMonAn}
-            </Text>
-          </View>
-        </View>
-        <View
-          style={{
-            height: 2,
-            backgroundColor: 'black',
-          }}
-        />
-      </View>
-    );
-  }
-}
-const styles = StyleSheet.create({
-  flatListItem: {
-    color: 'black',
-    padding: 10,
-    fontSize: 16,
-  },
-});
+import DanhSachDanhMucMonAnComponent from '../../components/quan-ly-thuc-don/DanhSachDanhMucMonAnComponent';
 
 class DanhSachDanhMucMonAnActivity extends Component {
   flatListDanhMucMonAn = [];
@@ -105,7 +55,7 @@ class DanhSachDanhMucMonAnActivity extends Component {
   }
 
   chonDanhMuc(idDanhMuc) {
-    this.props.navigation.navigate('DanhSachMonAnActivity', {
+    this.props.myNavigation.navigate('DanhSachMonAnActivity', {
       idDanhMuc: idDanhMuc,
       email: this.state.email,
       buaAnId: this.state.buaAnId,
@@ -122,7 +72,7 @@ class DanhSachDanhMucMonAnActivity extends Component {
           renderItem={({ item, index }) => {
             return (
               <TouchableOpacity onPress={() => this.chonDanhMuc(item.id)}>
-                <FlatListItem key={item.Id} item={item} />
+                <DanhSachDanhMucMonAnComponent key={item.Id} item={item} />
               </TouchableOpacity>
             );
           }}

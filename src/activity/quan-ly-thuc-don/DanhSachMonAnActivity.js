@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -7,8 +7,12 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import {IP_SERVER} from '../../asset/MyConst';
-export default class DanhSachMonAnActivity extends Component {
+import { IP_SERVER } from '../../asset/MyConst';
+import { connect } from 'react-redux';
+import * as actions from '../../redux/actions';
+import DanhSachMonAnComponent from '../../components/quan-ly-thuc-don/DanhSachMonAnComponent';
+
+class DanhSachMonAnActivity extends Component {
   static navigationOptions = {
     title: 'Món chay',
     headerStyle: {
@@ -56,14 +60,14 @@ export default class DanhSachMonAnActivity extends Component {
   }
   render() {
     return (
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <FlatList
           keyExtractor={(item, index) => index.toString()}
           data={this.state.flatListDanhMucMonAn}
-          renderItem={({item, index}) => {
+          renderItem={({ item, index }) => {
             return (
               <TouchableOpacity onPress={() => this.chonMonAn(item)}>
-                <FlatListFoodItem key={item.Id} item={item} />
+                <DanhSachMonAnComponent key={item.Id} item={item} />
               </TouchableOpacity>
             );
           }}
@@ -73,7 +77,7 @@ export default class DanhSachMonAnActivity extends Component {
   }
 
   chonMonAn(monAn) {
-    this.props.navigation.navigate('ChiTietMonAnActivity', {
+    this.props.myNavigation.navigate('ChiTietMonAnActivity', {
       themMonAnThanhCong: this.themMonAnThanhCong,
       monAn: monAn,
       email: this.state.email,
@@ -83,75 +87,13 @@ export default class DanhSachMonAnActivity extends Component {
   }
 }
 
-class FlatListFoodItem extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return (
-      <>
-        <View key={this.props.item.Id} style={styles.container}>
-          <View style={styles.left}>
-            <Image
-              style={styles.avatarLogin}
-              source={{
-                uri: this.props.item.AnhMonAn,
-              }}
-            />
-          </View>
-          <View style={styles.right}>
-            <View style={styles.rightTop}>
-              <Text style={{fontSize: 18}}>{this.props.item.TenMonAn}</Text>
-              <Text style={{fontSize: 20, color: 'red'}}>
-                {' '}
-                {this.props.item.Calo}
-              </Text>
-            </View>
-            <View style={styles.rightBottom}>
-              <Text>{this.props.item.DonViTinh}</Text>
-            </View>
-          </View>
-        </View>
-        <View
-          style={{
-            height: 2,
-            backgroundColor: 'black',
-          }}
-        />
-      </>
-    );
+function mapStateToProps(state) {
+  return {
+    myNavigation: state.myNavigation,
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'row',
-    padding: 5,
-  },
-  avatarLogin: {
-    width: 80,
-    height: 80,
-    marginBottom: 3,
-  },
-  left: {
-    flex: 1,
-  },
-  right: {
-    flex: 3,
-    paddingLeft: 5,
-  },
-  rightTop: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 15,
-  },
-  rightBottom: {flex: 1},
-  flatListItem: {
-    color: 'black',
-    padding: 10,
-    fontSize: 16,
-  },
-});
+export default connect(
+  mapStateToProps,
+  actions
+)(DanhSachMonAnActivity)

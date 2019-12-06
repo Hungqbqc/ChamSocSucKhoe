@@ -1,4 +1,4 @@
-import { LAY_THUC_DON, CHON_NGAY_THUC_DON, CHON_BUA_AN } from '../../asset/MyConst'
+import { LAY_THUC_DON, CHON_NGAY_THUC_DON, CHON_BUA_AN, DATE_FORMAT_COMPARE } from '../../asset/MyConst'
 import moment from 'moment';
 
 const initialState = {
@@ -13,7 +13,7 @@ const initialState = {
             { LoaiBua: '4', Mon: [] },
         ],
     },
-    ngayChon: '',
+    ngayChon: moment().format(DATE_FORMAT_COMPARE),
     buaAn: {
         loaiBua: 1,
         tenBua: 'Breakfast'

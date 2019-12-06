@@ -10,10 +10,12 @@ import {
   URLThucDon,
   COLOR_WHITE,
   DATE_FORMAT_COMPARE,
+  DATE_FORMAT,
 } from '../../asset/MyConst';
 import moment from 'moment';
-
-export default class ChiTietMonAnActivity extends Component {
+import { connect } from 'react-redux';
+import * as actions from '../../redux/actions';
+class ChiTietMonAnActivity extends Component {
   static navigationOptions = {
     title: 'Bông cải xào',
     headerStyle: {
@@ -30,10 +32,6 @@ export default class ChiTietMonAnActivity extends Component {
     this.state = {
       soLuong: 1,
       monAn: this.props.navigation.getParam('monAn'),
-      navigation: this.props.navigation,
-      email: this.props.navigation.getParam('email'),
-      BuaAnId: this.props.navigation.getParam('buaAnId'),
-      ngayAn: this.props.navigation.getParam('ngayAn'),
     };
   }
 
@@ -45,7 +43,7 @@ export default class ChiTietMonAnActivity extends Component {
   }
 
   _onPress = () => {
-    fetch(IP_SERVER + URLThucDon, {
+    fetch(URLThucDon, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -53,12 +51,10 @@ export default class ChiTietMonAnActivity extends Component {
       },
       body: JSON.stringify({
         loai: 1,
-        ChuTaiKhoanId: this.state.email,
-        BuaAnId: this.state.BuaAnId,
+        ChuTaiKhoanId: this.props.email,
+        BuaAnId: this.props.buaAn.loaiBua,
         MonAnId: this.state.monAn.Id,
-        NgayAn: moment(this.state.ngayAn, 'DD/MM/YYYY').format(
-          DATE_FORMAT_COMPARE,
-        ),
+        NgayAn: this.props.ngayChon,
         SoLuong: this.state.soLuong,
       }),
     })
@@ -66,7 +62,7 @@ export default class ChiTietMonAnActivity extends Component {
       .then(responseJson => {
         // Thêm món ăn thành công
         if (responseJson !== 0) {
-          this.props.navigation.navigate('ManHinhChinhActivity');
+          this.props.myNavigation.navigate('ManHinhChinhActivity');
         } else {
           alert('Thêm món ăn thất bại!');
         }
@@ -74,6 +70,9 @@ export default class ChiTietMonAnActivity extends Component {
       .catch(error => {
         console.error(error);
       });
+
+    console.log(this.props.ngayChon);
+
   };
 
   render() {
@@ -128,6 +127,20 @@ export default class ChiTietMonAnActivity extends Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    myNavigation: state.myNavigation,
+    buaAn: state.thucDon.buaAn,
+    ngayChon: state.thucDon.ngayChon,
+    email: state.taiKhoan.email
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  actions
+)(ChiTietMonAnActivity)
 
 const styles = StyleSheet.create({
   container: {
