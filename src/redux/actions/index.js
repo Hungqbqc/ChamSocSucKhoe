@@ -1,15 +1,4 @@
-// import {
-//   DEM_SO_THANH_VIEN,
-//   CHON_TAB_THANH_VIEN,
-//   DANG_NHAP,
-//   DANG_KY,
-//   KHOI_DONG_APP,
-//   LAY_THONG_TIN_CALO_THANH_VIEN,
-//   THEM_SO_THANH_VIEN,
-//   LAY_THUC_DON,
-//   CHON_NGAY_THUC_DON,
-//   CHON_BUA_AN
-// } from './type'
+
 import {
   DEM_SO_THANH_VIEN,
   CHON_TAB_THANH_VIEN,
@@ -32,7 +21,6 @@ import callApi from '../../api/apiCaller'
 import taiKhoan from '../../api/TaiKhoanAPI'
 import thucDon from '../../api/ThucDonAPI'
 import thongTinThanhVien from '../../api/ThongTinThanhVienAPI'
-
 
 //#region  Đăng nhập
 export const khoiDongApp = navigation => ({ type: KHOI_DONG_APP, navigation })
@@ -146,6 +134,20 @@ export function xoaThanhVienAsync(body,email) {
     });
   }
 }
+
+export function themThanhVienAsync(body,email) {
+  // console.log('body',body);
+  // console.log('email',email);
+  
+  return async dispatch => {
+    await callApi(URL_THONG_TIN_THANH_VIEN, 'POST', body).then(async res => {
+      console.log('themThanhVienAsync',res);
+      
+      dispatch(layThongTinThanhVienAsync(LAY_THONG_TIN_CALO_THANH_VIEN, { email }))
+    });
+  }
+}
+
 //#endregion
 
 

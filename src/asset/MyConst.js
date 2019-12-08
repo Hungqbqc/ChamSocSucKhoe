@@ -49,6 +49,7 @@ export const CHON_TAB_THANH_VIEN = 'CHON_TAB_THANH_VIEN';
 export const LAY_THONG_TIN_CALO_THANH_VIEN = 'LAY_THONG_TIN_CALO_THANH_VIEN';
 export const CHON_THANH_VIEN = 'CHON_THANH_VIEN';
 export const XOA_THANH_VIEN = 'XOA_THANH_VIEN';
+export const THEM_THANH_VIEN = 'THEM_THANH_VIEN';
 
 /* Thực đơn */
 export const LOADING = 'LOADING';

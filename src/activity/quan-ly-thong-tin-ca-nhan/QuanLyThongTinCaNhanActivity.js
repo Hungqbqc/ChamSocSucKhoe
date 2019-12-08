@@ -15,50 +15,12 @@ import { Button } from 'react-native-elements';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import IconEntypo from 'react-native-vector-icons/Entypo';
-import { ThemThanhVienModal } from '../../components/quan-ly-thong-tin-ca-nhan/ThemThanhVienModal';
+import  ThemThanhVienModal  from '../../components/quan-ly-thong-tin-ca-nhan/ThemThanhVienModal';
 import * as actions from '../../redux/actions';
 import { connect } from 'react-redux';
 
 class QuanLyThongTinCaNhanActivity extends React.Component {
-  // profileInfo: ProfileInfo = new ProfileInfo();
 
-
-
-  Obj = {
-    info: {
-      imageUri:
-        'https://www.google.com/imgres?imgurl=https%3A%2F%2Fimages.pexels.com%2Fphotos%2F1133957%2Fpexels-photo-1133957.jpeg%3Fauto%3Dcompress%26cs%3Dtinysrgb%26dpr%3D1%26w%3D500&imgrefurl=https%3A%2F%2Fwww.pexels.com%2Fsearch%2Fbeautiful%2F&docid=B51x0PBR9KNzvM&tbnid=Ta_cSMMIFERHqM%3A&vet=10ahUKEwi49tH9ks7lAhXVKqYKHfRhCxkQMwhOKAAwAA..i&w=500&h=334&bih=758&biw=1440&q=image%20beautiful&ved=0ahUKEwi49tH9ks7lAhXVKqYKHfRhCxkQMwhOKAAwAA&iact=mrc&uact=8',
-      name: 'Nguyễn Thị Ngọc Ánh',
-      email: 'Anh@gmail.com',
-    },
-    myFamily: [
-      { id: 1, name: 'Bố', checked: true },
-      { id: 2, name: 'Mẹ', checked: true },
-      { id: 3, name: 'Anh trai', checked: false },
-      { id: 5, name: 'Em gái', checked: true },
-    ],
-  };
-
-  getSoThanhVien() {
-    for (let index = 0; index < this.Obj.myFamily.length; index++) { }
-    return (
-      <View style={styles.MainContainer}>
-        <FlatList
-          keyExtractor={(item, index) => index.toString()}
-          data={this.Obj.myFamily}
-          renderItem={({ item }) => (
-            <CheckBox
-              containerStyle={styles.checkBoxMember}
-              title={item.name}
-              checked={this.state.checked}
-            />
-          )}
-          ItemSeparatorComponent={this.renderSeparator}
-          style={{ backgroundColor: 'transparent' }}
-        />
-      </View>
-    );
-  }
   modalVisible = false;
   constructor(props) {
     super(props);
@@ -72,12 +34,11 @@ class QuanLyThongTinCaNhanActivity extends React.Component {
       sliderValue: 0.3,
       quanLyCalo: this.props.quanLyCalo
     };
-    this.getSoThanhVien();
     this.addMember = this.addMember.bind(this);
   }
 
   addMember = () => {
-    this.refs.addMember.showAddMemberModal();
+    this.child.showAddMemberModal();
   };
 
   login() {
@@ -222,7 +183,7 @@ class QuanLyThongTinCaNhanActivity extends React.Component {
               />
             </View>
           </View>
-          <ThemThanhVienModal ref={'addMember'} parentFlatList={this} />
+          <ThemThanhVienModal onRef={ref => (this.child = ref)} />
         </View>
         <View style={styles.login}>
           <Button
