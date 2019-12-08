@@ -8,15 +8,22 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import {COLOR_BLUE} from '../../asset/MyColor';
-import {CheckBox, ListItem} from 'react-native-elements';
-import {Button} from 'react-native-elements';
+import { COLOR_BLUE } from '../../asset/MyColor';
+import { XOA_THANH_VIEN } from '../../asset/MyConst';
+import { CheckBox, ListItem } from 'react-native-elements';
+import { Button } from 'react-native-elements';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import IconEntypo from 'react-native-vector-icons/Entypo';
-import {ThemThanhVienModal} from '../../components/quan-ly-thong-tin-ca-nhan/ThemThanhVienModal';
-export class QuanLyThongTinCaNhanActivity extends React.Component {
+import { ThemThanhVienModal } from '../../components/quan-ly-thong-tin-ca-nhan/ThemThanhVienModal';
+import * as actions from '../../redux/actions';
+import { connect } from 'react-redux';
+
+class QuanLyThongTinCaNhanActivity extends React.Component {
   // profileInfo: ProfileInfo = new ProfileInfo();
+
+
+
   Obj = {
     info: {
       imageUri:
@@ -25,21 +32,21 @@ export class QuanLyThongTinCaNhanActivity extends React.Component {
       email: 'Anh@gmail.com',
     },
     myFamily: [
-      {id: 1, name: 'Bố', checked: true},
-      {id: 2, name: 'Mẹ', checked: true},
-      {id: 3, name: 'Anh trai', checked: false},
-      {id: 5, name: 'Em gái', checked: true},
+      { id: 1, name: 'Bố', checked: true },
+      { id: 2, name: 'Mẹ', checked: true },
+      { id: 3, name: 'Anh trai', checked: false },
+      { id: 5, name: 'Em gái', checked: true },
     ],
   };
 
   getSoThanhVien() {
-    for (let index = 0; index < this.Obj.myFamily.length; index++) {}
+    for (let index = 0; index < this.Obj.myFamily.length; index++) { }
     return (
       <View style={styles.MainContainer}>
         <FlatList
           keyExtractor={(item, index) => index.toString()}
           data={this.Obj.myFamily}
-          renderItem={({item}) => (
+          renderItem={({ item }) => (
             <CheckBox
               containerStyle={styles.checkBoxMember}
               title={item.name}
@@ -47,7 +54,7 @@ export class QuanLyThongTinCaNhanActivity extends React.Component {
             />
           )}
           ItemSeparatorComponent={this.renderSeparator}
-          style={{backgroundColor: 'transparent'}}
+          style={{ backgroundColor: 'transparent' }}
         />
       </View>
     );
@@ -63,6 +70,7 @@ export class QuanLyThongTinCaNhanActivity extends React.Component {
       isDisabled: false,
       swipeToClose: true,
       sliderValue: 0.3,
+      quanLyCalo: this.props.quanLyCalo
     };
     this.getSoThanhVien();
     this.addMember = this.addMember.bind(this);
@@ -89,7 +97,7 @@ export class QuanLyThongTinCaNhanActivity extends React.Component {
           },
         },
       ],
-      {cancelable: false},
+      { cancelable: false },
     );
   }
 
@@ -103,41 +111,49 @@ export class QuanLyThongTinCaNhanActivity extends React.Component {
           onPress: () => console.log('Cancel Pressed'),
           style: 'login',
         },
-        {text: 'Đăng xuất', onPress: () => console.log('OK Pressed')},
+        { text: 'Đăng xuất', onPress: () => console.log('OK Pressed') },
       ],
-      {cancelable: false},
+      { cancelable: false },
     );
   };
 
   xoaThanhVien() {
+    var out = [];
+    for (var i = 0; i < this.props.quanLyCalo.routes.length; i++) {
+      let item = this.props.quanLyCalo.routes[i]
+      if (item.info.checked) {
+        out.push({ id: item.key, name: item.info.chucDanh !== '' ? item.info.chucDanh : item.title });
+      }
+    }
+    let itemName = out.map(e => e.name).join(',');
+    let itemId = out.map(e => e.id).join(',');
     Alert.alert(
       'Bạn có chắc chắn không? ',
-      'Thành viên em trai sẽ bị xóa!',
+      'Thành viên ' + itemName + ' sẽ bị xóa!',
       [
         {
           text: 'Hủy',
-          onPress: () => console.log('Cancel Pressed'),
           style: 'login',
         },
         {
           text: 'Xác nhận',
           onPress: () => {
-            this.props.navigation.navigate('DangNhapActivity');
-          },
-        },
+            this.props.xoaThanhVienAsync(
+              JSON.stringify({
+                loai: XOA_THANH_VIEN,
+                listThanhVienId: itemId,
+              })
+              , this.props.email
+            )
+          }
+        }
       ],
-      {cancelable: false},
+      { cancelable: false },
     );
   }
 
-  checkItem = item => {
-    const {checked} = this.state;
-
-    if (!checked.includes(item)) {
-      this.setState({checked: [...checked, item]});
-    } else {
-      this.setState({checked: checked.filter(a => a !== item)});
-    }
+  checkItem = id => {
+    this.props.chonThanhVien(id);
   };
 
   render() {
@@ -150,40 +166,42 @@ export class QuanLyThongTinCaNhanActivity extends React.Component {
             <Image
               style={styles.avatarLogin}
               source={{
-                uri:
-                  'https://2img.net/h/i148.photobucket.com/albums/s1/KingofSarus/Dress-upLuffy2.jpg',
+                uri: this.props.thongTinCaNhan.Avatar,
               }}
             />
           </View>
           <View style={styles.infoRight}>
             <Text>Họ tên</Text>
-            <Text style={{marginLeft: 20}}>{this.Obj.info.name}</Text>
+            <Text style={{ marginLeft: 20 }}>{this.props.thongTinCaNhan.HoTen}</Text>
             <Text>Email</Text>
-            <Text style={{marginLeft: 20}}>{this.Obj.info.email}</Text>
+            <Text style={{ marginLeft: 20 }}>{this.props.thongTinCaNhan.Email}</Text>
           </View>
         </View>
         <View style={styles.family}>
-          <Text style={{fontWeight: 'bold', marginBottom: 15}}>
+          <Text style={{ fontWeight: 'bold', marginBottom: 15 }}>
             Thành viên trong gia đình
           </Text>
-          <View style={{flex: 9}}>
-            <FlatList
-              keyExtractor={(item, index) => index.toString()}
-              data={this.Obj.myFamily}
-              renderItem={({item}) => (
-                <CheckBox
-                  containerStyle={styles.checkBoxMember}
-                  title={item.name}
-                  checked={this.state.checked}
-                  onPress={() => this.setState({checked: !this.state.checked})}
-                />
-              )}
-              ItemSeparatorComponent={this.renderSeparator}
-              style={{backgroundColor: 'transparent'}}
-            />
+          <View style={{ flex: 9 }}>
+            {this.props.quanLyCalo.routes.length > 0 ?
+              <FlatList
+                keyExtractor={(item, index) => index.toString()}
+                data={this.props.quanLyCalo.routes}
+                renderItem={({ item }) => (
+                  <CheckBox
+                    containerStyle={styles.checkBoxMember}
+                    title={item.info.chucDanh === '' ? item.title : item.info.chucDanh}
+                    checked={item.info.checked}
+                    onPress={() => this.checkItem(item.info.id)
+                    }
+                  />
+                )}
+                ItemSeparatorComponent={this.renderSeparator}
+                style={{ backgroundColor: 'transparent' }}
+              />
+              : <Text>2</Text>}
           </View>
           <View style={styles.button}>
-            <View style={{flex: 1, marginRight: 15}}>
+            <View style={{ flex: 1, marginRight: 15 }}>
               <Button
                 icon={<IconAntDesign name="delete" size={20} color="white" />}
                 title="Xóa"
@@ -192,7 +210,7 @@ export class QuanLyThongTinCaNhanActivity extends React.Component {
                 }}
               />
             </View>
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
               <Button
                 icon={
                   <IconFontAwesome name="user-plus" size={20} color="white" />
@@ -208,17 +226,17 @@ export class QuanLyThongTinCaNhanActivity extends React.Component {
         </View>
         <View style={styles.login}>
           <Button
-            buttonStyle={{justifyContent: 'flex-start'}}
+            buttonStyle={{ justifyContent: 'flex-start' }}
             icon={<IconEntypo name="log-out" size={20} color="white" />}
             title="Đăng xuất"
-            titleStyle={{marginLeft: 10}}
+            titleStyle={{ marginLeft: 10 }}
             onPress={this.login}
           />
           <Button
-            buttonStyle={{justifyContent: 'flex-start'}}
+            buttonStyle={{ justifyContent: 'flex-start' }}
             icon={<IconAntDesign name="lock" size={20} color="white" />}
             title="Thay đổi mật khẩu"
-            titleStyle={{marginLeft: 10}}
+            titleStyle={{ marginLeft: 10 }}
             onPress={() => {
               this.changePassword();
             }}
@@ -228,6 +246,21 @@ export class QuanLyThongTinCaNhanActivity extends React.Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    myNavigation: state.myNavigation,
+    thongTinCaNhan: state.thongTinCaNhan.thongTin,
+    quanLyCalo: state.quanLyCalo,
+    email: state.taiKhoan.email,
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  actions
+)(QuanLyThongTinCaNhanActivity)
+
 
 const styles = StyleSheet.create({
   container: {

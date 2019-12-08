@@ -105,6 +105,7 @@ function CapNhatThongTinThanhVien(query) {
 
 
 export default function thongTinThanhVien(type = 1, data) {
+  debugger;
   switch (type) {
     case DEM_SO_THANH_VIEN:
       return LaySoThanhVien(data.email);

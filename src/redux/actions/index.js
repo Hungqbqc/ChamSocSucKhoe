@@ -22,7 +22,9 @@ import {
   CHON_NGAY_THUC_DON,
   CHON_BUA_AN,
   LOADING,
-  URLThucDon
+  URLThucDon,
+  CHON_THANH_VIEN,
+  URL_THONG_TIN_THANH_VIEN
 } from "../../asset/MyConst";
 
 // import * as thanhVien from './thanhVienAction'
@@ -118,6 +120,7 @@ export const layThongTinThanhVien = (routes) => ({
   routes,
 })
 export function layThongTinThanhVienAsync(type, data) {
+  console.log('layThongTinThanhVienAsync', type, data);
   return async dispatch => {
     await thongTinThanhVien(type, data).then(result => {
       dispatch(layThongTinThanhVien(result))
@@ -128,6 +131,19 @@ export function layThongTinThanhVienAsync(type, data) {
 export function capNhatThongTinCaloThanhVienAsync(type, data) {
   return async dispatch => {
     await thongTinThanhVien(type, data);
+  }
+}
+
+export const chonThanhVien = (id) => ({
+  type: CHON_THANH_VIEN,
+  id,
+})
+
+export function xoaThanhVienAsync(body,email) {
+  return async dispatch => {
+    await callApi(URL_THONG_TIN_THANH_VIEN, 'POST', body).then(async res => {
+      dispatch(layThongTinThanhVienAsync(LAY_THONG_TIN_CALO_THANH_VIEN, { email }))
+    });
   }
 }
 //#endregion

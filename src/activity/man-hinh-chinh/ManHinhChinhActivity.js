@@ -4,7 +4,7 @@ import { View, StyleSheet, } from 'react-native'
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs'
 import Icon from 'react-native-vector-icons/Ionicons'
 import QuanLyCaLoActivity from '../quan-ly-calo/QuanLyCaLoActivity'
-import { QuanLyThongTinCaNhanActivity } from '../quan-ly-thong-tin-ca-nhan/QuanLyThongTinCaNhanActivity'
+import QuanLyThongTinCaNhanActivity from '../quan-ly-thong-tin-ca-nhan/QuanLyThongTinCaNhanActivity'
 import QuanLyThucDonActivity from '../quan-ly-thuc-don/QuanLyThucDonActivity'
 
 // Tab calo

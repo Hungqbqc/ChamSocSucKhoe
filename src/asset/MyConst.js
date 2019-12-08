@@ -1,4 +1,4 @@
-export const IP_SERVER = 'http://192.168.0.129/ServerChamSocSucKhoe/';
+export const IP_SERVER = 'http://192.168.64.2/ServerChamSocSucKhoe/';
 // export const IP_SERVER = 'http://demo.thietkewebvn.vn/';
 // export const IP_SERVER = 'https://chedodinhduong.000webhostapp.com/';
 export const DATE_FORMAT = 'YYYY/MM/DD';
@@ -47,6 +47,8 @@ export const CAP_NHAT_THONG_TIN_CALO_THANH_VIEN = 'CAP_NHAT_THONG_TIN_CALO_THANH
 // Quản lý calo
 export const CHON_TAB_THANH_VIEN = 'CHON_TAB_THANH_VIEN';
 export const LAY_THONG_TIN_CALO_THANH_VIEN = 'LAY_THONG_TIN_CALO_THANH_VIEN';
+export const CHON_THANH_VIEN = 'CHON_THANH_VIEN';
+export const XOA_THANH_VIEN = 'XOA_THANH_VIEN';
 
 /* Thực đơn */
 export const LOADING = 'LOADING';

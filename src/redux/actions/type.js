@@ -27,3 +27,8 @@ export const CHON_NGAY_THUC_DON = 'CHON_NGAY_THUC_DON';
 // Lưu bữa ăn
 export const CHON_BUA_AN = 'CHON_BUA_AN';
 
+
+//#region 
+export const CHON_THANH_VIEN = 'CHON_THANH_VIEN';
+
+//#endregion

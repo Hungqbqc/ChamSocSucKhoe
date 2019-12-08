@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import counterReducer from './counterReducer'
+import ThongTinCaNhanReducer from './ThongTinCaNhanReducer'
 import TaiKhoanReducer from './TaiKhoanReducer'
 import NavigationReducer from './NavigationReducer'
 import ThanhVienReducer from './ThanhVienReducer'
@@ -7,7 +7,7 @@ import CaloReducer from './CaloReducer'
 import ThucDonReduce from './ThucDonReduce';
 
 export default combineReducers({
-  counter: counterReducer,
+  thongTinCaNhan: ThongTinCaNhanReducer,
   taiKhoan: TaiKhoanReducer,
   thanhVien: ThanhVienReducer,
   myNavigation: NavigationReducer,
