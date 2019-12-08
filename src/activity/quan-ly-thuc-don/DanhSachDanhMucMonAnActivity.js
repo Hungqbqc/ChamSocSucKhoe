@@ -54,9 +54,10 @@ class DanhSachDanhMucMonAnActivity extends Component {
     };
   }
 
-  chonDanhMuc(idDanhMuc) {
+  chonDanhMuc(danhMuc) {
     this.props.myNavigation.navigate('DanhSachMonAnActivity', {
-      idDanhMuc: idDanhMuc,
+      idDanhMuc: danhMuc.id,
+      tenDanhMuc: danhMuc.tenDanhMucMonAn,
       email: this.state.email,
       buaAnId: this.state.buaAnId,
       ngayAn: this.state.ngayAn,
@@ -71,7 +72,7 @@ class DanhSachDanhMucMonAnActivity extends Component {
           data={this.state.flatListDanhMucMonAn}
           renderItem={({ item, index }) => {
             return (
-              <TouchableOpacity onPress={() => this.chonDanhMuc(item.id)}>
+              <TouchableOpacity onPress={() => this.chonDanhMuc(item)}>
                 <DanhSachDanhMucMonAnComponent key={item.Id} item={item} />
               </TouchableOpacity>
             );

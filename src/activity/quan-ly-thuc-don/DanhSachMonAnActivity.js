@@ -13,8 +13,9 @@ import * as actions from '../../redux/actions';
 import DanhSachMonAnComponent from '../../components/quan-ly-thuc-don/DanhSachMonAnComponent';
 
 class DanhSachMonAnActivity extends Component {
-  static navigationOptions = {
-    title: 'Món chay',
+
+  static navigationOptions = ({ navigation }) => ({
+    title: `${navigation.state.params.tenDanhMuc}`,
     headerStyle: {
       backgroundColor: '#f4511e',
     },
@@ -22,7 +23,7 @@ class DanhSachMonAnActivity extends Component {
     headerTitleStyle: {
       fontWeight: 'bold',
     },
-  };
+  });
 
   URLLayMonAn = IP_SERVER + 'MonAn.php?loai=2&&idDanhMuc=';
   flatListDanhMucMonAn = [];
@@ -36,6 +37,8 @@ class DanhSachMonAnActivity extends Component {
       ngayAn: this.props.navigation.getParam('ngayAn'),
       selected: false,
     };
+    console.log(this.props.navigation.getParam('tenDanhMuc'));
+
   }
 
   themMonAnThanhCong = data => {
@@ -80,6 +83,7 @@ class DanhSachMonAnActivity extends Component {
     this.props.myNavigation.navigate('ChiTietMonAnActivity', {
       themMonAnThanhCong: this.themMonAnThanhCong,
       monAn: monAn,
+      tenMonAn: monAn.TenMonAn,
       email: this.state.email,
       buaAnId: this.state.buaAnId,
       ngayAn: this.state.ngayAn,

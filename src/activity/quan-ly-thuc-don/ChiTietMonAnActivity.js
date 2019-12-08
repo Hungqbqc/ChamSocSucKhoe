@@ -16,8 +16,19 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
 class ChiTietMonAnActivity extends Component {
-  static navigationOptions = {
-    title: 'Bông cải xào',
+  // static navigationOptions = {
+  //   title: 'Bông cải xào',
+  //   headerStyle: {
+  //     backgroundColor: '#f4511e',
+  //   },
+  //   headerTintColor: '#fff',
+  //   headerTitleStyle: {
+  //     fontWeight: 'bold',
+  //   },
+  // };
+
+  static navigationOptions = ({ navigation }) => ({
+    title: `${navigation.state.params.monAn.TenMonAn}`,
     headerStyle: {
       backgroundColor: '#f4511e',
     },
@@ -25,7 +36,7 @@ class ChiTietMonAnActivity extends Component {
     headerTitleStyle: {
       fontWeight: 'bold',
     },
-  };
+  });
 
   constructor(props) {
     super(props);
@@ -33,6 +44,9 @@ class ChiTietMonAnActivity extends Component {
       soLuong: 1,
       monAn: this.props.navigation.getParam('monAn'),
     };
+    // console.log(999,this.props.navigation.getParam('monAn'));
+    console.log(999,this.props.navigation.getParam('tenMonAn'));
+    
   }
 
 

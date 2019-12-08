@@ -137,11 +137,9 @@ class QuanLyThucDonActivity extends Component {
   }
 
   tinhSoTuan() {
-    return (
-      (moment(this.props.ngayChon, DATE_FORMAT).weeks() -
-        moment(this.props.thucDon.NgayTao, 'YYYYMMDD').weeks()) +
-      1
-    );
+    let ngayTao = moment(this.props.thucDon.NgayTao, 'YYYYMMDD').isoWeek()
+    let ngayChon = moment(this.props.ngayChon, 'YYYYMMDD').isoWeek()
+    return (ngayChon - ngayTao < 0 ? 0 : ngayChon - ngayTao) + 1;
   }
 
   render() {
