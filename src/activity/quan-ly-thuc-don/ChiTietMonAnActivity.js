@@ -81,7 +81,7 @@ class ChiTietMonAnActivity extends Component {
             email: this.props.email,
             ngayAn: this.props.ngayChon
           }).then(async () => {
-            this.props.taiLaiTrang(true)
+            // this.props.taiLaiTrang(true)
             this.props.myNavigation.navigate('ManHinhChinhActivity');
           });
         } else {

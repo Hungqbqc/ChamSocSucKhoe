@@ -59,7 +59,7 @@ class CaloComponent extends Component {
       chucDanh: this.props.data.info.chucDanh, // Chức danh
       gioiTinh: Number(this.props.data.info.gioiTinh), // Giới tính
       ngaySinh:
-        this.props.data.info.ngaySinh === ''
+        this.props.data.info.ngaySinh === null
           ? moment()
           : moment(this.props.data.info.ngaySinh, DATE_FORMAT),
       chieuCao: this.props.data.info.chieuCao, // Chiều cao

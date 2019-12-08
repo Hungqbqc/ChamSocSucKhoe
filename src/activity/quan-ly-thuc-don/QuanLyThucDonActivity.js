@@ -47,7 +47,6 @@ class QuanLyThucDonActivity extends Component {
   // Nếu có dữ liệu thì cấp nhật lại giao diện
   async  shouldComponentUpdate(nextProps, nextState) {
     if (this.props.isLoading !== nextProps.isLoading) {
-      this.props.taiLaiTrang(false)
       return true;
     }
     return false;
@@ -72,8 +71,9 @@ class QuanLyThucDonActivity extends Component {
       email: this.props.email,
       ngayAn: moment(ngayChon, DATE_FORMAT).format(DATE_FORMAT_COMPARE),
     }).then(async () => {
-      await this.tinhCaloCacDaChon();
-      this.props.taiLaiTrang(false);
+      await this.tinhCaloCacDaChon().then(() => {
+        this.props.taiLaiTrang(false);
+      });
     });
   }
 
@@ -96,7 +96,19 @@ class QuanLyThucDonActivity extends Component {
               : totalCalo / this.props.thucDon.TongNangLuong
             : 0,
       });
+      console.log(this.state.progress);
+
     }
+  }
+
+  tinhCaloDaAn() {
+    let totalCalo = 0;
+    this.props.thucDon.DanhSachMon.forEach((element) => {
+      element.Mon.map(w => {
+        totalCalo += w.SoLuong * w.Calo;
+      });
+    });
+    return totalCalo;
   }
 
   // Chọn ngày ở lịch
@@ -126,16 +138,13 @@ class QuanLyThucDonActivity extends Component {
 
   tinhSoTuan() {
     return (
-      moment(this.props.ngayChon, DATE_FORMAT).weeks() -
-      moment(this.props.thucDon.NgayTao, 'YYYYMMDD').weeks() +
+      (moment(this.props.ngayChon, DATE_FORMAT).weeks() -
+        moment(this.props.thucDon.NgayTao, 'YYYYMMDD').weeks()) +
       1
     );
   }
 
-
   render() {
-
-
     const items = this.state.dayOfWeek.map(item => {
       return (
         <TouchableOpacity
@@ -181,6 +190,7 @@ class QuanLyThucDonActivity extends Component {
             <View style={{ flex: 7 }}>
               <Progress.Bar
                 progress={this.state.progress}
+                animated={false}
                 width={300}
                 height={25}
               />
@@ -237,13 +247,14 @@ class QuanLyThucDonActivity extends Component {
             </Text>
             <Text style={styles.caloTopText}> - </Text>
             <Text style={styles.caloTopText}>
-              {this.props.thucDon === null ? 0 : this.state.totalCalo}
+              {this.tinhCaloDaAn()}
             </Text>
             <Text style={styles.caloTopText}> = </Text>
             <Text style={styles.caloTopText}>
               {this.props.thucDon === null
                 ? 0
-                : this.props.thucDon.TongNangLuong - this.state.totalCalo}
+                : this.props.thucDon.TongNangLuong - this.tinhCaloDaAn()
+              }
             </Text>
           </View>
           <View style={styles.caloMid}>
