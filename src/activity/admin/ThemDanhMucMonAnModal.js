@@ -1,79 +1,88 @@
 import React from 'react';
-import { Text, TextInput, View, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, Image, View, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import Modal from 'react-native-modalbox';
 import * as actions from '../../redux/actions';
 import { connect } from 'react-redux';
-import { THEM_THANH_VIEN } from '../../asset/MyConst';
-
+import { TITLE_FONT_SIZE } from '../../asset/MyConst';
+import ImagePicker from 'react-native-image-picker';
 class ThemDanhMucMonAnModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOpen: false,
-      isDisabled: false,
-      swipeToClose: true,
-      sliderValue: 0.3,
-      chucDanh: '',
-      email: this.props.email
+      photo: null,
+      tenDanhMuc: '',
+      imageEmpty: 'https://nameproscdn.com/a/2018/05/106343_82907bfea9fe97e84861e2ee7c5b4f5b.png'
     };
-    this.save = this.save.bind(this)
-    this.onClose = this.onClose.bind(this)
+
+    this.onClose = this.onClose.bind(this);
+    this.save = this.save.bind(this);
   }
 
-  // Nhấn nút lưu thêm thành viên
+  handleChoosePhoto = () => {
+    const options = {
+      noData: true,
+    };
+    ImagePicker.launchImageLibrary(options, response => {
+      if (response.uri) {
+        this.setState({ photo: response });
+      }
+    });
+  };
+
+  onClose() {
+    this.setState({
+      photo: null
+    })
+  }
+
   save() {
-    this.props.themThanhVienAsync(
-      JSON.stringify({
-        loai: THEM_THANH_VIEN,
-        chucDanh: this.state.chucDanh,
-        email: this.props.email
-      }), this.props.email).then(() => {
-        this.refs.modal1.close();
-      });
+
   }
 
   showAddMemberModal = () => {
     this.refs.modal1.open();
   };
 
-  onClose() {
-    //called on modal closed
-    console.log('Modal just closed');
-    this.setState({
-      chucDanh: ''
-    })
-  }
-
   componentDidMount() {
     this.props.onRef(this)
   }
 
-  shouldComponentUpdate
-
   render() {
+    const { photo } = this.state;
     return (
       <Modal
         style={[styles.modal, styles.modal1]}
         onClosed={this.onClose}
         position={'center'}
         ref={'modal1'}
-        isDisabled={this.state.isDisabled}>
-        <Text style={styles.title}>Thêm thành viên</Text>
+        isDisabled={this.state.isDisabled} >
+        <Text style={styles.title}>Thêm danh mục món ăn</Text>
         <View style={styles.textInputContainer}>
-          <Text>Chức danh</Text>
+          <Text>Tên danh mục</Text>
           <TextInput
             style={styles.textInput}
-            placeholder='Chức danh'
-            onChangeText={chucDanh => this.setState({ chucDanh })}
-            value={this.state.chucDanh}
+            placeholder='Tên danh mục'
+            onChangeText={tenDanhMuc => this.setState({ tenDanhMuc })}
+            value={this.state.tenDanhMuc}
           />
+          <Text>Ảnh mô tả </Text>
+          <TouchableOpacity
+            onPress={this.handleChoosePhoto}
+          >
+            <Image
+              source={{ uri: photo !== null ? photo.uri : this.state.imageEmpty }}
+              style={{ width: 150, height: 150, marginBottom: 15, marginTop: 10, }}
+            />
+          </TouchableOpacity>
+          <View style={{ justifyContent: "center", alignItems: "center" }}>
+            <TouchableOpacity
+              onPress={this.save}
+              style={styles.loginButton}
+            >
+              <Text style={styles.loginButtonTitle}>Lưu</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <TouchableOpacity
-          onPress={this.save}
-          style={styles.loginButton}
-        >
-          <Text style={styles.loginButtonTitle}>Lưu</Text>
-        </TouchableOpacity>
       </Modal>
     );
   }
@@ -101,28 +110,30 @@ const styles = StyleSheet.create({
   },
 
   modal1: {
-    height: 240,
+    height: 400,
     width: 400,
-    marginTop: -30
+    marginTop: -30,
+    borderRadius: 20
   },
   title: {
-    fontSize: 30,
+    fontSize: TITLE_FONT_SIZE,
     margin: 10
 
   },
   textInputContainer: {
+    width: '90%',
     paddingHorizontal: 10,
     borderRadius: 6,
-    marginBottom: 20,
-    backgroundColor: 'rgba(255,255,255,0.2)' // a = alpha = opacity
+    marginBottom: 30,
+    backgroundColor: 'rgba(255,255,255,0.2)', // a = alpha = opacity
   },
   textInput: {
-    width: 280,
     height: 45,
     borderBottomColor: 'black',
     borderWidth: 2,
     marginTop: 10,
-    padding: 8
+    padding: 8,
+    marginBottom: 10
   },
   loginButton: {
     width: 80,
@@ -133,6 +144,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'green'
   },
   loginButtonTitle: {
+    margin: 10,
     fontSize: 18,
     color: 'white'
   },
