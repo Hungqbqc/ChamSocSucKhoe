@@ -27,8 +27,8 @@ class DangNhapActivity extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      email: '2',
-      password: '2',
+      email: 'admin',
+      password: 'admin',
       errorMessage: null
     }
   }
@@ -41,10 +41,15 @@ class DangNhapActivity extends Component {
     if (email.trim() !== '' && password.trim() !== '') {
       this.props.dangNhapAsync(DANG_NHAP, { email, password }).then(success => {
         if (this.props.trangThaiDangNhap) {
-          if (this.props.soThanhVien > 0) {
-            this.props.myNavigation.navigate('ManHinhChinhActivity')
-          } else {
-            this.props.myNavigation.navigate('NhapSoThanhVienActivity')
+          if (!this.props.laQuanTri) {
+            if (this.props.soThanhVien > 0) {
+              this.props.myNavigation.navigate('ManHinhChinhActivity')
+            } else {
+              this.props.myNavigation.navigate('NhapSoThanhVienActivity')
+            }
+          }
+          else {
+            this.props.myNavigation.navigate('AdminActivity')
           }
         } else {
           Alert.alert('Thông báo', 'Đăng nhập thất bại')
@@ -123,6 +128,7 @@ function mapStateToProps(state) {
     myNavigation: state.myNavigation,
     email: state.taiKhoan.email,
     trangThaiDangNhap: state.taiKhoan.trangThaiDangNhap,
+    laQuanTri: state.taiKhoan.laQuanTri,
     password: state.taiKhoan.password,
     soThanhVien: state.thanhVien.soThanhVien
   }

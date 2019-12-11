@@ -24,20 +24,23 @@ import thongTinThanhVien from '../../api/ThongTinThanhVienAPI'
 
 //#region  Đăng nhập
 export const khoiDongApp = navigation => ({ type: KHOI_DONG_APP, navigation })
-export const dangNhap = (email, password, trangThaiDangNhap) => ({
+export const dangNhap = (email, password, trangThaiDangNhap,laQuanTri) => ({
   type: DANG_NHAP,
   email,
   password,
-  trangThaiDangNhap
+  trangThaiDangNhap,
+  laQuanTri
 })
 export function dangNhapAsync(type, data) {
   return async dispatch => {
     await taiKhoan(type, data).then(async e => {
       if (e === 0) {
-        dispatch(dangNhap('', '', false))
+        dispatch(dangNhap('', '', false, false))
         dispatch(demSoThanhVien(0))
       } else {
-        dispatch(dangNhap(data.email, data.password, true))
+        let de =e.LaQuanTri === "0" ? false : true;
+        console.log('dangNhapAsync', de);
+        dispatch(dangNhap(data.email, data.password, true, e.LaQuanTri === "0" ? false : true))
         await thongTinThanhVien(DEM_SO_THANH_VIEN, data).then(result => {
           dispatch(demSoThanhVien(result))
         })

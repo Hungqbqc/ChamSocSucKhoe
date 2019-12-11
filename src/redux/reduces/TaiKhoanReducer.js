@@ -5,6 +5,7 @@ const initialState = {
   password: '',
   trangThaiDangNhap: false,
   trangThaiDangKy: false,
+  laQuanTri: false
 }
 
 export default function (state = initialState, action) {
@@ -15,6 +16,7 @@ export default function (state = initialState, action) {
         email: action.email,
         password: action.password,
         trangThaiDangNhap: action.trangThaiDangNhap,
+        laQuanTri: action.laQuanTri
       };
     case DANG_KY:
       return {

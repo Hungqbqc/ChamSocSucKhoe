@@ -3,14 +3,15 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 // import FoodCategory from './src/components/diary/FoodCategory';
 import DangNhapActivity from './src/activity/dang-nhap/DangNhapActivity';
-import BaoCaoActivity from './src/activity/bao-cao/BaoCaoActivity';
 import DangKyActivity from './src/activity/dang-nhap/DangKyActivity';
 import NhapSoThanhVienActivity from './src/activity/nhap-so-thanh-vien/NhapSoThanhVienActivity';
 import ManHinhChinhActivity from './src/activity/man-hinh-chinh/ManHinhChinhActivity';
 import DanhSachDanhMucMonAnActivity from './src/activity/quan-ly-thuc-don/DanhSachDanhMucMonAnActivity';
+import BaoCaoActivity from './src/activity/bao-cao/BaoCaoActivity';
 import DanhSachMonAnActivity from './src/activity/quan-ly-thuc-don/DanhSachMonAnActivity';
 import ChiTietMonAnActivity from './src/activity/quan-ly-thuc-don/ChiTietMonAnActivity';
 import QuanLyThucDonActivity from './src/activity/quan-ly-thuc-don/QuanLyThucDonActivity';
+import AdminActivity from './src/activity/admin/AdminActivity';
 import { Provider } from 'react-redux';
 import store from './src/redux/store/store';
 const RootStack = createStackNavigator(
@@ -24,6 +25,7 @@ const RootStack = createStackNavigator(
     DanhSachMonAnActivity: DanhSachMonAnActivity,
     ChiTietMonAnActivity: ChiTietMonAnActivity,
     QuanLyThucDonActivity: QuanLyThucDonActivity,
+    AdminActivity: AdminActivity,
   },
   {
     initialRouteName: 'DangNhapActivity',
@@ -33,7 +35,7 @@ const RootStack = createStackNavigator(
 const AppContainer = createAppContainer(RootStack);
 console.disableYellowBox = true;
 export default class App extends React.Component {
-  
+
   render() {
     return (
       <Provider store={store}>

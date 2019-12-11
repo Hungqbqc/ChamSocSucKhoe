@@ -145,7 +145,7 @@ export class BaoCaoNgayActivity extends Component {
       let tongChatDam = 0;
       let tongChatBeo = 0;
       let tongChatBot = 0;
-      this.state.Obj.DanhSachMon.forEach((element: any) => {
+      this.state.Obj.DanhSachMon.forEach((element) => {
         if (element.Mon.length > 0) {
           element.Mon.map(w => {
             tongNangLuong += Number(w.SoLuong) * Number(w.Calo);
