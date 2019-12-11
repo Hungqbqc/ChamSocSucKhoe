@@ -108,17 +108,21 @@ export const layThongTinThanhVien = (routes) => ({
   routes,
 })
 export function layThongTinThanhVienAsync(type, data) {
-  console.log('layThongTinThanhVienAsync', type, data);
   return async dispatch => {
     await thongTinThanhVien(type, data).then(result => {
+      console.log('router', result);
       dispatch(layThongTinThanhVien(result))
     })
   }
 }
 
+// Cập nhật thông tin calo của các thành viên
 export function capNhatThongTinCaloThanhVienAsync(type, data) {
   return async dispatch => {
-    await thongTinThanhVien(type, data);
+    await thongTinThanhVien(type, data)
+    await thongTinThanhVien(LAY_THONG_TIN_CALO_THANH_VIEN, { email: data.email }).then(result => {
+      dispatch(layThongTinThanhVien(result))
+    })
   }
 }
 
@@ -127,7 +131,7 @@ export const chonThanhVien = (id) => ({
   id,
 })
 
-export function xoaThanhVienAsync(body,email) {
+export function xoaThanhVienAsync(body, email) {
   return async dispatch => {
     await callApi(URL_THONG_TIN_THANH_VIEN, 'POST', body).then(async res => {
       dispatch(layThongTinThanhVienAsync(LAY_THONG_TIN_CALO_THANH_VIEN, { email }))
@@ -135,14 +139,9 @@ export function xoaThanhVienAsync(body,email) {
   }
 }
 
-export function themThanhVienAsync(body,email) {
-  // console.log('body',body);
-  // console.log('email',email);
-  
+export function themThanhVienAsync(body, email) {
   return async dispatch => {
     await callApi(URL_THONG_TIN_THANH_VIEN, 'POST', body).then(async res => {
-      console.log('themThanhVienAsync',res);
-      
       dispatch(layThongTinThanhVienAsync(LAY_THONG_TIN_CALO_THANH_VIEN, { email }))
     });
   }
@@ -172,10 +171,8 @@ export function chonBuaAnAsync(buaAn) {
 }
 
 export function themMonAnAsync(monAn) {
-  console.log('themMonAnAsync', monAn);
   return dispatch => {
     return callApi(URLThucDon, 'POST', monAn).then(async res => {
-      // console.log(1221, res);
       dispatch(taiLaiTrang(true))
     });
   }

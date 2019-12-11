@@ -44,9 +44,6 @@ class ChiTietMonAnActivity extends Component {
       soLuong: 1,
       monAn: this.props.navigation.getParam('monAn'),
     };
-    // console.log(999,this.props.navigation.getParam('monAn'));
-    console.log(999,this.props.navigation.getParam('tenMonAn'));
-    
   }
 
 
@@ -105,8 +102,6 @@ class ChiTietMonAnActivity extends Component {
       .catch(error => {
         console.error(error);
       });
-
-    console.log(this.props.ngayChon);
   };
 
   render() {

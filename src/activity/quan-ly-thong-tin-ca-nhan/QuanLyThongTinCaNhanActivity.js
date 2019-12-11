@@ -15,7 +15,7 @@ import { Button } from 'react-native-elements';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import IconEntypo from 'react-native-vector-icons/Entypo';
-import  ThemThanhVienModal  from '../../components/quan-ly-thong-tin-ca-nhan/ThemThanhVienModal';
+import ThemThanhVienModal from '../../components/quan-ly-thong-tin-ca-nhan/ThemThanhVienModal';
 import * as actions from '../../redux/actions';
 import { connect } from 'react-redux';
 
@@ -35,13 +35,14 @@ class QuanLyThongTinCaNhanActivity extends React.Component {
       quanLyCalo: this.props.quanLyCalo
     };
     this.addMember = this.addMember.bind(this);
+    this.logOut = this.logOut.bind(this);
   }
 
   addMember = () => {
     this.child.showAddMemberModal();
   };
 
-  login() {
+  logOut() {
     Alert.alert(
       'Thoát khỏi ứng dụng? ',
       'Bạn sẽ không nhận được thông báo sau khi đăng xuất!',
@@ -54,7 +55,7 @@ class QuanLyThongTinCaNhanActivity extends React.Component {
         {
           text: 'Đăng xuất',
           onPress: () => {
-            this.props.navigation.navigate('DangNhapActivity');
+            this.props.myNavigation.navigate('DangNhapActivity');
           },
         },
       ],
@@ -116,6 +117,10 @@ class QuanLyThongTinCaNhanActivity extends React.Component {
   checkItem = id => {
     this.props.chonThanhVien(id);
   };
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props.quanLyCalo.routes !== nextProps.quanLyCalo.routes.routes;
+  }
 
   render() {
     return (
@@ -191,7 +196,7 @@ class QuanLyThongTinCaNhanActivity extends React.Component {
             icon={<IconEntypo name="log-out" size={20} color="white" />}
             title="Đăng xuất"
             titleStyle={{ marginLeft: 10 }}
-            onPress={this.login}
+            onPress={this.logOut}
           />
           <Button
             buttonStyle={{ justifyContent: 'flex-start' }}

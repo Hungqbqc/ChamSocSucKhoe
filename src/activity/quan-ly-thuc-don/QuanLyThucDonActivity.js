@@ -96,8 +96,6 @@ class QuanLyThucDonActivity extends Component {
               : totalCalo / this.props.thucDon.TongNangLuong
             : 0,
       });
-      console.log(this.state.progress);
-
     }
   }
 

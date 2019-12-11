@@ -61,8 +61,6 @@ function LayThongTinThanhVien(email) {
 }
 
 function ThemThanhVien(email, soThanhVien) {
-  console.log('ThemThanhVien', email, soThanhVien);
-
   return fetch(URL_THONG_TIN_THANH_VIEN, {
     method: 'POST',
     headers: {
@@ -78,8 +76,6 @@ function ThemThanhVien(email, soThanhVien) {
     .then(response => response.json())
     .then(responseJson => {
       responseJson
-      console.log(133, responseJson);
-
     }
     )
 }

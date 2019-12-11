@@ -37,8 +37,6 @@ class DanhSachMonAnActivity extends Component {
       ngayAn: this.props.navigation.getParam('ngayAn'),
       selected: false,
     };
-    console.log(this.props.navigation.getParam('tenDanhMuc'));
-
   }
 
   themMonAnThanhCong = data => {

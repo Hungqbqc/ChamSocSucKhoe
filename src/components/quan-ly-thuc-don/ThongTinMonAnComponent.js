@@ -36,7 +36,6 @@ export default class ThongTinMonAnComponent extends Component {
                     this.props.parentFlatList.refreshFlatList(
                       this.props.food.ThucDonId,
                     );
-                    // alert(1);
                   },
                 },
               ],

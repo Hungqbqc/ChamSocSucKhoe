@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Alert, FlatList } from 'react-native';
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Button } from 'react-native-elements';
 import ThongTinMonAnComponent from './ThongTinMonAnComponent';
-import { IP_SERVER, URLThucDon } from '../../asset/MyConst';
+import { XOA_THUC_DON, URLThucDon } from '../../asset/MyConst';
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
 class DanhSachBuaAnComponent extends Component {
@@ -158,14 +158,14 @@ class DanhSachBuaAnComponent extends Component {
   }
 
   refreshFlatList = deletedKey => {
-    fetch(IP_SERVER + URLThucDon, {
+    fetch( URLThucDon, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        loai: 4,
+        loai: XOA_THUC_DON,
         thucDonId: deletedKey,
       }),
     })
@@ -238,6 +238,7 @@ function mapStateToProps(state) {
     myNavigation: state.myNavigation,
     buaAn: state.thucDon.buaAn,
     caloTarget : state.thucDon.thucDon.TongNangLuong,
+    ngayAn: state.thucDon.ngayChon,
   }
 }
 

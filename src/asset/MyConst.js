@@ -1,4 +1,4 @@
-export const IP_SERVER = 'http://192.168.64.2/ServerChamSocSucKhoe/';
+export const IP_SERVER = 'http://192.168.56.1/ServerChamSocSucKhoe/';
 // export const IP_SERVER = 'http://demo.thietkewebvn.vn/';
 // export const IP_SERVER = 'https://chedodinhduong.000webhostapp.com/';
 export const DATE_FORMAT = 'YYYY/MM/DD';
@@ -60,3 +60,5 @@ export const CHON_NGAY_THUC_DON = 'CHON_NGAY_THUC_DON';
 export const CHON_BUA_AN = 'CHON_BUA_AN';
 // Thêm món ăn vào thực đơn
 export const THEM_MON_AN = 'THEM_MON_AN';
+// Xóa món ăn khỏi thực đơn
+export const XOA_THUC_DON = 'XOA_THUC_DON';

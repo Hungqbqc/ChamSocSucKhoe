@@ -59,7 +59,7 @@ class CaloComponent extends Component {
       chucDanh: this.props.data.info.chucDanh, // Chức danh
       gioiTinh: Number(this.props.data.info.gioiTinh), // Giới tính
       ngaySinh:
-        this.props.data.info.ngaySinh === null
+        this.props.data.info.ngaySinh === ''
           ? moment()
           : moment(this.props.data.info.ngaySinh, DATE_FORMAT),
       chieuCao: this.props.data.info.chieuCao, // Chiều cao
@@ -115,7 +115,7 @@ class CaloComponent extends Component {
         this.state.id;
       this.props.capNhatThongTinCaloThanhVienAsync(
         CAP_NHAT_THONG_TIN_CALO_THANH_VIEN,
-        { query: sql_Query });
+        { query: sql_Query, email: this.props.email });
     }
   }
 
@@ -338,8 +338,15 @@ class CaloComponent extends Component {
   }
 }
 
+function mapStateToProps(state) {
+  return {
+    email: state.taiKhoan.email,
+  }
+}
+
+
 export default connect(
-  null,
+  mapStateToProps,
   actions
 )(CaloComponent)
 
