@@ -64,19 +64,19 @@ class QuanLyThongTinCaNhanActivity extends React.Component {
   }
 
   changePassword = () => {
-    Alert.alert(
-      'Thoát khỏi ứng dụng? ',
-      'Bạn sẽ không nhận được thông báo sau khi đăng xuất!',
-      [
-        {
-          text: 'Hủy',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'login',
-        },
-        { text: 'Đăng xuất', onPress: () => console.log('OK Pressed') },
-      ],
-      { cancelable: false },
-    );
+    // Alert.alert(
+    //   'Thoát khỏi ứng dụng? ',
+    //   'Bạn sẽ không nhận được thông báo sau khi đăng xuất!',
+    //   [
+    //     {
+    //       text: 'Hủy',
+    //       onPress: () => console.log('Cancel Pressed'),
+    //       style: 'login',
+    //     },
+    //     { text: 'Đăng xuất', onPress: () => console.log('OK Pressed') },
+    //   ],
+    //   { cancelable: false },
+    // );
   };
 
   xoaThanhVien() {

@@ -267,7 +267,7 @@ class QuanLyThucDonActivity extends Component {
                   ngayChon: moment(this.props.ngayChon, DATE_FORMAT).format(
                     DATE_FORMAT,
                   ),
-                  email: this.state.email,
+                  email: this.props.email,
                 });
               }}
               style={styles.loginButton}>

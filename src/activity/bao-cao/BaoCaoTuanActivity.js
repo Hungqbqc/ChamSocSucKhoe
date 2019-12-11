@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {SafeAreaView} from 'react-navigation';
+import React, { Component } from 'react';
+import { SafeAreaView } from 'react-navigation';
 import {
   View,
   Text,
@@ -7,7 +7,7 @@ import {
   processColor,
   TouchableOpacity,
 } from 'react-native';
-import {BarChart} from 'react-native-charts-wrapper';
+import { BarChart } from 'react-native-charts-wrapper';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import moment from 'moment';
 import {
@@ -16,11 +16,13 @@ import {
   DATE_FORMAT,
   DATE_FORMAT_COMPARE,
 } from '../../asset/MyConst';
+import Loader from '../../components/Loader';
+
 export class BaoCaoTuanActivity extends Component {
-  temp: 10;
   constructor(props) {
     super(props);
     this.state = {
+      isLoading: true,
       dauTuan: '',
       cuoiTuan: '',
       khoangThoiGianHienThi: [],
@@ -32,7 +34,7 @@ export class BaoCaoTuanActivity extends Component {
       data: {
         dataSets: [
           {
-            values: [{y: 0}, {y: 0}, {y: 0}, {y: 0}, {y: 0}, {y: 0}, {y: 0}],
+            values: [{ y: 0 }, { y: 0 }, { y: 0 }, { y: 0 }, { y: 0 }, { y: 0 }, { y: 0 }],
             label: '',
             config: {
               color: processColor('teal'),
@@ -91,7 +93,7 @@ export class BaoCaoTuanActivity extends Component {
     });
   }
 
-  async layDuLieu(ngay: Number) {
+  async layDuLieu(ngay) {
     let date;
     if (
       Number(
@@ -100,11 +102,14 @@ export class BaoCaoTuanActivity extends Component {
           .format(DATE_FORMAT_COMPARE),
       ) <= Number(moment().format(DATE_FORMAT_COMPARE))
     ) {
+      this.setState({
+        isLoading: true
+      })
       date = moment(this.state.dauTuan, DATE_FORMAT)
         .add(ngay, 'days')
         .format(DATE_FORMAT_COMPARE);
       await this.tinhNgay(date);
-      fetch(IP_SERVER + URLThucDon, {
+      fetch(URLThucDon, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -123,6 +128,9 @@ export class BaoCaoTuanActivity extends Component {
             Obj: responseJson,
           });
           this.tinhToanTyLeDinhDuong();
+          this.setState({
+            isLoading: false
+          })
         })
         .catch(error => {
           console.error(error);
@@ -162,14 +170,14 @@ export class BaoCaoTuanActivity extends Component {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.thoiGian}>
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1 }}>
             <TouchableOpacity
-              style={{marginLeft: 100}}
+              style={{ marginLeft: 100 }}
               onPress={() => {
                 this.layDuLieu(-7);
               }}>
               <IconAntDesign
-                style={{color: 'black'}}
+                style={{ color: 'black' }}
                 name="caretleft"
                 size={20}
                 color="white"
@@ -184,21 +192,21 @@ export class BaoCaoTuanActivity extends Component {
               alignItems: 'center',
             }}>
             <Text>
-              <Text style={{fontSize: 18}}>
+              <Text style={{ fontSize: 18 }}>
                 {' '}
                 {this.state.dauTuan.substring(5)} -{' '}
                 {this.state.cuoiTuan.substring(5)}{' '}
               </Text>
             </Text>
           </View>
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1 }}>
             <TouchableOpacity
-              style={{marginRight: 50}}
+              style={{ marginRight: 50 }}
               onPress={() => {
                 this.layDuLieu(7);
               }}>
               <IconAntDesign
-                style={{color: 'black'}}
+                style={{ color: 'black' }}
                 name="caretright"
                 size={20}
                 color="white"
@@ -212,10 +220,17 @@ export class BaoCaoTuanActivity extends Component {
             style={styles.chart}
             data={this.state.data}
             xAxis={this.state.xAxis}
-            animation={{durationX: 2000}}
+            animation={{ durationX: 2000 }}
             gridBackgroundColor={processColor('#000000')}
-            visibleRange={{x: {min: 7, max: 7}}}
+            visibleRange={{ x: { min: 7, max: 7 } }}
           />
+        </View>
+        <View >
+          {
+            this.state.isLoading ? <View style={{ flex: 1, justifyContent: "center", alignContent: "center" }}>
+              <Loader />
+            </View> : null
+          }
         </View>
       </SafeAreaView>
     );

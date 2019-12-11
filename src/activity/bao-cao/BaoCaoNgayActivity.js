@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {SafeAreaView} from 'react-navigation';
+import React, { Component } from 'react';
+import { SafeAreaView } from 'react-navigation';
 import {
   View,
   Text,
@@ -7,21 +7,23 @@ import {
   processColor,
   TouchableOpacity,
 } from 'react-native';
-import {PieChart} from 'react-native-charts-wrapper';
+import { PieChart } from 'react-native-charts-wrapper';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import moment from 'moment';
 import {
-  IP_SERVER,
+  LAY_THUC_DON,
   URLThucDon,
   DATE_FORMAT,
   DATE_FORMAT_COMPARE,
 } from '../../asset/MyConst';
+import Loader from '../../components/Loader';
+
 export class BaoCaoNgayActivity extends Component {
-  temp: 10;
   constructor(props) {
     super(props);
     this.state = {
       thoiGian: '',
+      isLoading: true,
       ngayChon: this.props.ngayChon,
       email: this.props.email,
       Obj: null,
@@ -37,9 +39,9 @@ export class BaoCaoNgayActivity extends Component {
         dataSets: [
           {
             values: [
-              {value: 0, label: 'Chất bột'},
-              {value: 0, label: 'Chất đạm'},
-              {value: 0, label: 'Chất béo'},
+              { value: 0, label: 'Chất bột' },
+              { value: 0, label: 'Chất đạm' },
+              { value: 0, label: 'Chất béo' },
             ],
             label: '',
             config: {
@@ -89,8 +91,7 @@ export class BaoCaoNgayActivity extends Component {
     return ngay;
   }
 
-  async layDuLieu(ngay: Number) {
-    // debugger;
+  async layDuLieu(ngay) {
     let date;
     if (
       Number(
@@ -99,23 +100,25 @@ export class BaoCaoNgayActivity extends Component {
           .format(DATE_FORMAT_COMPARE),
       ) <= Number(moment().format(DATE_FORMAT_COMPARE))
     ) {
+      this.setState({
+        isLoading: true
+      })
       date = moment(this.state.ngayChon, DATE_FORMAT)
         .add(ngay, 'days')
         .format(DATE_FORMAT_COMPARE);
       this.setState({
         ngayChon: date,
       });
-
-      fetch(IP_SERVER + URLThucDon, {
+      fetch(URLThucDon, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          loai: 2,
+          loai: LAY_THUC_DON,
           email: this.state.email,
-          ngayAn: moment(date, DATE_FORMAT).format(DATE_FORMAT_COMPARE),
+          ngayAn: moment(date, DATE_FORMAT_COMPARE).format(DATE_FORMAT_COMPARE),
         }),
       })
         .then(response => response.json())
@@ -125,6 +128,9 @@ export class BaoCaoNgayActivity extends Component {
             Obj: responseJson,
           });
           this.tinhToanTyLeDinhDuong();
+          this.setState({
+            isLoading: false
+          })
         })
         .catch(error => {
           console.error(error);
@@ -215,14 +221,14 @@ export class BaoCaoNgayActivity extends Component {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.thoiGian}>
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1 }}>
             <TouchableOpacity
-              style={{marginLeft: 100}}
+              style={{ marginLeft: 100 }}
               onPress={() => {
                 this.layDuLieu(-1);
               }}>
               <IconAntDesign
-                style={{color: 'black'}}
+                style={{ color: 'black' }}
                 name="caretleft"
                 size={20}
                 color="white"
@@ -237,17 +243,17 @@ export class BaoCaoNgayActivity extends Component {
               alignItems: 'center',
             }}>
             <Text>
-              <Text style={{fontSize: 18}}> {this.tinhNgay()}</Text>
+              <Text style={{ fontSize: 18 }}> {this.tinhNgay()}</Text>
             </Text>
           </View>
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1 }}>
             <TouchableOpacity
-              style={{marginRight: 50}}
+              style={{ marginRight: 50 }}
               onPress={() => {
                 this.layDuLieu(1);
               }}>
               <IconAntDesign
-                style={{color: 'black'}}
+                style={{ color: 'black' }}
                 name="caretright"
                 size={20}
                 color="white"
@@ -256,14 +262,14 @@ export class BaoCaoNgayActivity extends Component {
           </View>
         </View>
         <View style={styles.tiLeDinhDuong}>
-          <Text style={{fontSize: 18}}>Tỷ lệ dinh dưỡng</Text>
-          <View style={{flex: 1, flexDirection: 'row'}}>
-            <View style={{flex: 1, alignItems: 'center'}}>
+          <Text style={{ fontSize: 18 }}>Tỷ lệ dinh dưỡng</Text>
+          <View style={{ flex: 1, flexDirection: 'row' }}>
+            <View style={{ flex: 1, alignItems: 'center' }}>
               <Text>Hiện tại</Text>
               <View
                 style={[
                   styles.thanhPhanDinhDuongHienTai,
-                  {backgroundColor: '#FF0000'},
+                  { backgroundColor: '#FF0000' },
                 ]}>
                 <Text style={styles.chuDinhDuong}>
                   {this.state.nangLuongHienTai + '%'}
@@ -272,7 +278,7 @@ export class BaoCaoNgayActivity extends Component {
               <View
                 style={[
                   styles.thanhPhanDinhDuongHienTai,
-                  {backgroundColor: '#FFA500'},
+                  { backgroundColor: '#FFA500' },
                 ]}>
                 <Text style={styles.chuDinhDuong}>
                   {this.state.damHienTai + '%'}
@@ -281,7 +287,7 @@ export class BaoCaoNgayActivity extends Component {
               <View
                 style={[
                   styles.thanhPhanDinhDuongHienTai,
-                  {backgroundColor: '#32CD32'},
+                  { backgroundColor: '#32CD32' },
                 ]}>
                 <Text style={styles.chuDinhDuong}>
                   {this.state.chatBotHienTai + '%'}
@@ -290,14 +296,14 @@ export class BaoCaoNgayActivity extends Component {
               <View
                 style={[
                   styles.thanhPhanDinhDuongHienTai,
-                  {backgroundColor: '#FF4500'},
+                  { backgroundColor: '#FF4500' },
                 ]}>
                 <Text style={styles.chuDinhDuong}>
                   {this.state.chatBeoHienTai + '%'}
                 </Text>
               </View>
             </View>
-            <View style={{flex: 1, alignItems: 'center'}}>
+            <View style={{ flex: 1, alignItems: 'center' }}>
               <Text />
               <View style={styles.thanhPhanDinhDuong}>
                 <Text>Năng lượng</Text>
@@ -312,12 +318,12 @@ export class BaoCaoNgayActivity extends Component {
                 <Text>Chất béo</Text>
               </View>
             </View>
-            <View style={{flex: 1, alignItems: 'center'}}>
+            <View style={{ flex: 1, alignItems: 'center' }}>
               <Text>Mục tiêu</Text>
               <View
                 style={[
                   styles.thanhPhanDinhDuongHienTai,
-                  {backgroundColor: '#FF0000'},
+                  { backgroundColor: '#FF0000' },
                 ]}>
                 <Text style={styles.chuDinhDuong}>
                   {this.state.nangLuongMucTieu}
@@ -326,14 +332,14 @@ export class BaoCaoNgayActivity extends Component {
               <View
                 style={[
                   styles.thanhPhanDinhDuongHienTai,
-                  {backgroundColor: '#FFA500'},
+                  { backgroundColor: '#FFA500' },
                 ]}>
                 <Text style={styles.chuDinhDuong}>{this.state.damMucTieu}</Text>
               </View>
               <View
                 style={[
                   styles.thanhPhanDinhDuongHienTai,
-                  {backgroundColor: '#32CD32'},
+                  { backgroundColor: '#32CD32' },
                 ]}>
                 <Text style={styles.chuDinhDuong}>
                   {this.state.chatBotMucTieu}
@@ -342,7 +348,7 @@ export class BaoCaoNgayActivity extends Component {
               <View
                 style={[
                   styles.thanhPhanDinhDuongHienTai,
-                  {backgroundColor: '#FF4500'},
+                  { backgroundColor: '#FF4500' },
                 ]}>
                 <Text style={styles.chuDinhDuong}>
                   {this.state.chatBeoMucTieu}
@@ -363,6 +369,13 @@ export class BaoCaoNgayActivity extends Component {
             holeColor={processColor('#f0f0f0')}
             transparentCircleRadius={10}
           />
+        </View>
+        <View >
+          {
+            this.state.isLoading ? <View style={{ flex: 1, justifyContent: "center", alignContent: "center" }}>
+              <Loader />
+            </View> : null
+          }
         </View>
       </SafeAreaView>
     );
