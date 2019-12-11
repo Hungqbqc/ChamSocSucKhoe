@@ -3,41 +3,107 @@ import { Text, Image, View, TouchableOpacity, StyleSheet, TextInput } from 'reac
 import Modal from 'react-native-modalbox';
 import * as actions from '../../redux/actions';
 import { connect } from 'react-redux';
-import { TITLE_FONT_SIZE } from '../../asset/MyConst';
+import { TITLE_FONT_SIZE, URL_UPLOAD } from '../../asset/MyConst';
 import ImagePicker from 'react-native-image-picker';
+import RNFetchBlob from 'rn-fetch-blob';
 class ThemDanhMucMonAnModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      photo: null,
+      data: null,
       tenDanhMuc: '',
-      imageEmpty: 'https://nameproscdn.com/a/2018/05/106343_82907bfea9fe97e84861e2ee7c5b4f5b.png'
+      imageEmpty: 'https://nameproscdn.com/a/2018/05/106343_82907bfea9fe97e84861e2ee7c5b4f5b.png',
+      uri: null
     };
 
     this.onClose = this.onClose.bind(this);
-    this.save = this.save.bind(this);
+    // this.save = this.save.bind(this);
   }
 
   handleChoosePhoto = () => {
     const options = {
-      noData: true,
+      quality: 1.0,
+      maxWidth: 500,
+      maxHeight: 500,
+      storageOptions: {
+        skipBackup: true
+      }
     };
-    ImagePicker.launchImageLibrary(options, response => {
-      if (response.uri) {
-        this.setState({ photo: response });
+
+    ImagePicker.showImagePicker(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled photo picker');
+      }
+      else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      }
+      else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      }
+      else {
+        this.setState({
+          uri: response.uri,
+          data: response.data
+        });
       }
     });
   };
 
+  // uploadImageToServer = () => {
+
+  //   RNFetchBlob.fetch('POST', URL_UPLOAD, {
+  //     Authorization: "Bearer access-token",
+  //     otherHeader: "foo",
+  //     'Content-Type': 'multipart/form-data',
+  //   }, [
+  //       { name: 'image', filename: 'image.png', type: 'image/png', data: this.state.data }
+  //     ]).then((resp) => {
+
+  //       var tempMSG = resp.data;
+
+  //       tempMSG = tempMSG.replace(/^"|"$/g, '');
+
+  //       Alert.alert(tempMSG);
+
+  //     }).catch((err) => {
+  //       alert(err)
+  //       // ...
+  //     })
+
+  // }
+
   onClose() {
     this.setState({
-      photo: null
+      uri: null
     })
   }
 
-  save() {
+  uploadImageToServer = () => {
+    debugger;
+    
+    RNFetchBlob.fetch('POST', URL_UPLOAD, {
+      Authorization: "Bearer access-token",
+      otherHeader: "foo",
+      'Content-Type': 'multipart/form-data',
+    }, [
+        { name: 'image', filename: 'image.png', type: 'image/png', data: this.state.data }
+      ]).then((resp) => {
+        console.log(1, JSON.stringify(resp) );
+        
+        var tempMSG = resp.data;
+
+        tempMSG = tempMSG.replace(/^"|"$/g, '');
+
+        // Alert.alert(tempMSG);
+
+      }).catch((err) => {
+        console.log(2,err);
+
+        // ...
+      })
 
   }
+
 
   showAddMemberModal = () => {
     this.refs.modal1.open();
@@ -70,13 +136,13 @@ class ThemDanhMucMonAnModal extends React.Component {
             onPress={this.handleChoosePhoto}
           >
             <Image
-              source={{ uri: photo !== null ? photo.uri : this.state.imageEmpty }}
+              source={{ uri: this.state.uri !== null ? this.state.uri : this.state.imageEmpty }}
               style={{ width: 150, height: 150, marginBottom: 15, marginTop: 10, }}
             />
           </TouchableOpacity>
           <View style={{ justifyContent: "center", alignItems: "center" }}>
             <TouchableOpacity
-              onPress={this.save}
+              onPress={this.uploadImageToServer}
               style={styles.loginButton}
             >
               <Text style={styles.loginButtonTitle}>Lưu</Text>
