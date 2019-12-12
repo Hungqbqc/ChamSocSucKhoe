@@ -202,6 +202,7 @@ export function layDanhMucMonAnAsync(body) {
   }
 }
 
+// THêm danh mục món ăn
 export function themDanhMucMonAnAsync(danhMucMonAn) {
   return dispatch => {
     return callApi(URL_MON_AN, 'POST', danhMucMonAn).then(async res => {
@@ -211,5 +212,20 @@ export function themDanhMucMonAnAsync(danhMucMonAn) {
     });
   }
 }
+
+// Sửa danh mục món ăn
+export function danhMucMonAnAsync(danhMucMonAn) {
+  console.log('danhMucMonAnAsync',danhMucMonAn);
+  
+  return dispatch => {
+    return callApi(URL_MON_AN, 'POST', danhMucMonAn).then(async res => {
+      dispatch(layDanhMucMonAnAsync(JSON.stringify({
+        loai: LAY_DANH_MUC_MON_AN
+      })))
+    });
+  }
+}
+
+
 
 //#endregion

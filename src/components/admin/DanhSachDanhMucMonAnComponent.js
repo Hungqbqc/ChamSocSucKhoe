@@ -21,9 +21,10 @@ export default class DanhSachDanhMucComponent extends Component {
             },
             right: [
                 {
+                    
                     onPress: () => {
-                        console.log(123, this.props.item);
-                        this.child.showAddMemberModal(2);
+                        console.log(this.props.item);
+                        this.props.parentFlatList._onPressEdit(this.props.item.id,this.props.item.anhDanhMuc, this.props.item.tenDanhMucMonAn);
                     },
                     text: 'Edit', type: 'primary'
                 },

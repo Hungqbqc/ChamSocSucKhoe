@@ -3,7 +3,7 @@ import { Text, Image, View, TouchableOpacity, StyleSheet, TextInput } from 'reac
 import Modal from 'react-native-modalbox';
 import * as actions from '../../redux/actions';
 import { connect } from 'react-redux';
-import { TITLE_FONT_SIZE, URL_UPLOAD, THEM_DANH_MUC_MON_AN } from '../../asset/MyConst';
+import { TITLE_FONT_SIZE, URL_UPLOAD, THEM_DANH_MUC_MON_AN, SUA_DANH_MUC_MON_AN } from '../../asset/MyConst';
 import ImagePicker from 'react-native-image-picker';
 import RNFetchBlob from 'rn-fetch-blob';
 class ThemDanhMucMonAnModal extends React.Component {
@@ -11,12 +11,15 @@ class ThemDanhMucMonAnModal extends React.Component {
     super(props);
     this.state = {
       data: null,
+      id: null,
       tenDanhMuc: '',
       imageEmpty: 'https://nameproscdn.com/a/2018/05/106343_82907bfea9fe97e84861e2ee7c5b4f5b.png',
       uri: null,
+      anhDanhMuc: '',
       loai: 1
     };
     this.onClose = this.onClose.bind(this);
+    this.uploadImageToServer = this.uploadImageToServer.bind(this);
   }
 
   handleChoosePhoto = () => {
@@ -53,40 +56,85 @@ class ThemDanhMucMonAnModal extends React.Component {
       uri: null,
       data: null,
       tenDanhMuc: '',
-      loai: 1
-    }, () => {
-      // this.props.loadingDanhMucMonAn(true);
+      anhDanhMuc: '',
+      loai: 1,
+      id: null
     })
   }
 
-  uploadImageToServer = () => {
+  async uploadImageToServer() {
     const { data } = this.state;
-    RNFetchBlob.fetch('POST', URL_UPLOAD, {
+    if (data === null && this.state.loai === 1) {
+      alert('Bạn chưa chọn ảnh')
+    }
+    else {
+      // Nếu chọn ảnh thì mới up lên server
+      if (data !== null) {
+        await this.uploadImage().then(async () => {
+          // Thêm mới
+          if (this.state.loai === 1) {
+            let danhMucMonAn = JSON.stringify(
+              {
+                loai: THEM_DANH_MUC_MON_AN,
+                tenDanhMucMonAn: this.state.tenDanhMuc,
+                anhDanhMuc: this.state.anhDanhMuc
+              }
+            );
+            await this.props.themDanhMucMonAnAsync(danhMucMonAn);
+          }
+          // update
+          else {
+            let danhMucMonAn = JSON.stringify(
+              {
+                loai: SUA_DANH_MUC_MON_AN,
+                idDanhMuc: this.state.id,
+                tenDanhMucMonAn: this.state.tenDanhMuc,
+                anhDanhMuc: this.state.anhDanhMuc
+              }
+            );
+            await this.props.danhMucMonAnAsync(danhMucMonAn);
+          }
+          this.refs.modal1.close();
+        })
+      }
+      else {
+        let danhMucMonAn = JSON.stringify(
+          {
+            loai: SUA_DANH_MUC_MON_AN,
+            idDanhMuc: this.state.id,
+            tenDanhMucMonAn: this.state.tenDanhMuc,
+            anhDanhMuc: this.state.anhDanhMuc
+          }
+        );
+        await this.props.danhMucMonAnAsync(danhMucMonAn);
+      }
+      this.refs.modal1.close();
+    }
+  }
+
+  async uploadImage() {
+    const { data } = this.state;
+    await RNFetchBlob.fetch('POST', URL_UPLOAD, {
       Authorization: "Bearer access-token",
       otherHeader: "foo",
       'Content-Type': 'multipart/form-data',
     }, [
-      { name: 'image', filename: 'image.png', type: 'image/png', data: data }
-    ]).then(async (resp) => {
-      var tempMSG = resp.data;
-      tempMSG = tempMSG.replace(/^"|"$/g, '');
-      let danhMucMonAn = JSON.stringify(
-        {
-          loai: THEM_DANH_MUC_MON_AN,
-          tenDanhMucMonAn: this.state.tenDanhMuc,
-          anhDanhMuc: tempMSG
-        }
-      );
-      await this.props.themDanhMucMonAnAsync(danhMucMonAn);
-      this.refs.modal1.close();
-    }).catch((err) => {
-      console.log(2, err);
-    })
+        { name: 'image', filename: 'image.png', type: 'image/png', data: data }
+      ]).then((resp) => {
+        var uri = resp.data;
+        uri = uri.replace(/^"|"$/g, '');
+        this.setState({
+          anhDanhMuc: uri
+        })
+      }).catch((err) => {
+        console.log(2, err);
+      })
   }
 
-  showAddMemberModal = (loai, uri = null, tenDanhMuc = '') => {
+  showAddMemberModal = (loai, id = null, uri = null, tenDanhMuc = '') => {
     this.setState({
       loai: loai,
+      id: id,
       uri: uri,
       tenDanhMuc: tenDanhMuc
     })

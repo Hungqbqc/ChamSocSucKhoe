@@ -58,8 +58,11 @@ class AdminActivity extends Component {
         this.child.showAddMemberModal(1);
     }
 
+    _onPressEdit(id,uri, tenDanhMuc) {
+        this.child.showAddMemberModal(2, id,uri, tenDanhMuc);
+    }
+
     render() {
-        
         return (
             <View style={{ flex: 1 }}>
                 <View >
@@ -96,11 +99,9 @@ class AdminActivity extends Component {
                     data={this.props.danhMucMonAn}
                     renderItem={({ item, index }) => {
                         return (
-                           
-                                <TouchableOpacity onPress={() => this.chonDanhMuc(item)}>
-                                    <DanhSachDanhMucMonAnComponent key={item.Id} item={item} />
-                                </TouchableOpacity>
-
+                            <TouchableOpacity onPress={() => this.chonDanhMuc(item)}>
+                                <DanhSachDanhMucMonAnComponent parentFlatList={this} key={item.Id} item={item} />
+                            </TouchableOpacity>
                         );
                     }}
                 />
