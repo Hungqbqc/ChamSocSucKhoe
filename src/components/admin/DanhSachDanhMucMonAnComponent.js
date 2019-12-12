@@ -21,31 +21,16 @@ export default class DanhSachDanhMucComponent extends Component {
             },
             right: [
                 {
-                    
+
                     onPress: () => {
                         console.log(this.props.item);
-                        this.props.parentFlatList._onPressEdit(this.props.item.id,this.props.item.anhDanhMuc, this.props.item.tenDanhMucMonAn);
+                        this.props.parentFlatList._onPressEdit(this.props.item.id, this.props.item.anhDanhMuc, this.props.item.tenDanhMucMonAn);
                     },
                     text: 'Edit', type: 'primary'
                 },
                 {
                     onPress: () => {
-                        const deletingRow = this.state.activeRowKey;
-                        Alert.alert(
-                            'Alert',
-                            'Are you sure you want to delete ?',
-                            [
-                                { text: 'No', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-                                {
-                                    text: 'Yes', onPress: () => {
-                                        flatListData.splice(this.props.index, 1);
-                                        //Refresh FlatList ! 
-                                        this.props.parentFlatList.refreshFlatList(deletingRow);
-                                    }
-                                },
-                            ],
-                            { cancelable: true }
-                        );
+                        this.props.parentFlatList._onPressDelete(this.props.item.id, this.props.item.tenDanhMucMonAn);
                     },
                     text: 'Delete', type: 'delete'
                 }

@@ -5,9 +5,10 @@ import {
     Text,
     View,
     Image,
+    Alert,
     TouchableOpacity,
 } from 'react-native';
-import { IP_SERVER, LAY_DANH_MUC_MON_AN } from '../../asset/MyConst';
+import { IP_SERVER, LAY_DANH_MUC_MON_AN, XOA_DANH_MUC_MON_AN } from '../../asset/MyConst';
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
 import DanhSachDanhMucMonAnComponent from '../../components/admin/DanhSachDanhMucMonAnComponent';
@@ -58,8 +59,34 @@ class AdminActivity extends Component {
         this.child.showAddMemberModal(1);
     }
 
-    _onPressEdit(id,uri, tenDanhMuc) {
-        this.child.showAddMemberModal(2, id,uri, tenDanhMuc);
+    _onPressEdit(id, uri, tenDanhMuc) {
+        this.child.showAddMemberModal(2, id, uri, tenDanhMuc);
+    }
+
+    _onPressDelete(id, tenDanhMuc) {
+        Alert.alert(
+            'Bạn có chắc chắn không? ',
+            'Danh mục ' + tenDanhMuc + ' sẽ bị xóa!',
+            [
+                {
+                    text: 'Hủy',
+                    style: 'login',
+                },
+                {
+                    text: 'Xác nhận',
+                    onPress: () => {
+                        let danhMucMonAn = JSON.stringify(
+                            {
+                                loai: XOA_DANH_MUC_MON_AN,
+                                idDanhMuc: id
+                            }
+                        );
+                        this.props.danhMucMonAnAsync(danhMucMonAn);
+                    }
+                }
+            ],
+            { cancelable: false },
+        );
     }
 
     render() {
