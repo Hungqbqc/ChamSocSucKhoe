@@ -45,16 +45,6 @@ class AdminActivity extends Component {
         this._onPressAdd = this._onPressAdd.bind(this);
     }
 
-    chonDanhMuc(danhMuc) {
-        this.props.myNavigation.navigate('DanhSachMonAnActivity', {
-            idDanhMuc: danhMuc.id,
-            tenDanhMuc: danhMuc.tenDanhMucMonAn,
-            email: this.state.email,
-            buaAnId: this.state.buaAnId,
-            ngayAn: this.state.ngayAn,
-        });
-    }
-
     _onPressAdd() {
         this.child.showAddMemberModal(1);
     }

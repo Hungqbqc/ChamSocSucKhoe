@@ -1,13 +1,22 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import Swipeout from 'react-native-swipeout';
-import ThemDanhMucMonAnModal from '../../activity/admin/ThemDanhMucMonAnModal';
-
-export default class DanhSachDanhMucComponent extends Component {
+import { connect } from 'react-redux';
+import * as actions from '../../redux/actions';
+class DanhSachDanhMucComponent extends Component {
+    
+    
     constructor(props) {
         super(props);
-
     }
+
+    chonDanhMuc(danhMuc) {
+        this.props.myNavigation.navigate('QuanLyMonAnActivity', {
+            idDanhMuc: danhMuc.id,
+            tenDanhMuc: danhMuc.tenDanhMucMonAn,
+        });
+    }
+
     render() {
         const swipeSettings = {
             autoClose: true,
@@ -41,45 +50,61 @@ export default class DanhSachDanhMucComponent extends Component {
 
         return (
             <Swipeout  {...swipeSettings}>
-                <View
-                    key={this.props.item.Id}
-                    style={{
-                        flex: 1,
-                        flexDirection: 'column',
-                    }}>
+                <TouchableOpacity onPress={() => this.chonDanhMuc(this.props.item)}>
+
                     <View
+                        key={this.props.item.Id}
                         style={{
                             flex: 1,
-                            flexDirection: 'row',
+                            flexDirection: 'column',
                         }}>
-                        <Image
-                            source={{ uri: this.props.item.anhDanhMuc }}
-                            style={{ width: 100, height: 100, margin: 5 }}
-                        />
                         <View
                             style={{
                                 flex: 1,
-                                flexDirection: 'column',
-                                height: 100,
-                                justifyContent: 'center',
+                                flexDirection: 'row',
                             }}>
-                            <Text style={styles.flatListItem}>
-                                {this.props.item.tenDanhMucMonAn}
-                            </Text>
+                            <Image
+                                source={{ uri: this.props.item.anhDanhMuc }}
+                                style={{ width: 100, height: 100, margin: 5 }}
+                            />
+                            <View
+                                style={{
+                                    flex: 1,
+                                    flexDirection: 'column',
+                                    height: 100,
+                                    justifyContent: 'center',
+                                }}>
+                                <Text style={styles.flatListItem}>
+                                    {this.props.item.tenDanhMucMonAn}
+                                </Text>
+                            </View>
                         </View>
+                        <View
+                            style={{
+                                height: 2,
+                                backgroundColor: 'black',
+                            }}
+                        />
                     </View>
-                    <View
-                        style={{
-                            height: 2,
-                            backgroundColor: 'black',
-                        }}
-                    />
-                </View>
-                <ThemDanhMucMonAnModal onRef={ref => (this.child = ref)} />
+                </TouchableOpacity>
+
             </Swipeout>
         );
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        myNavigation: state.myNavigation,
+        danhMucMonAn: state.monAn.danhMucMonAn,
+        isLoading: state.monAn.isLoading,
+    }
+}
+
+export default connect(
+    mapStateToProps,
+    actions
+)(DanhSachDanhMucComponent)
 
 const styles = StyleSheet.create({
     flatListItem: {
