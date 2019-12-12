@@ -13,7 +13,12 @@ import {
   LOADING,
   URLThucDon,
   CHON_THANH_VIEN,
-  URL_THONG_TIN_THANH_VIEN
+  URL_THONG_TIN_THANH_VIEN,
+  THEM_DANH_MUC_MON_AN,
+  URL_MON_AN,
+  LAY_DANH_MUC_MON_AN,
+  LAY_MON_AN,
+  LOADING_DANH_MUC_MON_AN
 } from "../../asset/MyConst";
 
 // import * as thanhVien from './thanhVienAction'
@@ -24,7 +29,7 @@ import thongTinThanhVien from '../../api/ThongTinThanhVienAPI'
 
 //#region  Đăng nhập
 export const khoiDongApp = navigation => ({ type: KHOI_DONG_APP, navigation })
-export const dangNhap = (email, password, trangThaiDangNhap,laQuanTri) => ({
+export const dangNhap = (email, password, trangThaiDangNhap, laQuanTri) => ({
   type: DANG_NHAP,
   email,
   password,
@@ -38,7 +43,7 @@ export function dangNhapAsync(type, data) {
         dispatch(dangNhap('', '', false, false))
         dispatch(demSoThanhVien(0))
       } else {
-        let de =e.LaQuanTri === "0" ? false : true;
+        let de = e.LaQuanTri === "0" ? false : true;
         console.log('dangNhapAsync', de);
         dispatch(dangNhap(data.email, data.password, true, e.LaQuanTri === "0" ? false : true))
         await thongTinThanhVien(DEM_SO_THANH_VIEN, data).then(result => {
@@ -180,4 +185,31 @@ export function themMonAnAsync(monAn) {
     });
   }
 }
+
+// Thêm danh mục món 
+
+export const layDanhMucMonAn = danhMucMonAn => ({ type: LAY_DANH_MUC_MON_AN, danhMucMonAn })
+export const loadingDanhMucMonAn = isLoading => ({ type: LOADING_DANH_MUC_MON_AN, isLoading })
+
+export function layDanhMucMonAnAsync(body) {
+  return dispatch => {
+    dispatch(loadingDanhMucMonAn(true));
+    return callApi(URL_MON_AN, 'POST', body).then(async danhMucMonAn => {
+      dispatch(layDanhMucMonAn(danhMucMonAn.data))
+    }).then(() => {
+      dispatch(loadingDanhMucMonAn(false))
+    });
+  }
+}
+
+export function themDanhMucMonAnAsync(danhMucMonAn) {
+  return dispatch => {
+    return callApi(URL_MON_AN, 'POST', danhMucMonAn).then(async res => {
+      dispatch(layDanhMucMonAnAsync(JSON.stringify({
+        loai: LAY_DANH_MUC_MON_AN
+      })))
+    });
+  }
+}
+
 //#endregion

@@ -3,7 +3,7 @@ import { Text, Image, View, TouchableOpacity, StyleSheet, TextInput } from 'reac
 import Modal from 'react-native-modalbox';
 import * as actions from '../../redux/actions';
 import { connect } from 'react-redux';
-import { TITLE_FONT_SIZE, URL_UPLOAD } from '../../asset/MyConst';
+import { TITLE_FONT_SIZE, URL_UPLOAD, THEM_DANH_MUC_MON_AN } from '../../asset/MyConst';
 import ImagePicker from 'react-native-image-picker';
 import RNFetchBlob from 'rn-fetch-blob';
 class ThemDanhMucMonAnModal extends React.Component {
@@ -15,9 +15,7 @@ class ThemDanhMucMonAnModal extends React.Component {
       imageEmpty: 'https://nameproscdn.com/a/2018/05/106343_82907bfea9fe97e84861e2ee7c5b4f5b.png',
       uri: null
     };
-
     this.onClose = this.onClose.bind(this);
-    // this.save = this.save.bind(this);
   }
 
   handleChoosePhoto = () => {
@@ -49,61 +47,40 @@ class ThemDanhMucMonAnModal extends React.Component {
     });
   };
 
-  // uploadImageToServer = () => {
-
-  //   RNFetchBlob.fetch('POST', URL_UPLOAD, {
-  //     Authorization: "Bearer access-token",
-  //     otherHeader: "foo",
-  //     'Content-Type': 'multipart/form-data',
-  //   }, [
-  //       { name: 'image', filename: 'image.png', type: 'image/png', data: this.state.data }
-  //     ]).then((resp) => {
-
-  //       var tempMSG = resp.data;
-
-  //       tempMSG = tempMSG.replace(/^"|"$/g, '');
-
-  //       Alert.alert(tempMSG);
-
-  //     }).catch((err) => {
-  //       alert(err)
-  //       // ...
-  //     })
-
-  // }
-
   onClose() {
     this.setState({
-      uri: null
+      uri: null,
+      data: null,
+      tenDanhMuc: '',
+    }, () => {
+      // this.props.loadingDanhMucMonAn(true);
     })
   }
 
   uploadImageToServer = () => {
-    debugger;
-    
+    const { data } = this.state;
     RNFetchBlob.fetch('POST', URL_UPLOAD, {
       Authorization: "Bearer access-token",
       otherHeader: "foo",
       'Content-Type': 'multipart/form-data',
     }, [
-        { name: 'image', filename: 'image.png', type: 'image/png', data: this.state.data }
-      ]).then((resp) => {
-        console.log(1, JSON.stringify(resp) );
-        
-        var tempMSG = resp.data;
-
-        tempMSG = tempMSG.replace(/^"|"$/g, '');
-
-        // Alert.alert(tempMSG);
-
-      }).catch((err) => {
-        console.log(2,err);
-
-        // ...
-      })
-
+      { name: 'image', filename: 'image.png', type: 'image/png', data: data }
+    ]).then(async (resp) => {
+      var tempMSG = resp.data;
+      tempMSG = tempMSG.replace(/^"|"$/g, '');
+      let danhMucMonAn = JSON.stringify(
+        {
+          loai: THEM_DANH_MUC_MON_AN,
+          tenDanhMucMonAn: this.state.tenDanhMuc,
+          anhDanhMuc: tempMSG
+        }
+      );
+      await this.props.themDanhMucMonAnAsync(danhMucMonAn);
+      this.refs.modal1.close();
+    }).catch((err) => {
+      console.log(2, err);
+    })
   }
-
 
   showAddMemberModal = () => {
     this.refs.modal1.open();
@@ -114,7 +91,7 @@ class ThemDanhMucMonAnModal extends React.Component {
   }
 
   render() {
-    const { photo } = this.state;
+    const { uri } = this.state;
     return (
       <Modal
         style={[styles.modal, styles.modal1]}
@@ -136,7 +113,7 @@ class ThemDanhMucMonAnModal extends React.Component {
             onPress={this.handleChoosePhoto}
           >
             <Image
-              source={{ uri: this.state.uri !== null ? this.state.uri : this.state.imageEmpty }}
+              source={{ uri: uri !== null ? uri : this.state.imageEmpty }}
               style={{ width: 150, height: 150, marginBottom: 15, marginTop: 10, }}
             />
           </TouchableOpacity>

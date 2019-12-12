@@ -1,32 +1,16 @@
-// export const IP_SERVER = 'http://192.168.56.1/ServerChamSocSucKhoe/';
+export const IP_SERVER = 'http://192.168.0.161/ServerChamSocSucKhoe/';
 // export const IP_SERVER = 'http://demo.thietkewebvn.vn/';
-export const IP_SERVER = 'http://192.168.64.2/ServerChamSocSucKhoe/';
+// export const IP_SERVER = 'http://192.168.64.2/ServerChamSocSucKhoe/';
 export const DATE_FORMAT = 'YYYY/MM/DD';
 export const DATE_FORMAT_COMPARE = 'YYYYMMDD';
 export const URL_DANG_NHAP = IP_SERVER + 'DangNhap.php';
 export const URL_DANG_KY = IP_SERVER + 'DangKy.php';
 export const URLThucDon = IP_SERVER + 'ThucDon.php';
+export const URL_MON_AN = IP_SERVER + 'MonAn.php';
 export const URL_UPLOAD = IP_SERVER + 'upload_image.php';
 export const URL_THONG_TIN_THANH_VIEN = IP_SERVER + 'LayThongTinThanhVien.php';
 export const TEXT_FONT_SIZE = 18;
 export const TITLE_FONT_SIZE = 30;
-
-// export const DANG_NHAP_ACTION = 1;
-// export const DANG_KY_ACTION = 2;
-
-
-// // THÀNH VIÊN
-// export const DEM_SO_THANH_VIEN_ACTION = 1;
-// export const LAY_THONG_TIN_CALO_THANH_VIEN_ACTION = 2;
-// export const THEM_SO_THANH_VIEN_ACTION = 3;
-// export const CAP_NHAT_THONG_TIN_CALO_THANH_VIEN_ACTION = 4;
-
-
-
-// export const LAY_THUC_DON_ACTION = 2;
-// export const LAY_THUC_DON_ACTION = 2;
-// export const LAY_THUC_DON_ACTION = 2;
-
 
 // Đăng nhập
 export const DANG_NHAP = 'DANG_NHAP';
@@ -64,3 +48,13 @@ export const CHON_BUA_AN = 'CHON_BUA_AN';
 export const THEM_MON_AN = 'THEM_MON_AN';
 // Xóa món ăn khỏi thực đơn
 export const XOA_THUC_DON = 'XOA_THUC_DON';
+
+export const LAY_DANH_MUC_MON_AN = 'LAY_DANH_MUC_MON_AN';
+export const LOADING_DANH_MUC_MON_AN = 'LOADING_DANH_MUC_MON_AN';
+export const THEM_DANH_MUC_MON_AN = 'THEM_DANH_MUC_MON_AN';
+export const SUA_DANH_MUC_MON_AN = 'SUA_DANH_MUC_MON_AN';
+export const XOA_DANH_MUC_MON_AN = 'XOA_DANH_MUC_MON_AN';
+export const LAY_MON_AN = 'LAY_MON_AN';
+export const THEM_MON_AN_DB = 'THEM_MON_AN_DB';
+export const SUA_MON_AN = 'SUA_MON_AN';
+export const XOA_MON_AN = 'XOA_MON_AN';

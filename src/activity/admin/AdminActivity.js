@@ -7,26 +7,17 @@ import {
     Image,
     TouchableOpacity,
 } from 'react-native';
-import { IP_SERVER } from '../../asset/MyConst';
+import { IP_SERVER, LAY_DANH_MUC_MON_AN } from '../../asset/MyConst';
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
 import DanhSachDanhMucMonAnComponent from '../../components/quan-ly-thuc-don/DanhSachDanhMucMonAnComponent';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import ThemDanhMucMonAnModal from './ThemDanhMucMonAnModal';
+import Loader from '../../components/Loader';
+
 class AdminActivity extends Component {
     flatListDanhMucMonAn = [];
     URLLayDanhMucMonAn = IP_SERVER + 'MonAn.php?loai=1';
-
-    // static navigationOptions = ({ navigation }) => ({
-    //     title: `Quản lý danh mục món ăn`,
-    //     headerStyle: {
-    //         backgroundColor: '#f4511e',
-    //     },
-    //     headerTintColor: '#fff',
-    //     headerTitleStyle: {
-    //         fontWeight: 'bold',
-    //     },
-    // });
 
     static navigationOptions = {
         header: null
@@ -36,17 +27,10 @@ class AdminActivity extends Component {
         this.layDanhMucMonAn();
     }
 
-    layDanhMucMonAn() {
-        return fetch(this.URLLayDanhMucMonAn)
-            .then(response => response.json())
-            .then(json => {
-                if (json !== 0) {
-                    this.flatListDanhMucMonAn = json;
-                    this.setState({
-                        flatListDanhMucMonAn: json,
-                    });
-                }
-            });
+    async  layDanhMucMonAn() {
+        await this.props.layDanhMucMonAnAsync(JSON.stringify({
+            loai: LAY_DANH_MUC_MON_AN
+        }))
     }
 
     constructor(props) {
@@ -77,7 +61,13 @@ class AdminActivity extends Component {
     render() {
         return (
             <View style={{ flex: 1 }}>
-
+                <View >
+                    {
+                        this.props.isLoading ? <View style={{ flex: 1, justifyContent: "center", alignContent: "center" }}>
+                            <Loader />
+                        </View> : null
+                    }
+                </View>
                 <View style={{
                     backgroundColor: 'tomato',
                     flexDirection: 'row',
@@ -100,10 +90,9 @@ class AdminActivity extends Component {
                         />
                     </TouchableHighlight>
                 </View>
-
                 <FlatList
                     keyExtractor={(item, index) => index.toString()}
-                    data={this.state.flatListDanhMucMonAn}
+                    data={this.props.danhMucMonAn}
                     renderItem={({ item, index }) => {
                         return (
                             <TouchableOpacity onPress={() => this.chonDanhMuc(item)}>
@@ -121,6 +110,8 @@ class AdminActivity extends Component {
 function mapStateToProps(state) {
     return {
         myNavigation: state.myNavigation,
+        danhMucMonAn: state.monAn.danhMucMonAn,
+        isLoading: state.monAn.isLoading,
     }
 }
 
