@@ -13,7 +13,8 @@ class ThemDanhMucMonAnModal extends React.Component {
       data: null,
       tenDanhMuc: '',
       imageEmpty: 'https://nameproscdn.com/a/2018/05/106343_82907bfea9fe97e84861e2ee7c5b4f5b.png',
-      uri: null
+      uri: null,
+      loai: 1
     };
     this.onClose = this.onClose.bind(this);
   }
@@ -52,6 +53,7 @@ class ThemDanhMucMonAnModal extends React.Component {
       uri: null,
       data: null,
       tenDanhMuc: '',
+      loai: 1
     }, () => {
       // this.props.loadingDanhMucMonAn(true);
     })
@@ -82,7 +84,12 @@ class ThemDanhMucMonAnModal extends React.Component {
     })
   }
 
-  showAddMemberModal = () => {
+  showAddMemberModal = (loai, uri = null, tenDanhMuc = '') => {
+    this.setState({
+      loai: loai,
+      uri: uri,
+      tenDanhMuc: tenDanhMuc
+    })
     this.refs.modal1.open();
   };
 
@@ -99,7 +106,7 @@ class ThemDanhMucMonAnModal extends React.Component {
         position={'center'}
         ref={'modal1'}
         isDisabled={this.state.isDisabled} >
-        <Text style={styles.title}>Thêm danh mục món ăn</Text>
+        <Text style={styles.title}>{this.state.loai === 1 ? 'Thêm danh mục món ăn' : 'Sửa danh mục món ăn'} </Text>
         <View style={styles.textInputContainer}>
           <Text>Tên danh mục</Text>
           <TextInput

@@ -10,15 +10,15 @@ import {
 import { IP_SERVER, LAY_DANH_MUC_MON_AN } from '../../asset/MyConst';
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
-import DanhSachDanhMucMonAnComponent from '../../components/quan-ly-thuc-don/DanhSachDanhMucMonAnComponent';
+import DanhSachDanhMucMonAnComponent from '../../components/admin/DanhSachDanhMucMonAnComponent';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import ThemDanhMucMonAnModal from './ThemDanhMucMonAnModal';
 import Loader from '../../components/Loader';
 
+
 class AdminActivity extends Component {
     flatListDanhMucMonAn = [];
     URLLayDanhMucMonAn = IP_SERVER + 'MonAn.php?loai=1';
-
     static navigationOptions = {
         header: null
     }
@@ -55,10 +55,11 @@ class AdminActivity extends Component {
     }
 
     _onPressAdd() {
-        this.child.showAddMemberModal();
+        this.child.showAddMemberModal(1);
     }
 
     render() {
+        
         return (
             <View style={{ flex: 1 }}>
                 <View >
@@ -95,9 +96,11 @@ class AdminActivity extends Component {
                     data={this.props.danhMucMonAn}
                     renderItem={({ item, index }) => {
                         return (
-                            <TouchableOpacity onPress={() => this.chonDanhMuc(item)}>
-                                <DanhSachDanhMucMonAnComponent key={item.Id} item={item} />
-                            </TouchableOpacity>
+                           
+                                <TouchableOpacity onPress={() => this.chonDanhMuc(item)}>
+                                    <DanhSachDanhMucMonAnComponent key={item.Id} item={item} />
+                                </TouchableOpacity>
+
                         );
                     }}
                 />
