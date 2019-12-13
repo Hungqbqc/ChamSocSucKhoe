@@ -371,11 +371,11 @@ export class BaoCaoNgayActivity extends Component {
           />
         </View>
         <View >
-          {
+          {/* {
             this.state.isLoading ? <View style={{ flex: 1, justifyContent: "center", alignContent: "center" }}>
               <Loader />
             </View> : null
-          }
+          } */}
         </View>
       </SafeAreaView>
     );

@@ -178,10 +178,14 @@ export function chonBuaAnAsync(buaAn) {
   }
 }
 
-export function themMonAnAsync(monAn) {
+export function themMonAnAsync(monAn, email, ngayAn) {
   return dispatch => {
     return callApi(URLThucDon, 'POST', monAn).then(async res => {
-      dispatch(taiLaiTrang(true))
+      dispatch(layThucDonAsync(
+        LAY_THUC_DON, {
+        email: email,
+        ngayAn: ngayAn,
+      }))
     });
   }
 }

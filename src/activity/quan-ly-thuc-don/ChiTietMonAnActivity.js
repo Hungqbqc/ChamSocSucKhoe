@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
 import NumericInput from 'react-native-numeric-input';
 import { Button } from 'react-native-elements';
 import {
@@ -9,7 +9,7 @@ import {
   IP_SERVER,
   LAY_THUC_DON,
   COLOR_WHITE,
-  DATE_FORMAT_COMPARE,
+  THEM_MON_AN,
   URLThucDon,
 } from '../../asset/MyConst';
 import moment from 'moment';
@@ -36,47 +36,74 @@ class ChiTietMonAnActivity extends Component {
     };
   }
 
-  // Lưu lại số người
-  numericInputOnchange(value) {
-    this.setState({ soLuong: value < 0 ? 0 : value });
-  }
-
   async _onPress() {
-    fetch(URLThucDon, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        loai: 1,
+    const { soLuong } = this.state;
+    if (soLuong < 1) {
+      Alert.alert(
+        'Chú ý!',
+        'Số lượng phải lớn hơn 0',
+        [
+          {
+            text: 'Xác nhận',
+            onPress: () => {
+            }
+          }
+        ],
+        { cancelable: false },
+      );
+    }
+    else {
+      let monAn = JSON.stringify({
+        loai: THEM_MON_AN,
         ChuTaiKhoanId: this.props.email,
         BuaAnId: this.props.buaAn.loaiBua,
         MonAnId: this.state.monAn.Id,
         NgayAn: this.props.ngayChon,
         SoLuong: this.state.soLuong,
-      }),
-    })
-      .then(response => response.json())
-      .then(responseJson => {
-        // Thêm món ăn thành công
-        if (responseJson !== 0) {
-          this.props.layThucDonAsync(LAY_THUC_DON, {
-            email: this.props.email,
-            ngayAn: this.props.ngayChon
-          }).then(async () => {
-            this.props.myNavigation.navigate('ManHinhChinhActivity');
-          });
-        } else {
-          alert('Thêm món ăn thất bại!');
-        }
-      })
-      .catch(error => {
-        console.error(error);
       });
+      this.props.themMonAnAsync(monAn, this.props.email, this.props.ngayChon).then(() => {
+        this.props.myNavigation.navigate('ManHinhChinhActivity');
+      });
+
+      // fetch(URLThucDon, {
+      //   method: 'POST',
+      //   headers: {
+      //     Accept: 'application/json',
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     loai: 1,
+      //     ChuTaiKhoanId: this.props.email,
+      //     BuaAnId: this.props.buaAn.loaiBua,
+      //     MonAnId: this.state.monAn.Id,
+      //     NgayAn: this.props.ngayChon,
+      //     SoLuong: this.state.soLuong,
+      //   }),
+      // })
+      //   .then(response => response.json())
+      //   .then(responseJson => {
+      //     // Thêm món ăn thành công
+      //     if (responseJson !== 0) {
+      //       this.props.layThucDonAsync(LAY_THUC_DON, {
+      //         email: this.props.email,
+      //         ngayAn: this.props.ngayChon
+      //       }).then(async () => {
+      //         this.props.myNavigation.navigate('ManHinhChinhActivity');
+      //       });
+      //     } else {
+      //       alert('Thêm món ăn thất bại!');
+      //     }
+      //   })
+      //   .catch(error => {
+      //     console.error(error);
+      //   });
+    }
+
   };
 
   render() {
+    const { Calo, Xo, Dam, Beo } = this.state.monAn;
+    const { soLuong } = this.state;
     return (
       <View style={styles.container}>
         <View style={styles.top}>
@@ -90,19 +117,19 @@ class ChiTietMonAnActivity extends Component {
         <View style={styles.mid}>
           <View style={styles.calo}>
             <Text style={styles.tieuDe}>Năng lượng (Kcal) </Text>
-            <Text style={styles.tieuDe}>{this.state.monAn.Calo}</Text>
+            <Text style={styles.tieuDe}>{Number(Calo) * soLuong}</Text>
           </View>
           <View style={styles.xo}>
             <Text style={styles.tieuDe}>Xơ (g) </Text>
-            <Text style={styles.tieuDe}>{this.state.monAn.Xo}</Text>
+            <Text style={styles.tieuDe}>{Number(Xo) * soLuong}</Text>
           </View>
           <View style={styles.beo}>
             <Text style={styles.tieuDe}>Béo (g) </Text>
-            <Text style={styles.tieuDe}>{this.state.monAn.Beo}</Text>
+            <Text style={styles.tieuDe}>{Number(Beo) * soLuong}</Text>
           </View>
           <View style={styles.dam}>
             <Text style={styles.tieuDe}>Đạm (g) </Text>
-            <Text style={styles.tieuDe}>{this.state.monAn.Dam}</Text>
+            <Text style={styles.tieuDe}>{Number(Dam) * soLuong}</Text>
           </View>
         </View>
         <View style={styles.bottom}>
@@ -111,7 +138,7 @@ class ChiTietMonAnActivity extends Component {
               style={styles.numberUpDown}
               type="up-down"
               value={this.state.soLuong}
-              onChange={value => this.numericInputOnchange(value)}
+              onChange={soLuong => this.setState({ soLuong })}
               totalWidth={100}
               totalHeight={40}
               initValue={this.state.soLuong}
