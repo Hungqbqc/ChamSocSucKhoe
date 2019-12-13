@@ -8,14 +8,16 @@ import {
   Alert,
   TouchableOpacity,
 } from 'react-native';
-import { LAY_MON_AN,XOA_MON_AN } from '../../asset/MyConst';
+import { LAY_MON_AN, XOA_MON_AN } from '../../asset/MyConst';
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
 import DanhSachMonAnComponent from '../../components/admin/DanhSachMonAnComponent';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import ThemMonAnModal from './ThemMonAnModal';
 import Loader from '../../components/Loader';
-
+import {
+  COLOR_HEADER,
+} from '../../asset/MyColor';
 
 class QuanLyMonAnActivity extends Component {
 
@@ -25,7 +27,6 @@ class QuanLyMonAnActivity extends Component {
 
   componentDidMount() {
     this.layMonAn();
-    this._onPressAdd();
   }
 
   async  layMonAn() {
@@ -39,6 +40,8 @@ class QuanLyMonAnActivity extends Component {
     super(props);
     this.state = {
       idDanhMuc: this.props.navigation.getParam('idDanhMuc'),
+      tenDanhMuc: this.props.navigation.getParam('tenDanhMuc'),
+
     };
     this._onPressAdd = this._onPressAdd.bind(this);
   }
@@ -73,7 +76,7 @@ class QuanLyMonAnActivity extends Component {
                 idMonAn: id
               }
             );
-            this.props.monAnAsync(monAn,this.props.danhMucDaChon);
+            this.props.monAnAsync(monAn, this.props.danhMucDaChon);
           }
         }
       ],
@@ -92,7 +95,7 @@ class QuanLyMonAnActivity extends Component {
           }
         </View>
         <View style={{
-          backgroundColor: 'tomato',
+          backgroundColor: COLOR_HEADER,
           flexDirection: 'row',
           justifyContent: 'flex-end',
           alignItems: 'center',
@@ -100,6 +103,7 @@ class QuanLyMonAnActivity extends Component {
         }}>
           <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
             <Text style={{ fontSize: 28, color: 'white' }}>Quản lý món ăn</Text>
+            <Text style={{ fontSize: 18, color: 'white' }}>Danh mục: {this.state.tenDanhMuc} </Text>
           </View>
           <TouchableHighlight
             style={{ marginRight: 10 }}
@@ -118,9 +122,7 @@ class QuanLyMonAnActivity extends Component {
           data={this.props.monAn}
           renderItem={({ item, index }) => {
             return (
-              <TouchableOpacity onPress={() => console.log(1)}>
-                <DanhSachMonAnComponent parentFlatList={this} key={item.Id} item={item} />
-              </TouchableOpacity>
+              <DanhSachMonAnComponent parentFlatList={this} key={item.Id} item={item} />
             );
           }}
         />

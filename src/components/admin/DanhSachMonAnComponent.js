@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import Swipeout from 'react-native-swipeout';
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
@@ -7,6 +7,16 @@ import * as actions from '../../redux/actions';
 class DanhSachMonAnComponent extends Component {
   constructor(props) {
     super(props);
+  }
+
+
+  chonMonAn(monAn) {
+    this.props.myNavigation.navigate('QuanLyChiTietMonAnActivity', {
+      themMonAnThanhCong: this.themMonAnThanhCong,
+      monAn: monAn,
+    });
+    console.log('monAn', monAn);
+
   }
 
   render() {
@@ -42,35 +52,38 @@ class DanhSachMonAnComponent extends Component {
     return (
       <>
         <Swipeout style={{ backgroundColor: 'tranparent' }}  {...swipeSettings}>
-          <View key={this.props.item.Id} style={styles.container}>
-            <View style={styles.left}>
-              <Image
-                style={styles.avatarLogin}
-                source={{
-                  uri: this.props.item.AnhMonAn,
-                }}
-              />
-            </View>
-            <View style={styles.right}>
-              <View style={styles.rightTop}>
-                <Text style={{ fontSize: 18 }}>{this.props.item.TenMonAn}</Text>
-                <Text style={{ fontSize: 20, color: 'red' }}>
-                  {' '}
-                  {this.props.item.Calo}
-                </Text>
+          <TouchableOpacity onPress={() => this.chonMonAn(this.props.item)}>
+            <View key={this.props.item.Id} style={styles.container}>
+              <View style={styles.left}>
+                <Image
+                  style={styles.avatarLogin}
+                  source={{
+                    uri: this.props.item.AnhMonAn,
+                  }}
+                />
               </View>
-              <View style={styles.rightBottom}>
-                <Text>{this.props.item.DonViTinh}</Text>
+              <View style={styles.right}>
+                <View style={styles.rightTop}>
+                  <Text style={{ fontSize: 18 }}>{this.props.item.TenMonAn}</Text>
+                  <Text style={{ fontSize: 20, color: 'red' }}>
+                    {' '}
+                    {this.props.item.Calo}
+                  </Text>
+                </View>
+                <View style={styles.rightBottom}>
+                  <Text>{this.props.item.DonViTinh}</Text>
+                </View>
               </View>
             </View>
-          </View>
-          <View
-            style={{
-              height: 2,
-              backgroundColor: 'black',
-            }}
-          />
+            <View
+              style={{
+                height: 2,
+                backgroundColor: 'black',
+              }}
+            />
+          </TouchableOpacity>
         </Swipeout>
+
       </>
     );
   }

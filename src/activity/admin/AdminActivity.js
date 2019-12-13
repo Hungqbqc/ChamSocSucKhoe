@@ -15,7 +15,9 @@ import DanhSachDanhMucMonAnComponent from '../../components/admin/DanhSachDanhMu
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import ThemDanhMucMonAnModal from './ThemDanhMucMonAnModal';
 import Loader from '../../components/Loader';
-
+import {
+    COLOR_HEADER,
+} from '../../asset/MyColor';
 
 class AdminActivity extends Component {
 
@@ -87,7 +89,7 @@ class AdminActivity extends Component {
                     }
                 </View>
                 <View style={{
-                    backgroundColor: 'tomato',
+                    backgroundColor: COLOR_HEADER,
                     flexDirection: 'row',
                     justifyContent: 'flex-end',
                     alignItems: 'center',

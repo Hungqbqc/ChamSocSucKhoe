@@ -13,6 +13,7 @@ import ChiTietMonAnActivity from './src/activity/quan-ly-thuc-don/ChiTietMonAnAc
 import QuanLyThucDonActivity from './src/activity/quan-ly-thuc-don/QuanLyThucDonActivity';
 import AdminActivity from './src/activity/admin/AdminActivity';
 import QuanLyMonAnActivity from './src/activity/admin/QuanLyMonAnActivity';
+import QuanLyChiTietMonAnActivity from './src/activity/admin/QuanLyChiTietMonAnActivity';
 import { Provider } from 'react-redux';
 import store from './src/redux/store/store';
 const RootStack = createStackNavigator(
@@ -28,6 +29,7 @@ const RootStack = createStackNavigator(
     QuanLyThucDonActivity: QuanLyThucDonActivity,
     AdminActivity: AdminActivity,
     QuanLyMonAnActivity: QuanLyMonAnActivity,
+    QuanLyChiTietMonAnActivity: QuanLyChiTietMonAnActivity,
   },
   {
     initialRouteName: 'DangNhapActivity',

@@ -7,4 +7,5 @@ export const COLOR_PINK_LIGHT = 'rgb(234, 195, 176)';
 export const COLOR_FACEBOOK = '#3b5998';
 export const COLOR_FIREBRICK = 'rgb(178,34,34)';
 export const COLOR_PINK_MEDIUM = 'rgb(255,119,34)';
+export const COLOR_HEADER = 'rgb(39, 174, 96)';
 
