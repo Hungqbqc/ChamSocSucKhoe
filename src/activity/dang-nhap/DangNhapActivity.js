@@ -8,8 +8,10 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Image,
-  Alert
+  Alert,
+
 } from 'react-native'
+import NetInfo from "@react-native-community/netinfo";
 import {
   COLOR_PINK,
   COLOR_PINK_LIGHT,
@@ -35,6 +37,21 @@ class DangNhapActivity extends Component {
   componentDidMount() {
     this.props.khoiDongApp(this.props.navigation)
   }
+
+  handleFirstConnectivityChange = isConnected => {
+    NetInfo.isConnected.removeEventListener(
+      "connectionChange",
+      this.handleFirstConnectivityChange
+    );
+
+    if (isConnected === false) {
+      Alert.alert("You are offline!");
+    } else {
+      Alert.alert("You are online!");
+    }
+  };
+
+
   // hàm đăng nhập
   async handleLogin() {
     const { email, password } = this.state

@@ -18,7 +18,8 @@ import {
   URL_MON_AN,
   LAY_DANH_MUC_MON_AN,
   LAY_MON_AN,
-  LOADING_DANH_MUC_MON_AN
+  LOADING_DANH_MUC_MON_AN,
+  LOADING_MON_AN
 } from "../../asset/MyConst";
 
 // import * as thanhVien from './thanhVienAction'
@@ -191,6 +192,9 @@ export function themMonAnAsync(monAn) {
 export const layDanhMucMonAn = danhMucMonAn => ({ type: LAY_DANH_MUC_MON_AN, danhMucMonAn })
 export const loadingDanhMucMonAn = isLoading => ({ type: LOADING_DANH_MUC_MON_AN, isLoading })
 
+export const layMonAn = monAn => ({ type: LAY_MON_AN, monAn })
+export const loadingMonAn = isLoadingMonAn => ({ type: LOADING_MON_AN, isLoadingMonAn })
+
 export function layDanhMucMonAnAsync(body) {
   return dispatch => {
     dispatch(loadingDanhMucMonAn(true));
@@ -215,8 +219,6 @@ export function themDanhMucMonAnAsync(danhMucMonAn) {
 
 // Sửa danh mục món ăn
 export function danhMucMonAnAsync(danhMucMonAn) {
-  console.log('danhMucMonAnAsync',danhMucMonAn);
-  
   return dispatch => {
     return callApi(URL_MON_AN, 'POST', danhMucMonAn).then(async res => {
       dispatch(layDanhMucMonAnAsync(JSON.stringify({
@@ -226,6 +228,27 @@ export function danhMucMonAnAsync(danhMucMonAn) {
   }
 }
 
+export function layMonAnAsync(body) {
+  return dispatch => {
+    dispatch(loadingMonAn(true));
+    return callApi(URL_MON_AN, 'POST', body).then(async monAn => {
+      dispatch(layMonAn(monAn.data))
+    }).then(() => {
+      dispatch(loadingMonAn(false))
+    });
+  }
+}
+
+// Sửa danh mục món ăn
+export function monAnAsync(monAn) {
+  return dispatch => {
+    return callApi(URL_MON_AN, 'POST', monAn).then(async res => {
+      dispatch(layMonAnAsync(JSON.stringify({
+        loai: LAY_MON_AN
+      })))
+    });
+  }
+}
 
 
 //#endregion

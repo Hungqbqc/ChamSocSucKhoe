@@ -1,97 +1,137 @@
 import React, { Component } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
   FlatList,
-  TouchableOpacity,
+  TouchableHighlight,
+  Text,
+  View,
   Image,
+  Alert,
+  TouchableOpacity,
 } from 'react-native';
-import { IP_SERVER } from '../../asset/MyConst';
+import { LAY_MON_AN } from '../../asset/MyConst';
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
-import DanhSachMonAnComponent from '../../components/quan-ly-thuc-don/DanhSachMonAnComponent';
+import DanhSachMonAnComponent from '../../components/admin/DanhSachMonAnComponent';
+import IconAntDesign from 'react-native-vector-icons/AntDesign';
+import ThemMonAnModal from './ThemMonAnModal';
+import Loader from '../../components/Loader';
+
 
 class QuanLyMonAnActivity extends Component {
 
-  static navigationOptions = ({ navigation }) => ({
-    title: `${navigation.state.params.tenDanhMuc}`,
-    headerStyle: {
-      backgroundColor: '#f4511e',
-    },
-    headerTintColor: '#fff',
-    headerTitleStyle: {
-      fontWeight: 'bold',
-    },
-  });
-
-  URLLayMonAn = IP_SERVER + 'MonAn.php?loai=2&&idDanhMuc=';
-  flatListDanhMucMonAn = [];
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      idDanhMuc: this.props.navigation.getParam('idDanhMuc'),
-      email: this.props.navigation.getParam('email'),
-      buaAnId: this.props.navigation.getParam('buaAnId'),
-      ngayAn: this.props.navigation.getParam('ngayAn'),
-      selected: false,
-    };
+  static navigationOptions = {
+    header: null
   }
-
-  themMonAnThanhCong = data => {
-    alert('come back status: ' + data);
-  };
 
   componentDidMount() {
     this.layMonAn();
   }
 
-  layMonAn() {
-    return fetch(this.URLLayMonAn + this.state.idDanhMuc)
-      .then(response => response.json())
-      .then(json => {
-        if (json !== 0) {
-          this.flatListDanhMucMonAn = json;
-          this.setState({
-            flatListDanhMucMonAn: json,
-          });
-        }
-      });
+  async  layMonAn() {
+    await this.props.layMonAnAsync(JSON.stringify({
+      loai: LAY_MON_AN,
+      idDanhMuc: this.state.idDanhMuc
+    }))
+    console.log(1233,this.props.monAn);
+    
   }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      idDanhMuc: this.props.navigation.getParam('idDanhMuc'),
+    };
+    this._onPressAdd = this._onPressAdd.bind(this);
+  }
+
+  _onPressAdd() {
+    this.child.showAddMemberModal(1);
+  }
+
+  _onPressEdit(id, uri, tenDanhMuc) {
+    this.child.showAddMemberModal(2, id, uri, tenDanhMuc);
+  }
+
+  _onPressDelete(id, tenDanhMuc) {
+    Alert.alert(
+      'Bạn có chắc chắn không? ',
+      'Danh mục ' + tenDanhMuc + ' sẽ bị xóa!',
+      [
+        {
+          text: 'Hủy',
+          style: 'login',
+        },
+        {
+          text: 'Xác nhận',
+          onPress: () => {
+            let danhMucMonAn = JSON.stringify(
+              {
+                loai: XOA_DANH_MUC_MON_AN,
+                idDanhMuc: id
+              }
+            );
+            this.props.monAnAsync(danhMucMonAn);
+          }
+        }
+      ],
+      { cancelable: false },
+    );
+  }
+
   render() {
     return (
       <View style={{ flex: 1 }}>
+        <View >
+          {
+            this.props.isLoading ? <View style={{ flex: 1, justifyContent: "center", alignContent: "center" }}>
+              <Loader />
+            </View> : null
+          }
+        </View>
+        <View style={{
+          backgroundColor: 'tomato',
+          flexDirection: 'row',
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+          height: 64
+        }}>
+          <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+            <Text style={{ fontSize: 28, color: 'white' }}>Quản lý món ăn</Text>
+          </View>
+          <TouchableHighlight
+            style={{ marginRight: 10 }}
+            underlayColor='tomato'
+            onPress={this._onPressAdd}
+          >
+            <IconAntDesign
+              style={{ color: 'white' }}
+              name="pluscircleo"
+              size={35}
+            />
+          </TouchableHighlight>
+        </View>
         <FlatList
           keyExtractor={(item, index) => index.toString()}
-          data={this.state.flatListDanhMucMonAn}
+          data={this.props.monAn}
           renderItem={({ item, index }) => {
             return (
-              <TouchableOpacity onPress={() => this.chonMonAn(item)}>
-                <DanhSachMonAnComponent key={item.Id} item={item} />
+              <TouchableOpacity onPress={() => this.chonDanhMuc(item)}>
+                <DanhSachMonAnComponent parentFlatList={this} key={item.Id} item={item} />
               </TouchableOpacity>
             );
           }}
         />
+        <ThemMonAnModal onRef={ref => (this.child = ref)} />
       </View>
     );
-  }
-
-  chonMonAn(monAn) {
-    this.props.myNavigation.navigate('ChiTietMonAnActivity', {
-      themMonAnThanhCong: this.themMonAnThanhCong,
-      monAn: monAn,
-      tenMonAn: monAn.TenMonAn,
-      email: this.state.email,
-      buaAnId: this.state.buaAnId,
-      ngayAn: this.state.ngayAn,
-    });
   }
 }
 
 function mapStateToProps(state) {
   return {
     myNavigation: state.myNavigation,
+    monAn: state.monAn.monAn,
+    isLoading: state.monAn.isLoading,
   }
 }
 

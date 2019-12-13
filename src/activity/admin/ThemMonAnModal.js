@@ -1,79 +1,186 @@
 import React from 'react';
-import { Text, TextInput, View, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, Image, View, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import Modal from 'react-native-modalbox';
 import * as actions from '../../redux/actions';
 import { connect } from 'react-redux';
-import { THEM_THANH_VIEN } from '../../asset/MyConst';
-
+import { TITLE_FONT_SIZE, URL_UPLOAD, THEM_DANH_MUC_MON_AN, SUA_DANH_MUC_MON_AN } from '../../asset/MyConst';
+import ImagePicker from 'react-native-image-picker';
+import RNFetchBlob from 'rn-fetch-blob';
 class ThemMonAnModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOpen: false,
-      isDisabled: false,
-      swipeToClose: true,
-      sliderValue: 0.3,
-      chucDanh: '',
-      email: this.props.email
+      data: null,
+      id: null,
+      tenDanhMuc: '',
+      imageEmpty: 'https://nameproscdn.com/a/2018/05/106343_82907bfea9fe97e84861e2ee7c5b4f5b.png',
+      uri: null,
+      anhDanhMuc: '',
+      loai: 1
     };
-    this.save = this.save.bind(this)
-    this.onClose = this.onClose.bind(this)
+    this.onClose = this.onClose.bind(this);
+    this.uploadImageToServer = this.uploadImageToServer.bind(this);
   }
 
-  // Nhấn nút lưu thêm thành viên
-  save() {
-    this.props.themThanhVienAsync(
-      JSON.stringify({
-        loai: THEM_THANH_VIEN,
-        chucDanh: this.state.chucDanh,
-        email: this.props.email
-      }), this.props.email).then(() => {
-        this.refs.modal1.close();
-      });
-  }
+  handleChoosePhoto = () => {
+    const options = {
+      quality: 1.0,
+      maxWidth: 500,
+      maxHeight: 500,
+      storageOptions: {
+        skipBackup: true
+      }
+    };
 
-  showAddMemberModal = () => {
-    this.refs.modal1.open();
+    ImagePicker.showImagePicker(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled photo picker');
+      }
+      else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      }
+      else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      }
+      else {
+        this.setState({
+          uri: response.uri,
+          data: response.data
+        });
+      }
+    });
   };
 
   onClose() {
-    //called on modal closed
-    console.log('Modal just closed');
     this.setState({
-      chucDanh: ''
+      uri: null,
+      data: null,
+      tenDanhMuc: '',
+      anhDanhMuc: '',
+      loai: 1,
+      id: null
     })
   }
+
+  async uploadImageToServer() {
+    const { data } = this.state;
+    if (data === null && this.state.loai === 1) {
+      alert('Bạn chưa chọn ảnh')
+    }
+    else {
+      // Nếu chọn ảnh thì mới up lên server
+      if (data !== null) {
+        await this.uploadImage().then(async () => {
+          // Thêm mới
+          if (this.state.loai === 1) {
+            let danhMucMonAn = JSON.stringify(
+              {
+                loai: THEM_DANH_MUC_MON_AN,
+                tenDanhMucMonAn: this.state.tenDanhMuc,
+                anhDanhMuc: this.state.anhDanhMuc
+              }
+            );
+            await this.props.themDanhMucMonAnAsync(danhMucMonAn);
+          }
+          // update
+          else {
+            let danhMucMonAn = JSON.stringify(
+              {
+                loai: SUA_DANH_MUC_MON_AN,
+                idDanhMuc: this.state.id,
+                tenDanhMucMonAn: this.state.tenDanhMuc,
+                anhDanhMuc: this.state.anhDanhMuc
+              }
+            );
+            await this.props.danhMucMonAnAsync(danhMucMonAn);
+          }
+          this.refs.modal1.close();
+        })
+      }
+      else {
+        let danhMucMonAn = JSON.stringify(
+          {
+            loai: SUA_DANH_MUC_MON_AN,
+            idDanhMuc: this.state.id,
+            tenDanhMucMonAn: this.state.tenDanhMuc,
+            anhDanhMuc: this.state.anhDanhMuc
+          }
+        );
+        await this.props.danhMucMonAnAsync(danhMucMonAn);
+      }
+      this.refs.modal1.close();
+    }
+  }
+
+  async uploadImage() {
+    const { data } = this.state;
+    await RNFetchBlob.fetch('POST', URL_UPLOAD, {
+      Authorization: "Bearer access-token",
+      otherHeader: "foo",
+      'Content-Type': 'multipart/form-data',
+    }, [
+      { name: 'image', filename: 'image.png', type: 'image/png', data: data }
+    ]).then((resp) => {
+      var uri = resp.data;
+      uri = uri.replace(/^"|"$/g, '');
+      this.setState({
+        anhDanhMuc: uri
+      })
+    }).catch((err) => {
+      console.log(2, err);
+    })
+  }
+
+  showAddMemberModal = (loai, id = null, uri = null, tenDanhMuc = '') => {
+    this.setState({
+      loai: loai,
+      id: id,
+      uri: uri,
+      tenDanhMuc: tenDanhMuc
+    })
+    this.refs.modal1.open();
+  };
 
   componentDidMount() {
     this.props.onRef(this)
   }
 
-  shouldComponentUpdate
-
   render() {
+    const { uri } = this.state;
     return (
       <Modal
         style={[styles.modal, styles.modal1]}
         onClosed={this.onClose}
         position={'center'}
         ref={'modal1'}
-        isDisabled={this.state.isDisabled}>
-        <Text style={styles.title}>Thêm thành viên</Text>
+        isDisabled={this.state.isDisabled} >
+        <Text style={styles.title}>{this.state.loai === 1 ? 'Thêm món ăn' : 'Sửa món ăn'} </Text>
         <View style={styles.textInputContainer}>
-          <Text>Chức danh</Text>
+          <Text>Tên danh mục</Text>
           <TextInput
             style={styles.textInput}
-            placeholder='Chức danh'
-            onChangeText={chucDanh => this.setState({ chucDanh })}
-            value={this.state.chucDanh}
+            placeholder='Tên danh mục'
+            onChangeText={tenDanhMuc => this.setState({ tenDanhMuc })}
+            value={this.state.tenDanhMuc}
           />
+          <Text>Ảnh mô tả </Text>
+          <TouchableOpacity
+            onPress={this.handleChoosePhoto}
+          >
+            <Image
+              source={{ uri: uri !== null ? uri : this.state.imageEmpty }}
+              style={{ width: 150, height: 150, marginBottom: 15, marginTop: 10, }}
+            />
+          </TouchableOpacity>
+          <View style={{ justifyContent: "center", alignItems: "center" }}>
+            <TouchableOpacity
+              onPress={this.uploadImageToServer}
+              style={styles.loginButton}
+            >
+              <Text style={styles.loginButtonTitle}>Lưu</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <TouchableOpacity
-          onPress={this.save}
-          style={styles.loginButton}
-        >
-          <Text style={styles.loginButtonTitle}>Lưu</Text>
-        </TouchableOpacity>
       </Modal>
     );
   }
@@ -101,28 +208,30 @@ const styles = StyleSheet.create({
   },
 
   modal1: {
-    height: 240,
+    height: 400,
     width: 400,
-    marginTop: -30
+    marginTop: -30,
+    borderRadius: 20
   },
   title: {
-    fontSize: 30,
+    fontSize: TITLE_FONT_SIZE,
     margin: 10
 
   },
   textInputContainer: {
+    width: '90%',
     paddingHorizontal: 10,
     borderRadius: 6,
-    marginBottom: 20,
-    backgroundColor: 'rgba(255,255,255,0.2)' // a = alpha = opacity
+    marginBottom: 30,
+    backgroundColor: 'rgba(255,255,255,0.2)', // a = alpha = opacity
   },
   textInput: {
-    width: 280,
     height: 45,
     borderBottomColor: 'black',
     borderWidth: 2,
     marginTop: 10,
-    padding: 8
+    padding: 8,
+    marginBottom: 10
   },
   loginButton: {
     width: 80,
@@ -133,6 +242,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'green'
   },
   loginButtonTitle: {
+    margin: 10,
     fontSize: 18,
     color: 'white'
   },
