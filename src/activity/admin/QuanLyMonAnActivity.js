@@ -25,6 +25,7 @@ class QuanLyMonAnActivity extends Component {
 
   componentDidMount() {
     this.layMonAn();
+    this._onPressAdd();
   }
 
   async  layMonAn() {
@@ -32,8 +33,6 @@ class QuanLyMonAnActivity extends Component {
       loai: LAY_MON_AN,
       idDanhMuc: this.state.idDanhMuc
     }))
-    console.log(1233,this.props.monAn);
-    
   }
 
   constructor(props) {
@@ -44,18 +43,22 @@ class QuanLyMonAnActivity extends Component {
     this._onPressAdd = this._onPressAdd.bind(this);
   }
 
+  componentWillMount() {
+    this.props.loadingMonAn(false);
+  }
+
   _onPressAdd() {
     this.child.showAddMemberModal(1);
   }
 
-  _onPressEdit(id, uri, tenDanhMuc) {
-    this.child.showAddMemberModal(2, id, uri, tenDanhMuc);
+  _onPressEdit(id, uri, tenMonAn) {
+    this.child.showAddMemberModal(2, id, uri, tenMonAn);
   }
 
-  _onPressDelete(id, tenDanhMuc) {
+  _onPressDelete(id, tenMonAn) {
     Alert.alert(
       'Bạn có chắc chắn không? ',
-      'Danh mục ' + tenDanhMuc + ' sẽ bị xóa!',
+      'Danh mục ' + tenMonAn + ' sẽ bị xóa!',
       [
         {
           text: 'Hủy',
@@ -64,13 +67,13 @@ class QuanLyMonAnActivity extends Component {
         {
           text: 'Xác nhận',
           onPress: () => {
-            let danhMucMonAn = JSON.stringify(
+            let monAn = JSON.stringify(
               {
-                loai: XOA_DANH_MUC_MON_AN,
+                loai: XOA_MON_AN,
                 idDanhMuc: id
               }
             );
-            this.props.monAnAsync(danhMucMonAn);
+            this.props.monAnAsync(monAn);
           }
         }
       ],
@@ -115,7 +118,7 @@ class QuanLyMonAnActivity extends Component {
           data={this.props.monAn}
           renderItem={({ item, index }) => {
             return (
-              <TouchableOpacity onPress={() => this.chonDanhMuc(item)}>
+              <TouchableOpacity onPress={() => console.log(1)}>
                 <DanhSachMonAnComponent parentFlatList={this} key={item.Id} item={item} />
               </TouchableOpacity>
             );

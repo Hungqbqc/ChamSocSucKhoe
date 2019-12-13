@@ -54,10 +54,12 @@ export const LOADING_DANH_MUC_MON_AN = 'LOADING_DANH_MUC_MON_AN';
 export const THEM_DANH_MUC_MON_AN = 'THEM_DANH_MUC_MON_AN';
 export const SUA_DANH_MUC_MON_AN = 'SUA_DANH_MUC_MON_AN';
 export const XOA_DANH_MUC_MON_AN = 'XOA_DANH_MUC_MON_AN';
+export const CHON_DANH_MUC_MON_AN = 'CHON_DANH_MUC_MON_AN';
 export const LOADING_MON_AN = 'LOADING_MON_AN';
 export const LAY_MON_AN = 'LAY_MON_AN';
 export const THEM_MON_AN_DB = 'THEM_MON_AN_DB';
 export const SUA_MON_AN = 'SUA_MON_AN';
 export const XOA_MON_AN = 'XOA_MON_AN';
+
 
 

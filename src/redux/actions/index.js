@@ -19,7 +19,8 @@ import {
   LAY_DANH_MUC_MON_AN,
   LAY_MON_AN,
   LOADING_DANH_MUC_MON_AN,
-  LOADING_MON_AN
+  LOADING_MON_AN,
+  CHON_DANH_MUC_MON_AN
 } from "../../asset/MyConst";
 
 // import * as thanhVien from './thanhVienAction'
@@ -191,6 +192,7 @@ export function themMonAnAsync(monAn) {
 
 export const layDanhMucMonAn = danhMucMonAn => ({ type: LAY_DANH_MUC_MON_AN, danhMucMonAn })
 export const loadingDanhMucMonAn = isLoading => ({ type: LOADING_DANH_MUC_MON_AN, isLoading })
+export const chonDanhMucMonAn = danhMucDaChon => ({ type: CHON_DANH_MUC_MON_AN, danhMucDaChon })
 
 export const layMonAn = monAn => ({ type: LAY_MON_AN, monAn })
 export const loadingMonAn = isLoadingMonAn => ({ type: LOADING_MON_AN, isLoadingMonAn })
@@ -240,11 +242,12 @@ export function layMonAnAsync(body) {
 }
 
 // Sửa danh mục món ăn
-export function monAnAsync(monAn) {
+export function monAnAsync(monAn, idDanhMuc) {
   return dispatch => {
     return callApi(URL_MON_AN, 'POST', monAn).then(async res => {
       dispatch(layMonAnAsync(JSON.stringify({
-        loai: LAY_MON_AN
+        loai: LAY_MON_AN,
+        idDanhMuc: idDanhMuc
       })))
     });
   }

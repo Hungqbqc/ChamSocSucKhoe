@@ -4,13 +4,14 @@ import Swipeout from 'react-native-swipeout';
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
 class DanhSachDanhMucComponent extends Component {
-    
-    
+
+
     constructor(props) {
         super(props);
     }
 
-    chonDanhMuc(danhMuc) {
+    async  chonDanhMuc(danhMuc) {
+        await this.props.chonDanhMucMonAn(danhMuc.id);
         this.props.myNavigation.navigate('QuanLyMonAnActivity', {
             idDanhMuc: danhMuc.id,
             tenDanhMuc: danhMuc.tenDanhMucMonAn,
@@ -30,9 +31,7 @@ class DanhSachDanhMucComponent extends Component {
             },
             right: [
                 {
-
                     onPress: () => {
-                        console.log(this.props.item);
                         this.props.parentFlatList._onPressEdit(this.props.item.id, this.props.item.anhDanhMuc, this.props.item.tenDanhMucMonAn);
                     },
                     text: 'Edit', type: 'primary'
@@ -98,6 +97,7 @@ function mapStateToProps(state) {
         myNavigation: state.myNavigation,
         danhMucMonAn: state.monAn.danhMucMonAn,
         isLoading: state.monAn.isLoading,
+        danhMucDaChon: state.monAn.danhMucDaChon,
     }
 }
 

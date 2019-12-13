@@ -3,7 +3,7 @@ import { Text, Image, View, TouchableOpacity, StyleSheet, TextInput } from 'reac
 import Modal from 'react-native-modalbox';
 import * as actions from '../../redux/actions';
 import { connect } from 'react-redux';
-import { TITLE_FONT_SIZE, URL_UPLOAD, THEM_DANH_MUC_MON_AN, SUA_DANH_MUC_MON_AN } from '../../asset/MyConst';
+import { TITLE_FONT_SIZE, URL_UPLOAD, THEM_MON_AN, SUA_MON_AN } from '../../asset/MyConst';
 import ImagePicker from 'react-native-image-picker';
 import RNFetchBlob from 'rn-fetch-blob';
 class ThemMonAnModal extends React.Component {
@@ -11,12 +11,18 @@ class ThemMonAnModal extends React.Component {
     super(props);
     this.state = {
       data: null,
-      id: null,
-      tenDanhMuc: '',
-      imageEmpty: 'https://nameproscdn.com/a/2018/05/106343_82907bfea9fe97e84861e2ee7c5b4f5b.png',
       uri: null,
-      anhDanhMuc: '',
-      loai: 1
+      id: null,
+      imageEmpty: 'https://nameproscdn.com/a/2018/05/106343_82907bfea9fe97e84861e2ee7c5b4f5b.png',
+      loai: 1,
+      tenMonAn: 'tenMonAn',
+      anhMonAn: '',
+      donViTinh: 'donViTinh',
+      caLo: '1',
+      dam: '2',
+      beo: '3',
+      xo: '4',
+      danhMucId: this.props.danhMucDaChon
     };
     this.onClose = this.onClose.bind(this);
     this.uploadImageToServer = this.uploadImageToServer.bind(this);
@@ -53,17 +59,22 @@ class ThemMonAnModal extends React.Component {
 
   onClose() {
     this.setState({
-      uri: null,
+      id: null,
       data: null,
-      tenDanhMuc: '',
-      anhDanhMuc: '',
+      tenMonAn: 'tenMonAn',
+      anhMonAn: '',
       loai: 1,
-      id: null
+      donViTinh: 'donViTinh',
+      caLo: '1',
+      dam: '2',
+      beo: '3',
+      xo: '4',
     })
   }
 
   async uploadImageToServer() {
     const { data } = this.state;
+    var monAn = null;
     if (data === null && this.state.loai === 1) {
       alert('Bạn chưa chọn ảnh')
     }
@@ -71,43 +82,59 @@ class ThemMonAnModal extends React.Component {
       // Nếu chọn ảnh thì mới up lên server
       if (data !== null) {
         await this.uploadImage().then(async () => {
+          const { id, tenMonAn, anhMonAn, donViTinh, caLo, dam, beo, xo, danhMucId } = this.state;
           // Thêm mới
           if (this.state.loai === 1) {
-            let danhMucMonAn = JSON.stringify(
+            monAn = JSON.stringify(
               {
-                loai: THEM_DANH_MUC_MON_AN,
-                tenDanhMucMonAn: this.state.tenDanhMuc,
-                anhDanhMuc: this.state.anhDanhMuc
+                loai: THEM_MON_AN,
+                Id: null,
+                TenMonAn: tenMonAn,
+                AnhMonAn: anhMonAn,
+                DonViTinh: donViTinh,
+                Calo: caLo,
+                Dam: dam,
+                Beo: beo,
+                Xo: xo,
+                IdDanhMucMonAn: danhMucId,
               }
             );
-            await this.props.themDanhMucMonAnAsync(danhMucMonAn);
           }
           // update
           else {
-            let danhMucMonAn = JSON.stringify(
+            monAn = JSON.stringify(
               {
-                loai: SUA_DANH_MUC_MON_AN,
-                idDanhMuc: this.state.id,
-                tenDanhMucMonAn: this.state.tenDanhMuc,
-                anhDanhMuc: this.state.anhDanhMuc
+                loai: THEM_MON_AN,
+                Id: id,
+                TenMonAn: tenMonAn,
+                AnhMonAn: anhMonAn,
+                DonViTinh: donViTinh,
+                Calo: caLo,
+                Dam: dam,
+                Beo: beo,
+                Xo: xo,
+                IdDanhMucMonAn: danhMucId,
               }
             );
-            await this.props.danhMucMonAnAsync(danhMucMonAn);
           }
-          this.refs.modal1.close();
         })
       }
       else {
-        let danhMucMonAn = JSON.stringify(
+        monAn = JSON.stringify(
           {
-            loai: SUA_DANH_MUC_MON_AN,
-            idDanhMuc: this.state.id,
-            tenDanhMucMonAn: this.state.tenDanhMuc,
-            anhDanhMuc: this.state.anhDanhMuc
-          }
-        );
-        await this.props.danhMucMonAnAsync(danhMucMonAn);
+            loai: THEM_MON_AN,
+            Id: id,
+            TenMonAn: tenMonAn,
+            AnhMonAn: anhMonAn,
+            DonViTinh: donViTinh,
+            Calo: caLo,
+            Dam: dam,
+            Beo: beo,
+            Xo: xo,
+            IdDanhMucMonAn: danhMucId,
+          })
       }
+      await this.props.monAnAsync(monAn, this.state.danhMucId);
       this.refs.modal1.close();
     }
   }
@@ -120,23 +147,23 @@ class ThemMonAnModal extends React.Component {
       'Content-Type': 'multipart/form-data',
     }, [
       { name: 'image', filename: 'image.png', type: 'image/png', data: data }
-    ]).then((resp) => {
+    ]).then(async (resp) => {
       var uri = resp.data;
       uri = uri.replace(/^"|"$/g, '');
-      this.setState({
-        anhDanhMuc: uri
+      await this.setState({
+        anhMonAn: uri
       })
     }).catch((err) => {
       console.log(2, err);
     })
   }
 
-  showAddMemberModal = (loai, id = null, uri = null, tenDanhMuc = '') => {
+  showAddMemberModal = (loai, id = null, uri = null, tenMonAn = '') => {
     this.setState({
       loai: loai,
       id: id,
       uri: uri,
-      tenDanhMuc: tenDanhMuc
+      tenMonAn: tenMonAn
     })
     this.refs.modal1.open();
   };
@@ -149,20 +176,65 @@ class ThemMonAnModal extends React.Component {
     const { uri } = this.state;
     return (
       <Modal
-        style={[styles.modal, styles.modal1]}
+        style={[styles.modal]}
         onClosed={this.onClose}
         position={'center'}
         ref={'modal1'}
         isDisabled={this.state.isDisabled} >
         <Text style={styles.title}>{this.state.loai === 1 ? 'Thêm món ăn' : 'Sửa món ăn'} </Text>
         <View style={styles.textInputContainer}>
-          <Text>Tên danh mục</Text>
+          <Text>Tên món ăn</Text>
           <TextInput
             style={styles.textInput}
-            placeholder='Tên danh mục'
-            onChangeText={tenDanhMuc => this.setState({ tenDanhMuc })}
-            value={this.state.tenDanhMuc}
+            onChangeText={tenMonAn => this.setState({ tenMonAn })}
+            value={this.state.tenMonAn}
           />
+
+          <Text>Đơn vị tính</Text>
+          <TextInput
+            style={styles.textInput}
+            onChangeText={donViTinh => this.setState({ donViTinh })}
+            value={this.state.donViTinh}
+          />
+
+          <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
+            <View style={{ flex: 1, marginRight: 15 }}>
+              <Text>Calo</Text>
+              <TextInput
+                style={styles.textInput}
+                onChangeText={caLo => this.setState({ caLo })}
+                value={this.state.caLo}
+              />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text>Đạm</Text>
+              <TextInput
+                style={styles.textInput}
+                onChangeText={dam => this.setState({ dam })}
+                value={this.state.dam}
+              />
+            </View>
+          </View>
+
+          <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
+            <View style={{ flex: 1, marginRight: 15 }}>
+              <Text>Béo</Text>
+              <TextInput
+                style={styles.textInput}
+                onChangeText={beo => this.setState({ beo })}
+                value={this.state.beo}
+              />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text>Xơ</Text>
+              <TextInput
+                style={styles.textInput}
+                onChangeText={xo => this.setState({ xo })}
+                value={this.state.xo}
+              />
+            </View>
+          </View>
+
           <Text>Ảnh mô tả </Text>
           <TouchableOpacity
             onPress={this.handleChoosePhoto}
@@ -188,6 +260,7 @@ class ThemMonAnModal extends React.Component {
 function mapStateToProps(state) {
   return {
     email: state.taiKhoan.email,
+    danhMucDaChon: state.monAn.danhMucDaChon,
   }
 }
 
@@ -203,20 +276,15 @@ const styles = StyleSheet.create({
   },
 
   modal: {
-    // justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  modal1: {
-    height: 400,
     width: 400,
+    height: 640,
     marginTop: -30,
-    borderRadius: 20
+    borderRadius: 20,
+    alignItems: 'center',
   },
   title: {
     fontSize: TITLE_FONT_SIZE,
     margin: 10
-
   },
   textInputContainer: {
     width: '90%',
@@ -234,7 +302,7 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   loginButton: {
-    width: 80,
+    width: 100,
     height: 40,
     borderRadius: 6,
     justifyContent: 'center',

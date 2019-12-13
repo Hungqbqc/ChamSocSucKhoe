@@ -18,10 +18,18 @@ import Loader from '../../components/Loader';
 
 
 class AdminActivity extends Component {
-    flatListDanhMucMonAn = [];
-    URLLayDanhMucMonAn = IP_SERVER + 'MonAn.php?loai=1';
+
     static navigationOptions = {
         header: null
+    }
+
+    constructor(props) {
+        super(props);
+        this._onPressAdd = this._onPressAdd.bind(this);
+    }
+
+    componentWillMount() {
+        this.props.loadingDanhMucMonAn(false);
     }
 
     componentDidMount() {
@@ -32,17 +40,6 @@ class AdminActivity extends Component {
         await this.props.layDanhMucMonAnAsync(JSON.stringify({
             loai: LAY_DANH_MUC_MON_AN
         }))
-    }
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            flatListDanhMucMonAn: [],
-            email: this.props.navigation.getParam('email'),
-            buaAnId: this.props.navigation.getParam('buaAnId'),
-            ngayAn: this.props.navigation.getParam('ngayAn'),
-        };
-        this._onPressAdd = this._onPressAdd.bind(this);
     }
 
     _onPressAdd() {
