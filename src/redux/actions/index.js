@@ -46,7 +46,6 @@ export function dangNhapAsync(type, data) {
         dispatch(demSoThanhVien(0))
       } else {
         let de = e.LaQuanTri === "0" ? false : true;
-        console.log('dangNhapAsync', de);
         dispatch(dangNhap(data.email, data.password, true, e.LaQuanTri === "0" ? false : true))
         await thongTinThanhVien(DEM_SO_THANH_VIEN, data).then(result => {
           dispatch(demSoThanhVien(result))
@@ -82,7 +81,6 @@ export const layThongTinCaloThanhVien = routes => ({
 })
 
 //#endregion
-
 
 //#region Quản lý thành viên
 

@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import { IP_SERVER } from '../../asset/MyConst';
+import { LAY_MON_AN } from '../../asset/MyConst';
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
 import DanhSachMonAnComponent from '../../components/quan-ly-thuc-don/DanhSachMonAnComponent';
@@ -25,18 +25,16 @@ class DanhSachMonAnActivity extends Component {
     },
   });
 
-  URLLayMonAn = IP_SERVER + 'MonAn.php?loai=2&&idDanhMuc=';
-  flatListDanhMucMonAn = [];
-
   constructor(props) {
     super(props);
     this.state = {
       idDanhMuc: this.props.navigation.getParam('idDanhMuc'),
-      email: this.props.navigation.getParam('email'),
-      buaAnId: this.props.navigation.getParam('buaAnId'),
-      ngayAn: this.props.navigation.getParam('ngayAn'),
-      selected: false,
+      tenDanhMuc: this.props.navigation.getParam('tenDanhMuc'),
     };
+  }
+
+  componentWillMount() {
+    this.props.loadingMonAn(false);
   }
 
   themMonAnThanhCong = data => {
@@ -47,24 +45,26 @@ class DanhSachMonAnActivity extends Component {
     this.layMonAn();
   }
 
-  layMonAn() {
-    return fetch(this.URLLayMonAn + this.state.idDanhMuc)
-      .then(response => response.json())
-      .then(json => {
-        if (json !== 0) {
-          this.flatListDanhMucMonAn = json;
-          this.setState({
-            flatListDanhMucMonAn: json,
-          });
-        }
-      });
+  async  layMonAn() {
+    await this.props.layMonAnAsync(JSON.stringify({
+      loai: LAY_MON_AN,
+      idDanhMuc: this.state.idDanhMuc
+    }))
   }
+
   render() {
     return (
       <View style={{ flex: 1 }}>
+        <View >
+          {
+            this.props.isLoading ? <View style={{ flex: 1, justifyContent: "center", alignContent: "center" }}>
+              <Loader />
+            </View> : null
+          }
+        </View>
         <FlatList
           keyExtractor={(item, index) => index.toString()}
-          data={this.state.flatListDanhMucMonAn}
+          data={this.props.monAn}
           renderItem={({ item, index }) => {
             return (
               <TouchableOpacity onPress={() => this.chonMonAn(item)}>
@@ -92,6 +92,9 @@ class DanhSachMonAnActivity extends Component {
 function mapStateToProps(state) {
   return {
     myNavigation: state.myNavigation,
+    monAn: state.monAn.monAn,
+    isLoading: state.monAn.isLoading,
+    danhMucDaChon: state.monAn.danhMucDaChon,
   }
 }
 

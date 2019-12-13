@@ -41,7 +41,6 @@ class QuanLyMonAnActivity extends Component {
     this.state = {
       idDanhMuc: this.props.navigation.getParam('idDanhMuc'),
       tenDanhMuc: this.props.navigation.getParam('tenDanhMuc'),
-
     };
     this._onPressAdd = this._onPressAdd.bind(this);
   }

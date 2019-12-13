@@ -7,15 +7,12 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import { IP_SERVER } from '../../asset/MyConst';
+import { IP_SERVER, LAY_DANH_MUC_MON_AN } from '../../asset/MyConst';
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
 import DanhSachDanhMucMonAnComponent from '../../components/quan-ly-thuc-don/DanhSachDanhMucMonAnComponent';
-
+import Loader from '../../components/Loader';
 class DanhSachDanhMucMonAnActivity extends Component {
-  flatListDanhMucMonAn = [];
-  URLLayDanhMucMonAn = IP_SERVER + 'MonAn.php?loai=1';
-
   static navigationOptions = ({ navigation }) => ({
     title: `${navigation.state.params.title}`,
     headerStyle: {
@@ -27,49 +24,45 @@ class DanhSachDanhMucMonAnActivity extends Component {
     },
   });
 
+  componentWillMount() {
+    this.props.loadingDanhMucMonAn(false);
+  }
+
   componentDidMount() {
     this.layDanhMucMonAn();
   }
 
-  layDanhMucMonAn() {
-    return fetch(this.URLLayDanhMucMonAn)
-      .then(response => response.json())
-      .then(json => {
-        if (json !== 0) {
-          this.flatListDanhMucMonAn = json;
-          this.setState({
-            flatListDanhMucMonAn: json,
-          });
-        }
-      });
+  async  layDanhMucMonAn() {
+    await this.props.layDanhMucMonAnAsync(JSON.stringify({
+      loai: LAY_DANH_MUC_MON_AN
+    }))
   }
 
   constructor(props) {
     super(props);
-    this.state = {
-      flatListDanhMucMonAn: [],
-      email: this.props.navigation.getParam('email'),
-      buaAnId: this.props.navigation.getParam('buaAnId'),
-      ngayAn: this.props.navigation.getParam('ngayAn'),
-    };
   }
 
-  chonDanhMuc(danhMuc) {
+  async  chonDanhMuc(danhMuc) {
+    await this.props.chonDanhMucMonAn(danhMuc.id);
     this.props.myNavigation.navigate('DanhSachMonAnActivity', {
       idDanhMuc: danhMuc.id,
       tenDanhMuc: danhMuc.tenDanhMucMonAn,
-      email: this.state.email,
-      buaAnId: this.state.buaAnId,
-      ngayAn: this.state.ngayAn,
     });
   }
 
   render() {
     return (
       <View style={{ flex: 1 }}>
+        <View >
+          {
+            this.props.isLoading ? <View style={{ flex: 1, justifyContent: "center", alignContent: "center" }}>
+              <Loader />
+            </View> : null
+          }
+        </View>
         <FlatList
           keyExtractor={(item, index) => index.toString()}
-          data={this.state.flatListDanhMucMonAn}
+          data={this.props.danhMucMonAn}
           renderItem={({ item, index }) => {
             return (
               <TouchableOpacity onPress={() => this.chonDanhMuc(item)}>
@@ -86,6 +79,8 @@ class DanhSachDanhMucMonAnActivity extends Component {
 function mapStateToProps(state) {
   return {
     myNavigation: state.myNavigation,
+    danhMucMonAn: state.monAn.danhMucMonAn,
+    isLoading: state.monAn.isLoading,
   }
 }
 

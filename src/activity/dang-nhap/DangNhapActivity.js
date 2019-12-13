@@ -9,7 +9,7 @@ import {
   Keyboard,
   Image,
   Alert,
-
+  AsyncStorage
 } from 'react-native'
 import NetInfo from "@react-native-community/netinfo";
 import {
@@ -28,14 +28,39 @@ class DangNhapActivity extends Component {
   }
   constructor(props) {
     super(props)
+    this.checkLogin();
     this.state = {
       email: 'admin',
       password: 'admin',
       errorMessage: null
     }
   }
-  componentDidMount() {
-    this.props.khoiDongApp(this.props.navigation)
+
+  async checkLogin() {
+    email = await AsyncStorage.getItem('email');
+    password = await AsyncStorage.getItem('password');
+    laQuanTri = await AsyncStorage.getItem('laQuanTri');
+    soThanhVien = await AsyncStorage.getItem('soThanhVien');
+    console.log(email, password, laQuanTri, soThanhVien);
+    this.props.khoiDongApp(this.props.navigation);
+    this.props.dangNhap(email, password, true, laQuanTri === "0" ? false : true)
+
+    if (email !== null && password !== null) {
+      if (laQuanTri === '0') {
+        if (Number(soThanhVien) > 0) {
+          this.props.myNavigation.navigate('ManHinhChinhActivity')
+        } else {
+          this.props.myNavigation.navigate('NhapSoThanhVienActivity')
+        }
+      }
+      else {
+        this.props.myNavigation.navigate('AdminActivity')
+      }
+    }
+  }
+
+  async componentDidMount() {
+    this.props.khoiDongApp(this.props.navigation);
   }
 
   handleFirstConnectivityChange = isConnected => {
@@ -51,13 +76,16 @@ class DangNhapActivity extends Component {
     }
   };
 
-
   // hàm đăng nhập
   async handleLogin() {
     const { email, password } = this.state
     if (email.trim() !== '' && password.trim() !== '') {
-      this.props.dangNhapAsync(DANG_NHAP, { email, password }).then(success => {
+      this.props.dangNhapAsync(DANG_NHAP, { email, password }).then(async success => {
         if (this.props.trangThaiDangNhap) {
+          await AsyncStorage.setItem('email', email);
+          await AsyncStorage.setItem('password', password);
+          await AsyncStorage.setItem('soThanhVien', this.props.soThanhVien.toString());
+          await AsyncStorage.setItem('laQuanTri', this.props.laQuanTri ? '1' : '0');
           if (!this.props.laQuanTri) {
             if (this.props.soThanhVien > 0) {
               this.props.myNavigation.navigate('ManHinhChinhActivity')
@@ -78,6 +106,7 @@ class DangNhapActivity extends Component {
       })
     }
   }
+
   render() {
     return (
       // Donot dismis Keyboard when click outside of TextInput

@@ -16,16 +16,6 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
 class ChiTietMonAnActivity extends Component {
-  // static navigationOptions = {
-  //   title: 'Bông cải xào',
-  //   headerStyle: {
-  //     backgroundColor: '#f4511e',
-  //   },
-  //   headerTintColor: '#fff',
-  //   headerTitleStyle: {
-  //     fontWeight: 'bold',
-  //   },
-  // };
 
   static navigationOptions = ({ navigation }) => ({
     title: `${navigation.state.params.monAn.TenMonAn}`,
@@ -46,29 +36,12 @@ class ChiTietMonAnActivity extends Component {
     };
   }
 
-
   // Lưu lại số người
   numericInputOnchange(value) {
     this.setState({ soLuong: value < 0 ? 0 : value });
   }
 
   async _onPress() {
-    // this.props.themMonAnAsync(
-    //   JSON.stringify({
-    //     loai: 1,
-    //     ChuTaiKhoanId: this.props.email,
-    //     BuaAnId: this.props.buaAn.loaiBua,
-    //     MonAnId: this.state.monAn.Id,
-    //     NgayAn: this.props.ngayChon,
-    //     SoLuong: this.state.soLuong,
-    //   }));
-    // await this.props.layThucDonAsync(LAY_THUC_DON, {
-    //   email: this.props.email,
-    //   ngayAn: this.props.ngayChon
-    // }).then(async () => {
-    //   this.props.myNavigation.navigate('ManHinhChinhActivity');
-    // });
-
     fetch(URLThucDon, {
       method: 'POST',
       headers: {
@@ -92,7 +65,6 @@ class ChiTietMonAnActivity extends Component {
             email: this.props.email,
             ngayAn: this.props.ngayChon
           }).then(async () => {
-            // this.props.taiLaiTrang(true)
             this.props.myNavigation.navigate('ManHinhChinhActivity');
           });
         } else {
