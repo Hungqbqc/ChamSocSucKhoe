@@ -1,76 +1,124 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image, FlatList } from 'react-native';
-export default class DanhSachMonAnComponent extends Component {
-    constructor(props) {
-        super(props);
-      }
-    
-      render() {
-        return (
-          <>
-            <View key={this.props.item.Id} style={styles.container}>
-              <View style={styles.left}>
-                <Image
-                  style={styles.avatarLogin}
-                  source={{
-                    uri: this.props.item.AnhMonAn,
-                  }}
-                />
+import Swipeout from 'react-native-swipeout';
+import { connect } from 'react-redux';
+import * as actions from '../../redux/actions';
+
+class DanhSachMonAnComponent extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    const swipeSettings = {
+      autoClose: true,
+      onClose: (secId, rowId, direction) => {
+        // if (this.state.activeRowKey != null) {
+        //   this.setState({activeRowKey: null});
+        // }
+      },
+      onOpen: (sectId, rowId, direction) => {
+        // this.setState({activeRowKey: this.props.item.key});
+      },
+      right: [
+        {
+          onPress: () => {
+            console.log(this.props.item);
+            this.props.parentFlatList._onPressEdit(this.props.item);
+          },
+          text: 'Edit', type: 'primary'
+        },
+        {
+          onPress: () => {
+            this.props.parentFlatList._onPressDelete(this.props.item.Id, this.props.item.TenMonAn);
+          },
+          text: 'Delete', type: 'delete'
+        }
+      ],
+      rowId: this.props.index,
+      sectionId: 1,
+    };
+
+    return (
+      <>
+        <Swipeout style={{ backgroundColor: 'tranparent' }}  {...swipeSettings}>
+          <View key={this.props.item.Id} style={styles.container}>
+            <View style={styles.left}>
+              <Image
+                style={styles.avatarLogin}
+                source={{
+                  uri: this.props.item.AnhMonAn,
+                }}
+              />
+            </View>
+            <View style={styles.right}>
+              <View style={styles.rightTop}>
+                <Text style={{ fontSize: 18 }}>{this.props.item.TenMonAn}</Text>
+                <Text style={{ fontSize: 20, color: 'red' }}>
+                  {' '}
+                  {this.props.item.Calo}
+                </Text>
               </View>
-              <View style={styles.right}>
-                <View style={styles.rightTop}>
-                  <Text style={{ fontSize: 18 }}>{this.props.item.TenMonAn}</Text>
-                  <Text style={{ fontSize: 20, color: 'red' }}>
-                    {' '}
-                    {this.props.item.Calo}
-                  </Text>
-                </View>
-                <View style={styles.rightBottom}>
-                  <Text>{this.props.item.DonViTinh}</Text>
-                </View>
+              <View style={styles.rightBottom}>
+                <Text>{this.props.item.DonViTinh}</Text>
               </View>
             </View>
-            <View
-              style={{
-                height: 2,
-                backgroundColor: 'black',
-              }}
-            />
-          </>
-        );
-      }
+          </View>
+          <View
+            style={{
+              height: 2,
+              backgroundColor: 'black',
+            }}
+          />
+        </Swipeout>
+      </>
+    );
+  }
 }
+
+function mapStateToProps(state) {
+  return {
+    myNavigation: state.myNavigation,
+    isLoading: state.monAn.isLoading,
+    danhMucDaChon: state.monAn.danhMucDaChon,
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  actions
+)(DanhSachMonAnComponent)
+
 
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      flexDirection: 'row',
-      padding: 5,
-    },
-    avatarLogin: {
-      width: 80,
-      height: 80,
-      marginBottom: 3,
-    },
-    left: {
-      flex: 1,
-    },
-    right: {
-      flex: 3,
-      paddingLeft: 5,
-    },
-    rightTop: {
-      flex: 1,
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      marginTop: 15,
-    },
-    rightBottom: { flex: 1 },
-    flatListItem: {
-      color: 'black',
-      padding: 10,
-      fontSize: 16,
-    },
-  });
-  
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+    padding: 5,
+  },
+  avatarLogin: {
+    width: 80,
+    height: 80,
+    marginBottom: 3,
+  },
+  left: {
+    flex: 1,
+  },
+  right: {
+    flex: 3,
+    paddingLeft: 5,
+  },
+  rightTop: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 15,
+  },
+  rightBottom: { flex: 1 },
+  flatListItem: {
+    color: 'black',
+    padding: 10,
+    fontSize: 16,
+  },
+});

@@ -28,6 +28,25 @@ class ThemMonAnModal extends React.Component {
     this.uploadImageToServer = this.uploadImageToServer.bind(this);
   }
 
+  showAddMemberModal = (loai, monAn = null) => {
+
+    this.setState({
+      loai: loai,
+      uri: monAn !== null ? monAn.AnhMonAn : null,
+      id: monAn !== null ? monAn.Id : null,
+      tenMonAn: monAn !== null ? monAn.TenMonAn : '',
+      donViTinh: monAn !== null ? monAn.DonViTinh : '',
+      anhMonAn: monAn !== null ? monAn.AnhMonAn : '',
+      caLo: monAn !== null ? monAn.Calo : '',
+      dam: monAn !== null ? monAn.Dam : '',
+      beo: monAn !== null ? monAn.Beo : '',
+      xo: monAn !== null ? monAn.Xo : '',
+      danhMucId: monAn !== null ? monAn.IdDanhMucMonAn : '',
+    })
+    this.refs.modal1.open();
+  };
+
+
   handleChoosePhoto = () => {
     const options = {
       quality: 1.0,
@@ -75,6 +94,8 @@ class ThemMonAnModal extends React.Component {
   async uploadImageToServer() {
     const { data } = this.state;
     var monAn = null;
+    const { id, tenMonAn, anhMonAn, donViTinh, caLo, dam, beo, xo, danhMucId } = this.state;
+
     if (data === null && this.state.loai === 1) {
       alert('Bạn chưa chọn ảnh')
     }
@@ -82,15 +103,15 @@ class ThemMonAnModal extends React.Component {
       // Nếu chọn ảnh thì mới up lên server
       if (data !== null) {
         await this.uploadImage().then(async () => {
-          const { id, tenMonAn, anhMonAn, donViTinh, caLo, dam, beo, xo, danhMucId } = this.state;
           // Thêm mới
           if (this.state.loai === 1) {
+
             monAn = JSON.stringify(
               {
                 loai: THEM_MON_AN,
                 Id: null,
                 TenMonAn: tenMonAn,
-                AnhMonAn: anhMonAn,
+                AnhMonAn: this.state.anhMonAn,
                 DonViTinh: donViTinh,
                 Calo: caLo,
                 Dam: dam,
@@ -104,10 +125,10 @@ class ThemMonAnModal extends React.Component {
           else {
             monAn = JSON.stringify(
               {
-                loai: THEM_MON_AN,
+                loai: SUA_MON_AN,
                 Id: id,
                 TenMonAn: tenMonAn,
-                AnhMonAn: anhMonAn,
+                AnhMonAn: this.state.anhMonAn,
                 DonViTinh: donViTinh,
                 Calo: caLo,
                 Dam: dam,
@@ -122,10 +143,10 @@ class ThemMonAnModal extends React.Component {
       else {
         monAn = JSON.stringify(
           {
-            loai: THEM_MON_AN,
+            loai: SUA_MON_AN,
             Id: id,
             TenMonAn: tenMonAn,
-            AnhMonAn: anhMonAn,
+            AnhMonAn: this.state.anhMonAn,
             DonViTinh: donViTinh,
             Calo: caLo,
             Dam: dam,
@@ -158,15 +179,7 @@ class ThemMonAnModal extends React.Component {
     })
   }
 
-  showAddMemberModal = (loai, id = null, uri = null, tenMonAn = '') => {
-    this.setState({
-      loai: loai,
-      id: id,
-      uri: uri,
-      tenMonAn: tenMonAn
-    })
-    this.refs.modal1.open();
-  };
+
 
   componentDidMount() {
     this.props.onRef(this)

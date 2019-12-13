@@ -8,7 +8,7 @@ import {
   Alert,
   TouchableOpacity,
 } from 'react-native';
-import { LAY_MON_AN } from '../../asset/MyConst';
+import { LAY_MON_AN,XOA_MON_AN } from '../../asset/MyConst';
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
 import DanhSachMonAnComponent from '../../components/admin/DanhSachMonAnComponent';
@@ -51,8 +51,8 @@ class QuanLyMonAnActivity extends Component {
     this.child.showAddMemberModal(1);
   }
 
-  _onPressEdit(id, uri, tenMonAn) {
-    this.child.showAddMemberModal(2, id, uri, tenMonAn);
+  _onPressEdit(monAn) {
+    this.child.showAddMemberModal(2, monAn);
   }
 
   _onPressDelete(id, tenMonAn) {
@@ -70,10 +70,10 @@ class QuanLyMonAnActivity extends Component {
             let monAn = JSON.stringify(
               {
                 loai: XOA_MON_AN,
-                idDanhMuc: id
+                idMonAn: id
               }
             );
-            this.props.monAnAsync(monAn);
+            this.props.monAnAsync(monAn,this.props.danhMucDaChon);
           }
         }
       ],
@@ -135,6 +135,7 @@ function mapStateToProps(state) {
     myNavigation: state.myNavigation,
     monAn: state.monAn.monAn,
     isLoading: state.monAn.isLoading,
+    danhMucDaChon: state.monAn.danhMucDaChon,
   }
 }
 
