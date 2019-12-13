@@ -14,6 +14,7 @@ export const TITLE_FONT_SIZE = 30;
 
 // Đăng nhập
 export const DANG_NHAP = 'DANG_NHAP';
+export const LUU_THONG_TIN_DANG_NHAP = 'LUU_THONG_TIN_DANG_NHAP';
 // Đăng ký
 export const DANG_KY = 'DANG_KY';
 // lưu lại navigation

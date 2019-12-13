@@ -84,11 +84,13 @@ const TabNavigator = createMaterialBottomTabNavigator(
     }
   },
   {
-    initialRouteName: 'CaloScreen',
+    initialRouteName: initialRouteName,
+    activeColor: '#f0edf6',
+    inactiveColor: '#3e2465',
     barStyle: { backgroundColor: '#3BAD87' }
   }
 )
-
+const initialRouteName = 'DiaryScreen'
 const AppContainer = createAppContainer(TabNavigator)
 
 export default class ManHinhChinhActivity extends React.Component {

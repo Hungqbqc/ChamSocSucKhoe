@@ -266,12 +266,11 @@ const styles = StyleSheet.create({
   login: {
     flex: 2,
     width: '100%',
-    justifyContent: 'space-around',
+    justifyContent: 'flex-end',
   },
   avatarLogin: {
     width: 100,
     height: 100,
-    // margin: 10,
     borderRadius: 100,
   },
   checkBoxMember: {

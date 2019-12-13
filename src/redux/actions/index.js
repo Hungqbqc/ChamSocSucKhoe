@@ -20,7 +20,8 @@ import {
   LAY_MON_AN,
   LOADING_DANH_MUC_MON_AN,
   LOADING_MON_AN,
-  CHON_DANH_MUC_MON_AN
+  CHON_DANH_MUC_MON_AN,
+  LUU_THONG_TIN_DANG_NHAP
 } from "../../asset/MyConst";
 
 // import * as thanhVien from './thanhVienAction'
@@ -38,6 +39,12 @@ export const dangNhap = (email, password, trangThaiDangNhap, laQuanTri) => ({
   trangThaiDangNhap,
   laQuanTri
 })
+export const luuThongTinDangNhap = (HoTen, Email, Avatar) => ({
+  type: LUU_THONG_TIN_DANG_NHAP,
+  HoTen,
+  Email,
+  Avatar,
+})
 export function dangNhapAsync(type, data) {
   return async dispatch => {
     await taiKhoan(type, data).then(async e => {
@@ -45,8 +52,10 @@ export function dangNhapAsync(type, data) {
         dispatch(dangNhap('', '', false, false))
         dispatch(demSoThanhVien(0))
       } else {
-        let de = e.LaQuanTri === "0" ? false : true;
         dispatch(dangNhap(data.email, data.password, true, e.LaQuanTri === "0" ? false : true))
+        console.log('luuThongTinDangNhap', e);
+
+        // dispatch(luuThongTinDangNhap(data.email,data.ho));
         await thongTinThanhVien(DEM_SO_THANH_VIEN, data).then(result => {
           dispatch(demSoThanhVien(result))
         })
@@ -118,7 +127,6 @@ export const layThongTinThanhVien = (routes) => ({
 export function layThongTinThanhVienAsync(type, data) {
   return async dispatch => {
     await thongTinThanhVien(type, data).then(result => {
-      console.log('router', result);
       dispatch(layThongTinThanhVien(result))
     })
   }

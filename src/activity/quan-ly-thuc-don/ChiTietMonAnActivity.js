@@ -64,39 +64,6 @@ class ChiTietMonAnActivity extends Component {
       this.props.themMonAnAsync(monAn, this.props.email, this.props.ngayChon).then(() => {
         this.props.myNavigation.navigate('ManHinhChinhActivity');
       });
-
-      // fetch(URLThucDon, {
-      //   method: 'POST',
-      //   headers: {
-      //     Accept: 'application/json',
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({
-      //     loai: 1,
-      //     ChuTaiKhoanId: this.props.email,
-      //     BuaAnId: this.props.buaAn.loaiBua,
-      //     MonAnId: this.state.monAn.Id,
-      //     NgayAn: this.props.ngayChon,
-      //     SoLuong: this.state.soLuong,
-      //   }),
-      // })
-      //   .then(response => response.json())
-      //   .then(responseJson => {
-      //     // Thêm món ăn thành công
-      //     if (responseJson !== 0) {
-      //       this.props.layThucDonAsync(LAY_THUC_DON, {
-      //         email: this.props.email,
-      //         ngayAn: this.props.ngayChon
-      //       }).then(async () => {
-      //         this.props.myNavigation.navigate('ManHinhChinhActivity');
-      //       });
-      //     } else {
-      //       alert('Thêm món ăn thất bại!');
-      //     }
-      //   })
-      //   .catch(error => {
-      //     console.error(error);
-      //   });
     }
 
   };

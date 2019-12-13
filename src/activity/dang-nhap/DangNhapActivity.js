@@ -41,7 +41,6 @@ class DangNhapActivity extends Component {
     password = await AsyncStorage.getItem('password');
     laQuanTri = await AsyncStorage.getItem('laQuanTri');
     soThanhVien = await AsyncStorage.getItem('soThanhVien');
-    console.log(email, password, laQuanTri, soThanhVien);
     this.props.khoiDongApp(this.props.navigation);
     this.props.dangNhap(email, password, true, laQuanTri === "0" ? false : true)
 
