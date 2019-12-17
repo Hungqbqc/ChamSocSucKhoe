@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {Image, StyleSheet, View, Text, Alert} from 'react-native';
+import React, { Component } from 'react';
+import { Image, StyleSheet, View, Text, Alert } from 'react-native';
 import Swipeout from 'react-native-swipeout';
 
 export default class ThongTinMonAnComponent extends Component {
@@ -22,16 +22,16 @@ export default class ThongTinMonAnComponent extends Component {
           onPress: () => {
             // const deletingRow = this.state.activeRowKey;
             Alert.alert(
-              'Alert',
-              'Are you sure you want to delete?',
+              'Chú ý',
+              'Món ăn ' + this.props.food.TenMonAn + " sẽ bị xóa?",
               [
                 {
-                  text: 'No',
+                  text: 'Hủy',
                   onPress: () => console.log('Cancel pressed'),
                   style: 'cancel',
                 },
                 {
-                  text: 'Yes',
+                  text: 'Có',
                   onPress: () => {
                     this.props.parentFlatList.refreshFlatList(
                       this.props.food.ThucDonId,
@@ -39,7 +39,7 @@ export default class ThongTinMonAnComponent extends Component {
                   },
                 },
               ],
-              {cancelable: true},
+              { cancelable: true },
             );
           },
           text: 'Delete',
@@ -62,8 +62,8 @@ export default class ThongTinMonAnComponent extends Component {
           </View>
           <View style={styles.right}>
             <View style={styles.rightTop}>
-              <Text style={{fontSize: 18}}>{this.props.food.TenMonAn}</Text>
-              <Text style={{fontSize: 20, color: 'red'}}>
+              <Text style={{ fontSize: 18 }}>{this.props.food.TenMonAn}</Text>
+              <Text style={{ fontSize: 20, color: 'red' }}>
                 {' '}
                 {this.props.food.SoLuong * this.props.food.Calo}
               </Text>
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: 15,
   },
-  rightBottom: {flex: 1},
+  rightBottom: { flex: 1 },
   demo: {
     backgroundColor: 'transparent',
   },

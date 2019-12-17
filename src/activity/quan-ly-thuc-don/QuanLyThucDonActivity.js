@@ -99,6 +99,23 @@ class QuanLyThucDonActivity extends Component {
     }
   }
 
+  getProgress() {
+    let totalCalo = 1;
+    if (this.props.thucDon !== null && this.props.thucDon.DanhSachMon.length > 0) {
+      for (let index = 0; index < this.props.thucDon.DanhSachMon.length; index++) {
+        const element = this.props.thucDon.DanhSachMon[index];
+        for (let index = 0; index < element.Mon.length; index++) {
+          const item = element.Mon[index];
+          totalCalo += item.SoLuong * item.Calo;
+        }
+      }
+      let tongNangLuong = this.props.thucDon.TongNangLuong
+      return tongNangLuong !== null ? totalCalo / tongNangLuong > 1 ? 1 : totalCalo / tongNangLuong
+        : 0
+    }
+    return 0;
+  }
+
   tinhCaloDaAn() {
     let totalCalo = 0;
     this.props.thucDon.DanhSachMon.forEach((element) => {
@@ -185,7 +202,7 @@ class QuanLyThucDonActivity extends Component {
             </View>
             <View style={{ flex: 7 }}>
               <Progress.Bar
-                progress={this.state.progress}
+                progress={this.getProgress()}
                 animated={false}
                 width={300}
                 height={25}

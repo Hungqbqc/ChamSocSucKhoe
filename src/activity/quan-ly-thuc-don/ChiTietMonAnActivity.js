@@ -33,6 +33,7 @@ class ChiTietMonAnActivity extends Component {
     this.state = {
       soLuong: 1,
       monAn: this.props.navigation.getParam('monAn'),
+      isActive: true
     };
   }
 
@@ -53,6 +54,9 @@ class ChiTietMonAnActivity extends Component {
       );
     }
     else {
+      this.setState({
+        isActive: false
+      });
       let monAn = JSON.stringify({
         loai: THEM_MON_AN,
         ChuTaiKhoanId: this.props.email,
@@ -61,8 +65,12 @@ class ChiTietMonAnActivity extends Component {
         NgayAn: this.props.ngayChon,
         SoLuong: this.state.soLuong,
       });
-      this.props.themMonAnAsync(monAn, this.props.email, this.props.ngayChon).then(() => {
+      await this.props.themMonAnAsync(monAn, this.props.email, this.props.ngayChon).then(() => {
         this.props.myNavigation.navigate('ManHinhChinhActivity');
+      }).then(() => {
+        this.setState({
+          isActive: false
+        });
       });
     }
 
@@ -114,7 +122,7 @@ class ChiTietMonAnActivity extends Component {
               {this.state.monAn.DonViTinh.split(' ')[1].trim()}
             </Text>
           </View>
-          <TouchableOpacity onPress={() => this._onPress()} style={styles.buttonluu}>
+          <TouchableOpacity onPress={() => this._onPress()} disabled={!this.state.isActive} style={this.state.isActive ? styles.buttonluu : styles.button_disabled}>
             <Text style={{ fontSize: 20 }}>Lưu</Text>
           </TouchableOpacity>
         </View>
@@ -201,4 +209,16 @@ const styles = StyleSheet.create({
   luu: {
     color: COLOR_WHITE,
   },
+  button_disabled: {
+    backgroundColor: '#cccccc',
+    color: '#666666',
+    borderWidth: 1,
+    borderColor: '#999999',
+    width: 200,
+    height: 45,
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+  }
 });
