@@ -1,49 +1,112 @@
 import React, { Component } from 'react'
-import { Text, View, TouchableOpacity } from 'react-native'
-
+import {
+  View,
+  Text,
+  FlatList,
+  ActivityIndicator,
+  TextInput
+} from "react-native";
+import { List, ListItem, SearchBar } from "react-native-elements";
 import { connect } from 'react-redux'
 import * as actions from '../redux/actions'
+import { getUsers } from "../api/index";
+
 class DemoActivity extends Component {
-  constructor (props) {
-    super(props)
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      loading: false,
+      data: [],
+      error: null,
+    };
+  }
+  arrayholder = []
+  makeRemoteRequest = () => {
+    const url = `https://randomuser.me/api/?&results=20`;
+    this.setState({ loading: true });
+
+    fetch(url)
+      .then(res => res.json())
+      .then(res => {
+        this.setState({
+          data: res.results,
+          error: res.error || null,
+          loading: false,
+        });
+
+        this.arrayholder = res.results;
+      })
+      .catch(error => {
+        this.setState({ error, loading: false });
+      });
+  };
+
+  searchFilterFunction = text => {
+
+    const newData = this.arrayholder.filter(item => {
+      const itemData = `${item.name.title.toUpperCase()}   
+      ${item.name.first.toUpperCase()} ${item.name.last.toUpperCase()}`;
+      // console.log('itemData', itemData);
+
+      const textData = text.toUpperCase();
+
+      return itemData.indexOf(textData) > -1;
+    });
+    console.log('itemData', newData);
+
+    // this.setState({ data: newData });
+  };
+
+  componentDidMount() {
+    this.makeRemoteRequest();
   }
 
-  handleIncrease = () => {
-    // this.props.counterIncrease()
-    this.props.dangNhap('abc', 'xyz')
-  }
-
-  handleDecrease = () => {
-    // this.props.counterDecrease()
-
-  }
-
-  render () {
+  renderSeparator = () => {
     return (
       <View
         style={{
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-          alignContent: 'center',
-          padding: 50
+          height: 1,
+          width: "86%",
+          backgroundColor: "#CED0CE",
+          marginLeft: "14%"
         }}
-      >
-        <TouchableOpacity onPress={this.handleIncrease}>
-          <Text>+</Text>
-        </TouchableOpacity>
-        <Text>{this.props.counter}</Text>
-        <TouchableOpacity onPress={this.handleDecrease}>
-          <Text>-</Text>
-        </TouchableOpacity>
+      />
+    );
+  };
 
-        <Text>{this.props.email}</Text>
-        <Text>{this.props.password}</Text>
-      </View>
-    )
+  renderHeader = () => {
+    return (
+      <TextInput
+        autoCapitalize="none"
+        onChangeText={text => this.searchFilterFunction(text)}
+        value={this.state.name}
+      />
+    );
+  };
+
+  render() {
+    return (
+      <FlatList
+        data={this.state.data}
+        renderItem={({ item }) => (
+          <ListItem
+            roundAvatar
+            title={`${item.name.first} ${item.name.last}`}
+            subtitle={item.email}
+            avatar={{ uri: item.picture.thumbnail }}
+            containerStyle={{ borderBottomWidth: 0 }}
+          />
+        )}
+        keyExtractor={item => item.email}
+        ItemSeparatorComponent={this.renderSeparator}
+        ListHeaderComponent={this.renderHeader}
+      />
+    );
   }
 }
 
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   return {
     counter: state.counter,
     email: state.taiKhoan.email,

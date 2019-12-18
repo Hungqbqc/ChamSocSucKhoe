@@ -4,10 +4,11 @@ import {
     TouchableHighlight,
     Text,
     View,
-    Image,
+    TextInput,
     Alert,
     TouchableOpacity,
 } from 'react-native';
+import { List, ListItem, SearchBar } from "react-native-elements";
 import { IP_SERVER, LAY_DANH_MUC_MON_AN, XOA_DANH_MUC_MON_AN } from '../../asset/MyConst';
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
@@ -28,6 +29,9 @@ class AdminActivity extends Component {
     constructor(props) {
         super(props);
         this._onPressAdd = this._onPressAdd.bind(this);
+        this.state = {
+            danhMucMonAn: []
+        }
     }
 
     componentWillMount() {
@@ -41,7 +45,21 @@ class AdminActivity extends Component {
     async  layDanhMucMonAn() {
         await this.props.layDanhMucMonAnAsync(JSON.stringify({
             loai: LAY_DANH_MUC_MON_AN
-        }))
+        })).then(() => {
+            this.setState({
+                danhMucMonAn: this.props.danhMucMonAn
+            })
+        })
+    }
+
+    // Nếu có dữ liệu thì cấp nhật lại giao diện
+    async  shouldComponentUpdate(nextProps, nextState) {
+        if (this.props.isLoading !== nextProps.isLoading) {
+            this.setState({
+                danhMucMonAn: this.props.danhMucMonAn
+            })
+        }
+        return false;
     }
 
     _onPressAdd() {
@@ -78,6 +96,29 @@ class AdminActivity extends Component {
         );
     }
 
+    renderHeader = () => {
+        return (
+            <TextInput
+                autoCapitalize="none"
+                onChangeText={text => this.searchFilterFunction(text)}
+            />
+        );
+    };
+
+    searchFilterFunction = text => {
+        const { danhMucMonAn } = this.props;
+        const newData = danhMucMonAn.filter(item => {
+            const itemData = `${item.tenDanhMucMonAn.toUpperCase()}`;
+            const textData = text.toUpperCase();
+
+            return itemData.indexOf(textData) > -1;
+        });
+
+        this.setState({
+            danhMucMonAn: newData
+        })
+    };
+
     render() {
         return (
             <View style={{ flex: 1 }}>
@@ -110,9 +151,17 @@ class AdminActivity extends Component {
                         />
                     </TouchableHighlight>
                 </View>
+                <TextInput
+                    style={{
+                        borderRadius: 20,
+                    }}
+                    placeholder="Nhập tên..."
+                    autoCapitalize="none"
+                    onChangeText={text => this.searchFilterFunction(text)}
+                />
                 <FlatList
                     keyExtractor={(item, index) => index.toString()}
-                    data={this.props.danhMucMonAn}
+                    data={this.state.danhMucMonAn}
                     renderItem={({ item, index }) => {
                         return (
                             <TouchableOpacity onPress={() => this.chonDanhMuc(item)}>
