@@ -34,7 +34,7 @@ const RootStack = createStackNavigator(
     DemoActivity: DemoActivity,
   },
   {
-    initialRouteName: 'AdminActivity',
+    initialRouteName: 'DangNhapActivity',
   },
 );
 

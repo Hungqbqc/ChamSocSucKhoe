@@ -253,8 +253,12 @@ export function layMonAnAsync(body) {
 
 // Sửa danh mục món ăn
 export function monAnAsync(monAn, idDanhMuc) {
+  console.log(monAn,idDanhMuc);
+  
   return dispatch => {
     return callApi(URL_MON_AN, 'POST', monAn).then(async res => {
+      console.log('monAn',res);
+      
       dispatch(layMonAnAsync(JSON.stringify({
         loai: LAY_MON_AN,
         idDanhMuc: idDanhMuc

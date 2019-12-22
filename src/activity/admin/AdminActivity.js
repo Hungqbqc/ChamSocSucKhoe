@@ -19,7 +19,6 @@ import Loader from '../../components/Loader';
 import {
     COLOR_HEADER,
 } from '../../asset/MyColor';
-
 class AdminActivity extends Component {
 
     static navigationOptions = {
@@ -30,7 +29,8 @@ class AdminActivity extends Component {
         super(props);
         this._onPressAdd = this._onPressAdd.bind(this);
         this.state = {
-            danhMucMonAn: []
+            danhMucMonAn: [],
+            search :''
         }
     }
 
@@ -56,7 +56,8 @@ class AdminActivity extends Component {
     async  shouldComponentUpdate(nextProps, nextState) {
         if (this.props.isLoading !== nextProps.isLoading) {
             this.setState({
-                danhMucMonAn: this.props.danhMucMonAn
+                danhMucMonAn: this.props.danhMucMonAn,
+                search : ''
             })
         }
         return false;
@@ -98,10 +99,21 @@ class AdminActivity extends Component {
 
     renderHeader = () => {
         return (
-            <TextInput
-                autoCapitalize="none"
-                onChangeText={text => this.searchFilterFunction(text)}
-            />
+
+            <SearchBar
+        placeholder="Type Here..."
+          onChangeText={text => this.searchFilterFunction(text)}
+       value={this.state.search}
+      />
+
+    //   <TextInput
+    //                 style={{
+    //                     borderRadius: 20,
+    //                 }}
+    //                 placeholder="Nhập tên..."
+    //                 autoCapitalize="none"
+    //                 onChangeText={text => this.searchFilterFunction(text)}
+    //             />
         );
     };
 
@@ -115,7 +127,8 @@ class AdminActivity extends Component {
         });
 
         this.setState({
-            danhMucMonAn: newData
+            danhMucMonAn: newData,
+            search : text
         })
     };
 
@@ -151,13 +164,10 @@ class AdminActivity extends Component {
                         />
                     </TouchableHighlight>
                 </View>
-                <TextInput
-                    style={{
-                        borderRadius: 20,
-                    }}
-                    placeholder="Nhập tên..."
-                    autoCapitalize="none"
+                <SearchBar
+                    placeholder="Type Here..."
                     onChangeText={text => this.searchFilterFunction(text)}
+                    value={this.state.search}
                 />
                 <FlatList
                     keyExtractor={(item, index) => index.toString()}

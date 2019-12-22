@@ -24,6 +24,8 @@ class ThemMonAnModal extends React.Component {
       xo: '4',
       danhMucId: this.props.danhMucDaChon
     };
+    console.log('danhMucDaChon',this.props.danhMucDaChon);
+    
     this.onClose = this.onClose.bind(this);
     this.uploadImageToServer = this.uploadImageToServer.bind(this);
   }
@@ -41,7 +43,7 @@ class ThemMonAnModal extends React.Component {
       dam: monAn !== null ? monAn.Dam : '',
       beo: monAn !== null ? monAn.Beo : '',
       xo: monAn !== null ? monAn.Xo : '',
-      danhMucId: monAn !== null ? monAn.IdDanhMucMonAn : '',
+      danhMucId: monAn !== null ? monAn.IdDanhMucMonAn : this.state.danhMucId,
     })
     this.refs.modal1.open();
   };
