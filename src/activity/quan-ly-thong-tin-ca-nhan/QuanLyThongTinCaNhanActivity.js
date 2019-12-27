@@ -7,9 +7,10 @@ import {
   Alert,
   AsyncStorage,
   FlatList,
+  TouchableOpacity
 } from 'react-native';
 import { COLOR_BLUE } from '../../asset/MyColor';
-import { XOA_THANH_VIEN } from '../../asset/MyConst';
+import { XOA_THANH_VIEN, URL_UPLOAD, CAP_NHAT_AVATAR } from '../../asset/MyConst';
 import { CheckBox, ListItem } from 'react-native-elements';
 import { Button } from 'react-native-elements';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
@@ -18,6 +19,8 @@ import IconEntypo from 'react-native-vector-icons/Entypo';
 import ThemThanhVienModal from '../../components/quan-ly-thong-tin-ca-nhan/ThemThanhVienModal';
 import * as actions from '../../redux/actions';
 import { connect } from 'react-redux';
+import ImagePicker from 'react-native-image-picker';
+import RNFetchBlob from 'rn-fetch-blob';
 
 class QuanLyThongTinCaNhanActivity extends React.Component {
 
@@ -32,10 +35,27 @@ class QuanLyThongTinCaNhanActivity extends React.Component {
       isDisabled: false,
       swipeToClose: true,
       sliderValue: 0.3,
-      quanLyCalo: this.props.quanLyCalo
+      quanLyCalo: this.props.quanLyCalo,
+      imageEmpty: 'https://nameproscdn.com/a/2018/05/106343_82907bfea9fe97e84861e2ee7c5b4f5b.png',
+      HoTen: '',
+      Email: '',
+      Avatar: null,
+      data: null,
+      uri: null,
     };
     this.addMember = this.addMember.bind(this);
     this.logOut = this.logOut.bind(this);
+  }
+
+  async componentDidMount() {
+    let HoTen = await AsyncStorage.getItem('HoTen');
+    let Email = await AsyncStorage.getItem('Email');
+    let Avatar =  await AsyncStorage.getItem('Avatar')
+    this.setState({
+      HoTen: HoTen,
+      Email: Email,
+      Avatar: Avatar,
+    })
   }
 
   addMember = () => {
@@ -57,6 +77,7 @@ class QuanLyThongTinCaNhanActivity extends React.Component {
           onPress: () => {
             AsyncStorage.setItem('email', '');
             AsyncStorage.setItem('password', '');
+            AsyncStorage.setItem('Avatar', '');
             this.props.myNavigation.navigate('DangNhapActivity');
           },
         },
@@ -124,6 +145,60 @@ class QuanLyThongTinCaNhanActivity extends React.Component {
     return this.props.quanLyCalo.routes !== nextProps.quanLyCalo.routes.routes;
   }
 
+  handleChoosePhoto = () => {
+    const options = {
+      quality: 1.0,
+      maxWidth: 500,
+      maxHeight: 500,
+      storageOptions: {
+        skipBackup: true
+      }
+    };
+
+    ImagePicker.showImagePicker(options, async (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled photo picker');
+      }
+      else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      }
+      else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      }
+      else {
+
+        await RNFetchBlob.fetch('POST', URL_UPLOAD, {
+          Authorization: "Bearer access-token",
+          otherHeader: "foo",
+          'Content-Type': 'multipart/form-data',
+        }, [
+          { name: 'image', filename: 'image.png', type: 'image/png', data: response.data }
+        ]).then(async (resp) => {
+          var uri = resp.data;
+          uri = uri.replace(/^"|"$/g, '');
+
+          let avatar = JSON.stringify(
+            {
+              loai: CAP_NHAT_AVATAR,
+              email: this.state.Email,
+              uri: uri
+            })
+          this.props.capNhatAvatarAsync(avatar,uri);
+          await this.setState({
+            Avatar: uri
+          })
+        }).catch((err) => {
+          console.log(2, err);
+        })
+
+        // this.setState({
+        //   Avatar: response.uri,
+        //   data: response.data
+        // });
+      }
+    });
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -131,18 +206,23 @@ class QuanLyThongTinCaNhanActivity extends React.Component {
         <Text style={styles.title}>My Profile</Text>
         <View style={styles.info}>
           <View style={styles.infoLeft}>
-            <Image
-              style={styles.avatarLogin}
-              source={{
-                uri: this.props.thongTinCaNhan.Avatar,
-              }}
-            />
+            <TouchableOpacity
+              onPress={this.handleChoosePhoto}
+            >
+              <Image
+                style={styles.avatarLogin}
+                source={{
+                  uri: (this.state.Avatar !== null) ? this.state.Avatar : this.state.imageEmpty,
+                }}
+
+              />
+            </TouchableOpacity>
           </View>
           <View style={styles.infoRight}>
             <Text>Họ tên</Text>
-            <Text style={{ marginLeft: 20 }}>{this.props.thongTinCaNhan.HoTen}</Text>
+            <Text style={{ marginLeft: 20 }}>{this.state.HoTen}</Text>
             <Text>Email</Text>
-            <Text style={{ marginLeft: 20 }}>{this.props.thongTinCaNhan.Email}</Text>
+            <Text style={{ marginLeft: 20 }}>{this.state.Email}</Text>
           </View>
         </View>
         <View style={styles.family}>

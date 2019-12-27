@@ -21,7 +21,8 @@ import {
   LOADING_DANH_MUC_MON_AN,
   LOADING_MON_AN,
   CHON_DANH_MUC_MON_AN,
-  LUU_THONG_TIN_DANG_NHAP
+  LUU_THONG_TIN_DANG_NHAP,
+  CAP_NHAT_AVATAR
 } from "../../asset/MyConst";
 
 // import * as thanhVien from './thanhVienAction'
@@ -29,6 +30,10 @@ import callApi from '../../api/apiCaller'
 import taiKhoan from '../../api/TaiKhoanAPI'
 import thucDon from '../../api/ThucDonAPI'
 import thongTinThanhVien from '../../api/ThongTinThanhVienAPI'
+
+import {
+  AsyncStorage
+} from 'react-native'
 
 //#region  Đăng nhập
 export const khoiDongApp = navigation => ({ type: KHOI_DONG_APP, navigation })
@@ -53,7 +58,10 @@ export function dangNhapAsync(type, data) {
         dispatch(demSoThanhVien(0))
       } else {
         dispatch(dangNhap(data.email, data.password, true, e.LaQuanTri === "0" ? false : true))
-        // dispatch(luuThongTinDangNhap(data.email,data.ho));
+        dispatch(luuThongTinDangNhap(e.HoTen, e.Email, e.Avatar));
+        await AsyncStorage.setItem('HoTen', e.HoTen);
+        await AsyncStorage.setItem('Email', e.Email);
+        await AsyncStorage.setItem('Avatar', e.Avatar);
         await thongTinThanhVien(DEM_SO_THANH_VIEN, data).then(result => {
           dispatch(demSoThanhVien(result))
         })
@@ -139,6 +147,15 @@ export function capNhatThongTinCaloThanhVienAsync(type, data) {
     })
   }
 }
+
+export function capNhatAvatarAsync(body,uri) {
+  return async dispatch => {
+    await callApi(URL_THONG_TIN_THANH_VIEN, 'POST', body).then(async res => {
+      await AsyncStorage.setItem('Avatar', uri);
+    });
+  }
+}
+
 
 export const chonThanhVien = (id) => ({
   type: CHON_THANH_VIEN,

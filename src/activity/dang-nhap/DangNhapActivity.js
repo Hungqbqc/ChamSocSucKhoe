@@ -36,17 +36,19 @@ class DangNhapActivity extends Component {
   }
 
   async  componentWillMount() {
-    
     await this.props.khoiDongApp(this.props.navigation);
   }
 
   async checkLogin() {
-    email = await AsyncStorage.getItem('email');
-    password = await AsyncStorage.getItem('password');
-    laQuanTri = await AsyncStorage.getItem('laQuanTri');
-    soThanhVien = await AsyncStorage.getItem('soThanhVien');
+    let email = await AsyncStorage.getItem('email');
+    let password = await AsyncStorage.getItem('password');
+    let laQuanTri = await AsyncStorage.getItem('laQuanTri');
+    let soThanhVien = await AsyncStorage.getItem('soThanhVien');
     this.props.dangNhap(email, password, true, laQuanTri === "0" ? false : true)
-    if (email !== '' && password !== '') {
+    if (email === '' || password === '' || email === null || password === null) {
+
+    }
+    else {
       if (laQuanTri === '0') {
         if (Number(soThanhVien) > 0) {
           this.props.myNavigation.navigate('ManHinhChinhActivity')

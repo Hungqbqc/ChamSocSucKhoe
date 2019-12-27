@@ -62,5 +62,6 @@ export const THEM_MON_AN_DB = 'THEM_MON_AN_DB';
 export const SUA_MON_AN = 'SUA_MON_AN';
 export const XOA_MON_AN = 'XOA_MON_AN';
 
+export const CAP_NHAT_AVATAR = 'CAP_NHAT_AVATAR';
 
 
