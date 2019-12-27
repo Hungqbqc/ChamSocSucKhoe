@@ -5,7 +5,7 @@ import {
   View,
   Image,
   Alert,
-  TouchableOpacity,
+  AsyncStorage,
   FlatList,
 } from 'react-native';
 import { COLOR_BLUE } from '../../asset/MyColor';
@@ -55,6 +55,8 @@ class QuanLyThongTinCaNhanActivity extends React.Component {
         {
           text: 'Đăng xuất',
           onPress: () => {
+            AsyncStorage.setItem('email', '');
+            AsyncStorage.setItem('password', '');
             this.props.myNavigation.navigate('DangNhapActivity');
           },
         },

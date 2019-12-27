@@ -48,6 +48,8 @@ export const luuThongTinDangNhap = (HoTen, Email, Avatar) => ({
 export function dangNhapAsync(type, data) {
   return async dispatch => {
     await taiKhoan(type, data).then(async e => {
+      console.log(e);
+      
       if (e === 0) {
         dispatch(dangNhap('', '', false, false))
         dispatch(demSoThanhVien(0))

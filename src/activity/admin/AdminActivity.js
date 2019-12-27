@@ -165,7 +165,7 @@ class AdminActivity extends Component {
                     </TouchableHighlight>
                 </View>
                 <SearchBar
-                    placeholder="Type Here..."
+                    placeholder="Nhập danh món ăn..."
                     onChangeText={text => this.searchFilterFunction(text)}
                     value={this.state.search}
                 />

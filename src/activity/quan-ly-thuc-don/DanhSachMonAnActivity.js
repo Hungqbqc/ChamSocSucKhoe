@@ -10,6 +10,8 @@ import {
 import { LAY_MON_AN } from '../../asset/MyConst';
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
+import { SearchBar } from "react-native-elements";
+
 import DanhSachMonAnComponent from '../../components/quan-ly-thuc-don/DanhSachMonAnComponent';
 
 class DanhSachMonAnActivity extends Component {
@@ -30,6 +32,8 @@ class DanhSachMonAnActivity extends Component {
     this.state = {
       idDanhMuc: this.props.navigation.getParam('idDanhMuc'),
       tenDanhMuc: this.props.navigation.getParam('tenDanhMuc'),
+      monAn: [],
+      search: ''
     };
   }
 
@@ -49,8 +53,27 @@ class DanhSachMonAnActivity extends Component {
     await this.props.layMonAnAsync(JSON.stringify({
       loai: LAY_MON_AN,
       idDanhMuc: this.state.idDanhMuc
-    }))
+    })).then(() => {
+      this.setState({
+        monAn: this.props.monAn
+      })
+    })
   }
+
+  searchFilterFunction = text => {
+    const { monAn } = this.props;
+    const newData = monAn.filter(item => {
+      const itemData = `${item.TenMonAn.toUpperCase()}`;
+      const textData = text.toUpperCase();
+      return itemData.indexOf(textData) > -1;
+    });
+
+    this.setState({
+      monAn: newData,
+      search: text
+    })
+  };
+
 
   render() {
     return (
@@ -62,9 +85,14 @@ class DanhSachMonAnActivity extends Component {
             </View> : null
           }
         </View>
+        <SearchBar
+          placeholder="Nhập món ăn..."
+          onChangeText={text => this.searchFilterFunction(text)}
+          value={this.state.search}
+        />
         <FlatList
           keyExtractor={(item, index) => index.toString()}
-          data={this.props.monAn}
+          data={this.state.monAn}
           renderItem={({ item, index }) => {
             return (
               <TouchableOpacity onPress={() => this.chonMonAn(item)}>
