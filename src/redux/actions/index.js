@@ -48,15 +48,11 @@ export const luuThongTinDangNhap = (HoTen, Email, Avatar) => ({
 export function dangNhapAsync(type, data) {
   return async dispatch => {
     await taiKhoan(type, data).then(async e => {
-      console.log(e);
-      
       if (e === 0) {
         dispatch(dangNhap('', '', false, false))
         dispatch(demSoThanhVien(0))
       } else {
         dispatch(dangNhap(data.email, data.password, true, e.LaQuanTri === "0" ? false : true))
-        console.log('luuThongTinDangNhap', e);
-
         // dispatch(luuThongTinDangNhap(data.email,data.ho));
         await thongTinThanhVien(DEM_SO_THANH_VIEN, data).then(result => {
           dispatch(demSoThanhVien(result))
@@ -167,7 +163,6 @@ export function themThanhVienAsync(body, email) {
 
 //#endregion
 
-
 //#region Thực đơn
 // Tải lại màn hình thực đơn
 export const taiLaiTrang = isLoading => ({ type: LOADING, isLoading })
@@ -255,12 +250,8 @@ export function layMonAnAsync(body) {
 
 // Sửa danh mục món ăn
 export function monAnAsync(monAn, idDanhMuc) {
-  console.log(monAn,idDanhMuc);
-  
   return dispatch => {
     return callApi(URL_MON_AN, 'POST', monAn).then(async res => {
-      console.log('monAn',res);
-      
       dispatch(layMonAnAsync(JSON.stringify({
         loai: LAY_MON_AN,
         idDanhMuc: idDanhMuc
@@ -268,6 +259,5 @@ export function monAnAsync(monAn, idDanhMuc) {
     });
   }
 }
-
 
 //#endregion

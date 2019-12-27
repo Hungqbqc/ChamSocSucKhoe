@@ -62,14 +62,18 @@ class DanhSachMonAnActivity extends Component {
 
   searchFilterFunction = text => {
     const { monAn } = this.props;
-    const newData = monAn.filter(item => {
-      const itemData = `${item.TenMonAn.toUpperCase()}`;
-      const textData = text.toUpperCase();
-      return itemData.indexOf(textData) > -1;
-    });
-
+    if (monAn.length > 0) {
+      const newData = monAn.filter(item => {
+        const itemData = `${item.TenMonAn.toUpperCase()}`;
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      this.setState({
+        monAn: newData,
+        search: text
+      })
+    }
     this.setState({
-      monAn: newData,
       search: text
     })
   };

@@ -127,7 +127,7 @@ class ThemDanhMucMonAnModal extends React.Component {
           anhDanhMuc: uri
         })
       }).catch((err) => {
-        console.log(2, err);
+        console.log('err', err);
       })
   }
 

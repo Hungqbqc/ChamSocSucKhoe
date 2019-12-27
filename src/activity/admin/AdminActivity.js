@@ -8,7 +8,7 @@ import {
     Alert,
     TouchableOpacity,
 } from 'react-native';
-import { List, ListItem, SearchBar } from "react-native-elements";
+import { SearchBar } from "react-native-elements";
 import { IP_SERVER, LAY_DANH_MUC_MON_AN, XOA_DANH_MUC_MON_AN } from '../../asset/MyConst';
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
@@ -74,7 +74,7 @@ class AdminActivity extends Component {
     _onPressDelete(id, tenDanhMuc) {
         Alert.alert(
             'Bạn có chắc chắn không? ',
-            'Danh mục ' + tenDanhMuc + ' sẽ bị xóa!',
+            'Danh mục ' + tenDanhMuc + ' sẽ bị xóa!' +id,
             [
                 {
                     text: 'Hủy',

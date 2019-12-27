@@ -15,8 +15,6 @@ class DanhSachMonAnComponent extends Component {
       themMonAnThanhCong: this.themMonAnThanhCong,
       monAn: monAn,
     });
-    console.log('monAn', monAn);
-
   }
 
   render() {
@@ -33,7 +31,6 @@ class DanhSachMonAnComponent extends Component {
       right: [
         {
           onPress: () => {
-            console.log(this.props.item);
             this.props.parentFlatList._onPressEdit(this.props.item);
           },
           text: 'Edit', type: 'primary'

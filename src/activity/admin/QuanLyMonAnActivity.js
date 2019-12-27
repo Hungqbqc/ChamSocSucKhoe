@@ -18,11 +18,27 @@ import Loader from '../../components/Loader';
 import {
   COLOR_HEADER,
 } from '../../asset/MyColor';
+import { SearchBar } from "react-native-elements";
 
 class QuanLyMonAnActivity extends Component {
 
   static navigationOptions = {
     header: null
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      idDanhMuc: this.props.navigation.getParam('idDanhMuc'),
+      tenDanhMuc: this.props.navigation.getParam('tenDanhMuc'),
+      monAn: [],
+      search: ''
+    };
+    this._onPressAdd = this._onPressAdd.bind(this);
+  }
+
+  componentWillMount() {
+    this.props.loadingMonAn(false);
   }
 
   componentDidMount() {
@@ -33,20 +49,39 @@ class QuanLyMonAnActivity extends Component {
     await this.props.layMonAnAsync(JSON.stringify({
       loai: LAY_MON_AN,
       idDanhMuc: this.state.idDanhMuc
-    }))
+    })).then(() => {
+      this.setState({
+        monAn: this.props.monAn
+      })
+    })
   }
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      idDanhMuc: this.props.navigation.getParam('idDanhMuc'),
-      tenDanhMuc: this.props.navigation.getParam('tenDanhMuc'),
-    };
-    this._onPressAdd = this._onPressAdd.bind(this);
-  }
+  searchFilterFunction = text => {
+    const { monAn } = this.props;
+    if (monAn.length > 0) {
+      const newData = monAn.filter(item => {
+        const itemData = `${item.TenMonAn.toUpperCase()}`;
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      this.setState({
+        monAn: newData,
+        search: text
+      })
+    }
+    this.setState({
+      search: text
+    })
+  };
 
-  componentWillMount() {
-    this.props.loadingMonAn(false);
+  async  shouldComponentUpdate(nextProps, nextState) {
+    if (this.props.isLoading !== nextProps.isLoading) {
+      this.setState({
+        monAn: this.props.monAn,
+        search: ''
+      })
+    }
+    return false;
   }
 
   _onPressAdd() {
@@ -116,9 +151,15 @@ class QuanLyMonAnActivity extends Component {
             />
           </TouchableHighlight>
         </View>
+        <SearchBar
+          placeholder="Nhập món ăn..."
+          onChangeText={text => this.searchFilterFunction(text)}
+          value={this.state.search}
+          style={{backgroundColor : 'red'}}
+        />
         <FlatList
           keyExtractor={(item, index) => index.toString()}
-          data={this.props.monAn}
+          data={this.state.monAn}
           renderItem={({ item, index }) => {
             return (
               <DanhSachMonAnComponent parentFlatList={this} key={item.Id} item={item} />
@@ -135,7 +176,7 @@ function mapStateToProps(state) {
   return {
     myNavigation: state.myNavigation,
     monAn: state.monAn.monAn,
-    isLoading: state.monAn.isLoading,
+    isLoading: state.monAn.isLoadingMonAn,
     danhMucDaChon: state.monAn.danhMucDaChon,
   }
 }

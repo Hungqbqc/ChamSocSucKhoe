@@ -47,14 +47,10 @@ class DemoActivity extends Component {
     const newData = this.arrayholder.filter(item => {
       const itemData = `${item.name.title.toUpperCase()}   
       ${item.name.first.toUpperCase()} ${item.name.last.toUpperCase()}`;
-      // console.log('itemData', itemData);
-
       const textData = text.toUpperCase();
 
       return itemData.indexOf(textData) > -1;
     });
-    console.log('itemData', newData);
-
     // this.setState({ data: newData });
   };
 

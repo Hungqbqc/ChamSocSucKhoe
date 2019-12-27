@@ -35,9 +35,12 @@ class DangNhapActivity extends Component {
     }
   }
 
+  async  componentWillMount() {
+    
+    await this.props.khoiDongApp(this.props.navigation);
+  }
+
   async checkLogin() {
-   
-    this.props.khoiDongApp(this.props.navigation);
     email = await AsyncStorage.getItem('email');
     password = await AsyncStorage.getItem('password');
     laQuanTri = await AsyncStorage.getItem('laQuanTri');
