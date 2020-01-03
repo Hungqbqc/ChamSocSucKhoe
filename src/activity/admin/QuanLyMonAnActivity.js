@@ -95,7 +95,7 @@ class QuanLyMonAnActivity extends Component {
   _onPressDelete(id, tenMonAn) {
     Alert.alert(
       'Bạn có chắc chắn không? ',
-      'Danh mục ' + tenMonAn + ' sẽ bị xóa!',
+      'Món ăn ' + tenMonAn + ' sẽ bị xóa!',
       [
         {
           text: 'Hủy',
@@ -136,8 +136,8 @@ class QuanLyMonAnActivity extends Component {
           height: 64
         }}>
           <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-            <Text style={{ fontSize: 28, color: 'white' }}>Quản lý món ăn</Text>
-            <Text style={{ fontSize: 18, color: 'white' }}>Danh mục: {this.state.tenDanhMuc} </Text>
+            <Text style={{ fontSize: 28, color: 'white' }}>Danh sách món ăn</Text>
+            <Text style={{ fontSize: 22, color: 'white' }}>{this.state.tenDanhMuc} </Text>
           </View>
           <TouchableHighlight
             style={{ marginRight: 10 }}

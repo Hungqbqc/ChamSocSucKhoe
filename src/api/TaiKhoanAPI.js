@@ -38,7 +38,11 @@ function DangKy(data) {
 export default function taiKhoan(type, data) {
     switch (type) {
         case DANG_NHAP:
-            return DangNhap(data.email, data.password)
+            {
+                console.log(DangNhap(data.email, data.password));
+                
+                return DangNhap(data.email, data.password)
+            }
         case DANG_KY:
             return DangKy(data)
     }

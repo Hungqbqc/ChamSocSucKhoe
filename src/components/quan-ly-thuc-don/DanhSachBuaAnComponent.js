@@ -63,7 +63,7 @@ class DanhSachBuaAnComponent extends Component {
       case '4': {
         this.suggestions =
           'Gợi ý : 5% lượng thức ăn (khoảng ' +
-          Math.round(this.props.caloTarget * 0.0, 0) +
+          Math.round(this.props.caloTarget * 0.05, 0) +
           ' kcal)';
         break;
       }

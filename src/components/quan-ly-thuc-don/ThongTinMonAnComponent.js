@@ -10,12 +10,8 @@ export default class ThongTinMonAnComponent extends Component {
     const swipeSettings = {
       autoClose: true,
       onClose: (secId, rowId, direction) => {
-        // if (this.state.activeRowKey != null) {
-        //   this.setState({activeRowKey: null});
-        // }
       },
       onOpen: (sectId, rowId, direction) => {
-        // this.setState({activeRowKey: this.props.item.key});
       },
       right: [
         {
@@ -42,7 +38,7 @@ export default class ThongTinMonAnComponent extends Component {
               { cancelable: true },
             );
           },
-          text: 'Delete',
+          text: 'Xóa',
           type: 'delete',
         },
       ],

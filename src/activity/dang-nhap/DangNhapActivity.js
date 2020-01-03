@@ -29,8 +29,8 @@ class DangNhapActivity extends Component {
     super(props)
     this.checkLogin();
     this.state = {
-      email: 'admin',
-      password: 'admin',
+      email: '2',
+      password: '2',
       errorMessage: null
     }
   }
@@ -49,6 +49,8 @@ class DangNhapActivity extends Component {
 
     }
     else {
+      console.log(5);
+      
       if (laQuanTri === '0') {
         if (Number(soThanhVien) > 0) {
           this.props.myNavigation.navigate('ManHinhChinhActivity')

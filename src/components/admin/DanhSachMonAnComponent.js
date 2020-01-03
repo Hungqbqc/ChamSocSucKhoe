@@ -21,25 +21,21 @@ class DanhSachMonAnComponent extends Component {
     const swipeSettings = {
       autoClose: true,
       onClose: (secId, rowId, direction) => {
-        // if (this.state.activeRowKey != null) {
-        //   this.setState({activeRowKey: null});
-        // }
       },
       onOpen: (sectId, rowId, direction) => {
-        // this.setState({activeRowKey: this.props.item.key});
       },
       right: [
         {
           onPress: () => {
             this.props.parentFlatList._onPressEdit(this.props.item);
           },
-          text: 'Edit', type: 'primary'
+          text: 'Sửa', type: 'primary'
         },
         {
           onPress: () => {
             this.props.parentFlatList._onPressDelete(this.props.item.Id, this.props.item.TenMonAn);
           },
-          text: 'Delete', type: 'delete'
+          text: 'Xóa', type: 'delete'
         }
       ],
       rowId: this.props.index,

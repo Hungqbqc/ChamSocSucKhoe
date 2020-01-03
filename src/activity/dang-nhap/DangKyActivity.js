@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,51 +7,58 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import { DANG_KY } from '../../asset/MyConst';
-import {
-  COLOR_DEEPSKY_BLUE,
-} from '../../asset/MyColor';
-import { connect } from 'react-redux';
+import {DANG_KY, DATE_FORMAT_COMPARE} from '../../asset/MyConst';
+import {COLOR_DEEPSKY_BLUE} from '../../asset/MyColor';
+import {connect} from 'react-redux';
 import * as actions from '../../redux/actions';
+import moment from 'moment';
+
 class DangKyActivity extends Component {
   static navigationOptions = {
     header: null,
   };
 
   state = {
-    email: '2',
-    password: '2',
-    name: '2',
-    confirmPass: '2',
+    email: '',
+    password: '',
+    name: '',
+    confirmPass: '',
     errorMessage: null,
   };
   handleSignUp = () => {
-    const { email, password, name } = this.state;
+    const {email, password, name} = this.state;
     if (email.trim() != '' && password.trim() != '') {
-      this.props.dangKyAsync(DANG_KY, { email, password, name }).then(success => {
-        if (this.props.trangThaiDangKy) {
-          Alert.alert('Đăng ký thành công!');
-          this.props.navigation.navigate('DangNhapActivity');
-        } else {
-          alert('Đăng ký thất bại!');
-        }
-      });
+      this.props
+        .dangKyAsync(DANG_KY, {
+          email,
+          password,
+          name,
+          ngayTao: moment().format(DATE_FORMAT_COMPARE),
+        })
+        .then(success => {
+          if (this.props.trangThaiDangKy) {
+            Alert.alert('Đăng ký thành công!');
+            this.props.navigation.navigate('DangNhapActivity');
+          } else {
+            alert('Đăng ký thất bại!');
+          }
+        });
     }
   };
 
   render() {
     return (
       <View style={styles.container}>
-        <Text style={{ fontSize: 25, marginBottom: 30 }}>Đăng ký</Text>
+        <Text style={{fontSize: 25, marginBottom: 30}}>Đăng ký</Text>
         {this.state.errorMessage && (
-          <Text style={{ color: 'red' }}>{this.state.errorMessage}</Text>
+          <Text style={{color: 'red'}}>{this.state.errorMessage}</Text>
         )}
         <View style={styles.hoTen}>
           <Text>Họ tên</Text>
           <TextInput
             autoCapitalize="none"
             style={styles.textInput}
-            onChangeText={name => this.setState({ name })}
+            onChangeText={name => this.setState({name})}
             value={this.state.name}
           />
         </View>
@@ -60,7 +67,7 @@ class DangKyActivity extends Component {
           <TextInput
             autoCapitalize="none"
             style={styles.textInput}
-            onChangeText={email => this.setState({ email })}
+            onChangeText={email => this.setState({email})}
             value={this.state.email}
           />
         </View>
@@ -70,7 +77,7 @@ class DangKyActivity extends Component {
             secureTextEntry
             autoCapitalize="none"
             style={styles.textInput}
-            onChangeText={password => this.setState({ password })}
+            onChangeText={password => this.setState({password})}
             value={this.state.password}
           />
         </View>
@@ -80,7 +87,7 @@ class DangKyActivity extends Component {
             secureTextEntry
             autoCapitalize="none"
             style={styles.textInput}
-            onChangeText={confirmPass => this.setState({ confirmPass })}
+            onChangeText={confirmPass => this.setState({confirmPass})}
             value={this.state.confirmPass}
           />
         </View>
@@ -88,14 +95,14 @@ class DangKyActivity extends Component {
         <TouchableOpacity
           onPress={this.handleSignUp}
           style={styles.signInButton}>
-          <Text style={{ fontSize: 20 }}>Đăng ký</Text>
+          <Text style={{fontSize: 20}}>Đăng ký</Text>
         </TouchableOpacity>
         <Text>
           {' '}
           Đã có tài khoản?{' '}
           <Text
             onPress={() => this.props.navigation.navigate('DangNhapActivity')}
-            style={{ color: '#e93766', fontSize: 18 }}>
+            style={{color: '#e93766', fontSize: 18}}>
             {' '}
             Đăng nhập{' '}
           </Text>
@@ -105,19 +112,14 @@ class DangKyActivity extends Component {
   }
 }
 
-
-
 function mapStateToProps(state) {
   return {
     myNavigation: state.myNavigation,
     trangThaiDangKy: state.taiKhoan.trangThaiDangKy,
-  }
+  };
 }
 
-export default connect(
-  mapStateToProps,
-  actions
-)(DangKyActivity)
+export default connect(mapStateToProps, actions)(DangKyActivity);
 const styles = StyleSheet.create({
   container: {
     flex: 1,

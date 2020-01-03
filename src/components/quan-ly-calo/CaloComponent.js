@@ -53,13 +53,15 @@ class CaloComponent extends Component {
   ];
   constructor(props) {
     super(props);
+    console.log(this.props.data.info.ngaySinh);
+    
     this.state = {
       checked: true,
       id: this.props.data.info.id,
       chucDanh: this.props.data.info.chucDanh, // Chức danh
       gioiTinh: Number(this.props.data.info.gioiTinh), // Giới tính
       ngaySinh:
-        this.props.data.info.ngaySinh === ''
+        this.props.data.info.ngaySinh === null
           ? moment()
           : moment(this.props.data.info.ngaySinh, DATE_FORMAT),
       chieuCao: this.props.data.info.chieuCao, // Chiều cao
@@ -134,7 +136,7 @@ class CaloComponent extends Component {
   }
 
   componentDidMount() {
-    this.calulate();
+    // this.calulate();
   }
 
   // Tính tuổi

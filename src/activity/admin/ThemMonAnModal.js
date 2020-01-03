@@ -214,7 +214,7 @@ class ThemMonAnModal extends React.Component {
 
           <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
             <View style={{ flex: 1, marginRight: 15 }}>
-              <Text>Calo</Text>
+              <Text>Calo (Kcal)</Text>
               <TextInput
                 style={styles.textInput}
                 onChangeText={caLo => this.setState({ caLo })}
@@ -222,7 +222,7 @@ class ThemMonAnModal extends React.Component {
               />
             </View>
             <View style={{ flex: 1 }}>
-              <Text>Đạm</Text>
+              <Text>Đạm (gam)</Text>
               <TextInput
                 style={styles.textInput}
                 onChangeText={dam => this.setState({ dam })}
@@ -233,7 +233,7 @@ class ThemMonAnModal extends React.Component {
 
           <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
             <View style={{ flex: 1, marginRight: 15 }}>
-              <Text>Béo</Text>
+              <Text>Béo (gam)</Text>
               <TextInput
                 style={styles.textInput}
                 onChangeText={beo => this.setState({ beo })}
@@ -241,7 +241,7 @@ class ThemMonAnModal extends React.Component {
               />
             </View>
             <View style={{ flex: 1 }}>
-              <Text>Xơ</Text>
+              <Text>Xơ (gam)</Text>
               <TextInput
                 style={styles.textInput}
                 onChangeText={xo => this.setState({ xo })}
@@ -292,14 +292,15 @@ const styles = StyleSheet.create({
 
   modal: {
     width: 400,
-    height: 640,
+    height: 700,
     marginTop: -30,
     borderRadius: 20,
     alignItems: 'center',
   },
   title: {
     fontSize: TITLE_FONT_SIZE,
-    margin: 10
+    margin: 10,
+    marginTop:30
   },
   textInputContainer: {
     width: '90%',

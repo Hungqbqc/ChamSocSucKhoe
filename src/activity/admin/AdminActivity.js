@@ -71,10 +71,11 @@ class AdminActivity extends Component {
         this.child.showAddMemberModal(2, id, uri, tenDanhMuc);
     }
 
+    // Xóa danh mục món ăns
     _onPressDelete(id, tenDanhMuc) {
         Alert.alert(
             'Bạn có chắc chắn không? ',
-            'Danh mục ' + tenDanhMuc + ' sẽ bị xóa!' +id,
+            'Danh mục ' + tenDanhMuc + ' sẽ bị xóa!',
             [
                 {
                     text: 'Hủy',
@@ -117,11 +118,12 @@ class AdminActivity extends Component {
         );
     };
 
+    // Hàm xử lý tìm kiếm
     searchFilterFunction = text => {
         const { danhMucMonAn } = this.props;
         const newData = danhMucMonAn.filter(item => {
             const itemData = `${item.tenDanhMucMonAn.toUpperCase()}`;
-            const textData = text.toUpperCase();
+            const textData = text.toUpperCase().trim();
 
             return itemData.indexOf(textData) > -1;
         });
@@ -150,7 +152,7 @@ class AdminActivity extends Component {
                     height: 64
                 }}>
                     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                        <Text style={{ fontSize: 28, color: 'white' }}>Quản lý danh mục món ăn</Text>
+                        <Text style={{ fontSize: 28, color: 'white' }}>Danh mục món ăn</Text>
                     </View>
                     <TouchableHighlight
                         style={{ marginRight: 10 }}
@@ -165,7 +167,7 @@ class AdminActivity extends Component {
                     </TouchableHighlight>
                 </View>
                 <SearchBar
-                    placeholder="Nhập danh món ăn..."
+                    placeholder="Nhập danh mục món ăn..."
                     onChangeText={text => this.searchFilterFunction(text)}
                     value={this.state.search}
                 />

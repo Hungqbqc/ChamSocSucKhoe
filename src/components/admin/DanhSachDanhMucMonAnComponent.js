@@ -22,25 +22,21 @@ class DanhSachDanhMucComponent extends Component {
         const swipeSettings = {
             autoClose: true,
             onClose: (secId, rowId, direction) => {
-                // if (this.state.activeRowKey != null) {
-                //   this.setState({activeRowKey: null});
-                // }
             },
             onOpen: (sectId, rowId, direction) => {
-                // this.setState({activeRowKey: this.props.item.key});
             },
             right: [
                 {
                     onPress: () => {
                         this.props.parentFlatList._onPressEdit(this.props.item.id, this.props.item.anhDanhMuc, this.props.item.tenDanhMucMonAn);
                     },
-                    text: 'Edit', type: 'primary'
+                    text: 'Sửa', type: 'primary'
                 },
                 {
                     onPress: () => {
                         this.props.parentFlatList._onPressDelete(this.props.item.id, this.props.item.tenDanhMucMonAn);
                     },
-                    text: 'Delete', type: 'delete'
+                    text: 'Xóa', type: 'delete'
                 }
             ],
             rowId: this.props.index,

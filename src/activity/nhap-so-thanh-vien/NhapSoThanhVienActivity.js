@@ -31,7 +31,7 @@ class NhapSoThanhVienActivity extends Component {
   // Nhấn nút Next thì chuyển sang màn hình k
   onPress = () => {
     const { soThanhVien } = this.state;
-    this.props.themSoThanhVienAsync(THEM_SO_THANH_VIEN, { email: this.props.email, soThanhVien: soThanhVien }).then(() => {
+    this.props.themSoThanhVienAsync( JSON.stringify({loai : THEM_SO_THANH_VIEN, email: this.props.email, soNguoi: soThanhVien })).then(() => {
       if (this.props.soThanhVien > 0) {
         this.props.myNavigation.navigate('ManHinhChinhActivity')
       }

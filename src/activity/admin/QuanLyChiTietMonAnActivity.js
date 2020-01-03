@@ -49,15 +49,15 @@ class QuanLyChiTietMonAnActivity extends Component {
             <Text style={styles.tieuDe}>{this.state.monAn.Calo}</Text>
           </View>
           <View style={styles.xo}>
-            <Text style={styles.tieuDe}>Xơ (g) </Text>
+            <Text style={styles.tieuDe}>Xơ (gam) </Text>
             <Text style={styles.tieuDe}>{this.state.monAn.Xo}</Text>
           </View>
           <View style={styles.beo}>
-            <Text style={styles.tieuDe}>Béo (g) </Text>
+            <Text style={styles.tieuDe}>Béo (gam) </Text>
             <Text style={styles.tieuDe}>{this.state.monAn.Beo}</Text>
           </View>
           <View style={styles.dam}>
-            <Text style={styles.tieuDe}>Đạm (g) </Text>
+            <Text style={styles.tieuDe}>Đạm (gam) </Text>
             <Text style={styles.tieuDe}>{this.state.monAn.Dam}</Text>
           </View>
         </View>
