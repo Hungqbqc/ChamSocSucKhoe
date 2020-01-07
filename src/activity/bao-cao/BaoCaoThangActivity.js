@@ -29,6 +29,14 @@ export class BaoCaoThangActivity extends Component {
       email: this.props.email,
       Obj: null,
       duLieu: [],
+      nangLuongHienTai: 0,
+      damHienTai: 0,
+      chatBotHienTai: 0,
+      chatBeoHienTai: 0,
+      nangLuongMucTieu: '100%',
+      damMucTieu: '50%',
+      chatBotMucTieu: '30%',
+      chatBeoMucTieu: '20%',
       data: {
         dataSets: [
           {
@@ -146,6 +154,35 @@ export class BaoCaoThangActivity extends Component {
 
   async tinhToanTyLeDinhDuong() {
     if (this.state.Obj !== undefined) {
+      let nangLuongHienTai = 0;
+      let tongNangLuong = 0;
+      let tongChatDam = 0;
+      let tongChatBeo = 0;
+      let tongChatBot = 0;
+      this.state.Obj.forEach(w => {
+        nangLuongHienTai += Number(w.TongNangLuong) ;
+        tongNangLuong +=  Number(w.Calo);
+        tongChatDam += Number(w.Dam);
+        tongChatBeo += Number(w.Beo);
+        tongChatBot += Number(w.Xo);
+
+        let total = tongChatDam + tongChatBeo + tongChatBot;
+        let tyLeChatDam =
+          tongChatDam > 0 ? parseInt((tongChatDam / total) * 100) : 0;
+        let tyLeChatBeo =
+          tongChatBeo > 0 ? parseInt((tongChatBeo / total) * 100) : 0;
+        let tyLeChatBot = total > 0 ? 100 - tyLeChatDam - tyLeChatBeo : 0;
+
+        this.setState({
+          nangLuongHienTai:
+            tongNangLuong > 0
+              ? parseInt((tongNangLuong / nangLuongHienTai) * 100)
+              : 0,
+          damHienTai: tyLeChatDam,
+          chatBotHienTai: tyLeChatBot,
+          chatBeoHienTai: tyLeChatBeo,
+        });
+      });
       let data = {
         dataSets: [
           {
@@ -210,7 +247,102 @@ export class BaoCaoThangActivity extends Component {
             </TouchableOpacity>
           </View>
         </View>
-
+        <View style={styles.tiLeDinhDuong}>
+          <Text style={{fontSize: 18}}>Tỷ lệ dinh dưỡng</Text>
+          <View style={{flex: 1, flexDirection: 'row'}}>
+            <View style={{flex: 1, alignItems: 'center'}}>
+              <Text>Hiện tại</Text>
+              <View
+                style={[
+                  styles.thanhPhanDinhDuongHienTai,
+                  {backgroundColor: '#FF0000'},
+                ]}>
+                <Text style={styles.chuDinhDuong}>
+                  {this.state.nangLuongHienTai + '%'}
+                </Text>
+              </View>
+              <View
+                style={[
+                  styles.thanhPhanDinhDuongHienTai,
+                  {backgroundColor: '#FFA500'},
+                ]}>
+                <Text style={styles.chuDinhDuong}>
+                  {this.state.damHienTai + '%'}
+                </Text>
+              </View>
+              <View
+                style={[
+                  styles.thanhPhanDinhDuongHienTai,
+                  {backgroundColor: '#32CD32'},
+                ]}>
+                <Text style={styles.chuDinhDuong}>
+                  {this.state.chatBotHienTai + '%'}
+                </Text>
+              </View>
+              <View
+                style={[
+                  styles.thanhPhanDinhDuongHienTai,
+                  {backgroundColor: '#FF4500'},
+                ]}>
+                <Text style={styles.chuDinhDuong}>
+                  {this.state.chatBeoHienTai + '%'}
+                </Text>
+              </View>
+            </View>
+            <View style={{flex: 1, alignItems: 'center'}}>
+              <Text />
+              <View style={styles.thanhPhanDinhDuong}>
+                <Text>Năng lượng</Text>
+              </View>
+              <View style={styles.thanhPhanDinhDuong}>
+                <Text>Chất đạm</Text>
+              </View>
+              <View style={styles.thanhPhanDinhDuong}>
+                <Text>Chất bột</Text>
+              </View>
+              <View style={styles.thanhPhanDinhDuong}>
+                <Text>Chất béo</Text>
+              </View>
+            </View>
+            <View style={{flex: 1, alignItems: 'center'}}>
+              <Text>Mục tiêu</Text>
+              <View
+                style={[
+                  styles.thanhPhanDinhDuongHienTai,
+                  {backgroundColor: '#FF0000'},
+                ]}>
+                <Text style={styles.chuDinhDuong}>
+                  {this.state.nangLuongMucTieu}
+                </Text>
+              </View>
+              <View
+                style={[
+                  styles.thanhPhanDinhDuongHienTai,
+                  {backgroundColor: '#FFA500'},
+                ]}>
+                <Text style={styles.chuDinhDuong}>{this.state.damMucTieu}</Text>
+              </View>
+              <View
+                style={[
+                  styles.thanhPhanDinhDuongHienTai,
+                  {backgroundColor: '#32CD32'},
+                ]}>
+                <Text style={styles.chuDinhDuong}>
+                  {this.state.chatBotMucTieu}
+                </Text>
+              </View>
+              <View
+                style={[
+                  styles.thanhPhanDinhDuongHienTai,
+                  {backgroundColor: '#FF4500'},
+                ]}>
+                <Text style={styles.chuDinhDuong}>
+                  {this.state.chatBeoMucTieu}
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
         <View style={styles.bieuDo}>
           <BarChart
             style={styles.chart}

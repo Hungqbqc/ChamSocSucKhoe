@@ -1,4 +1,4 @@
-export const IP_SERVER = 'http://192.168.1.68/ServerChamSocSucKhoe/';
+export const IP_SERVER = 'http://192.168.0.131/ServerChamSocSucKhoe/';
 // export const IP_SERVER = 'http://demo.thietkewebvn.vn/';
 // export const IP_SERVER = 'http://192.168.64.2/ServerChamSocSucKhoe/';
 export const DATE_FORMAT = 'YYYY/MM/DD';
