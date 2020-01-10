@@ -136,7 +136,7 @@ class CaloComponent extends Component {
   }
 
   componentDidMount() {
-    // this.calulate();
+    this.calulate();
   }
 
   // Tính tuổi
