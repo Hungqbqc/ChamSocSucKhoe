@@ -1,6 +1,6 @@
-export const IP_SERVER = 'http://192.168.0.131/ServerChamSocSucKhoe/';
+// export const IP_SERVER = 'http://192.168.0.199/ServerChamSocSucKhoe/';
 // export const IP_SERVER = 'http://demo.thietkewebvn.vn/';
-// export const IP_SERVER = 'http://192.168.64.2/ServerChamSocSucKhoe/';
+export const IP_SERVER = 'http://chamsocsuckhoe.rcplus.com.vn/';
 export const DATE_FORMAT = 'YYYY/MM/DD';
 export const DATE_FORMAT_COMPARE = 'YYYYMMDD';
 export const URL_DANG_NHAP = IP_SERVER + 'DangNhap.php';

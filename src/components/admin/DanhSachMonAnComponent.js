@@ -11,6 +11,8 @@ class DanhSachMonAnComponent extends Component {
 
 
   chonMonAn(monAn) {
+    console.log(3,monAn);
+    
     this.props.myNavigation.navigate('QuanLyChiTietMonAnActivity', {
       themMonAnThanhCong: this.themMonAnThanhCong,
       monAn: monAn,

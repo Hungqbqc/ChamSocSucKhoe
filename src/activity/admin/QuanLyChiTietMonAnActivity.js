@@ -1,13 +1,10 @@
-import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
-import {
-  COLOR_HEADER,
-} from '../../asset/MyColor';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {View, Text, StyleSheet, Image} from 'react-native';
+import {COLOR_HEADER} from '../../asset/MyColor';
+import {connect} from 'react-redux';
 import * as actions from '../../redux/actions';
 class QuanLyChiTietMonAnActivity extends Component {
-
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = ({navigation}) => ({
     title: `${navigation.state.params.monAn.TenMonAn}`,
     headerStyle: {
       backgroundColor: COLOR_HEADER,
@@ -26,10 +23,9 @@ class QuanLyChiTietMonAnActivity extends Component {
     };
   }
 
-
   // Lưu lại số người
   numericInputOnchange(value) {
-    this.setState({ soLuong: value < 0 ? 0 : value });
+    this.setState({soLuong: value < 0 ? 0 : value});
   }
 
   render() {
@@ -61,6 +57,9 @@ class QuanLyChiTietMonAnActivity extends Component {
             <Text style={styles.tieuDe}>{this.state.monAn.Dam}</Text>
           </View>
         </View>
+        <View style={styles.bottom}>
+          <Text style={[styles.tieuDe,{fontSize:22}]}>Đơn vị tính : {this.state.monAn.DonViTinh} </Text>
+        </View>
       </View>
     );
   }
@@ -71,14 +70,11 @@ function mapStateToProps(state) {
     myNavigation: state.myNavigation,
     buaAn: state.thucDon.buaAn,
     ngayChon: state.thucDon.ngayChon,
-    email: state.taiKhoan.email
-  }
+    email: state.taiKhoan.email,
+  };
 }
 
-export default connect(
-  mapStateToProps,
-  actions
-)(QuanLyChiTietMonAnActivity)
+export default connect(mapStateToProps, actions)(QuanLyChiTietMonAnActivity);
 
 const styles = StyleSheet.create({
   container: {
@@ -87,7 +83,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   top: {
-    flex: 3,
+    flex: 9,
     borderBottomWidth: 2,
   },
   mid: {
@@ -95,11 +91,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderBottomWidth: 2,
     padding: 5,
+    paddingBottom:20
+  },
+  bottom: {
+    flex: 5,
+    marginTop:20,
+    alignContent: 'center',
+    alignItems: 'center',
   },
   avatarLogin: {
     width: '100%',
     height: '100%',
-    resizeMode: "stretch",
+    resizeMode: 'stretch',
   },
   calo: {
     flex: 2,
@@ -116,5 +119,5 @@ const styles = StyleSheet.create({
   tieuDe: {
     fontSize: 18,
     marginTop: 5,
-  }
+  },
 });

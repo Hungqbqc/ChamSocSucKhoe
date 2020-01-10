@@ -27,10 +27,10 @@ class DangNhapActivity extends Component {
   }
   constructor(props) {
     super(props)
-    this.checkLogin();
+    // this.checkLogin();
     this.state = {
-      email: '2',
-      password: '2',
+      email: 'anh@gmail.com',
+      password: '1',
       errorMessage: null
     }
   }
