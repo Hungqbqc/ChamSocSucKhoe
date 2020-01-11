@@ -232,7 +232,6 @@ class QuanLyThucDonActivity extends Component {
         this.setStateAsync({
           thongTinCacNgayDaAn: responseJson,
         });
-        console.log(555, this.state.thongTinCacNgayDaAn);
       })
       .catch(error => {
         console.error(error);

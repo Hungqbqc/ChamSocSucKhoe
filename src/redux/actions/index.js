@@ -51,11 +51,10 @@ export const luuThongTinDangNhap = (HoTen, Email, Avatar) => ({
 export function dangNhapAsync(type, data) {
   return async dispatch => {
     return callApi(URL_DANG_NHAP, 'POST', data).then(async e => {
-      if (e === 0) {
+      if (e.data === 0) {
         dispatch(dangNhap('', '', false, false));
         dispatch(demSoThanhVien(0));
       } else {
-        // console.log(e.data);
         dispatch(
           dangNhap(
             data.email,
@@ -129,7 +128,7 @@ export const themSoThanhVien = soThanhVien => ({
   soThanhVien,
 });
 export function themSoThanhVienAsync(body) {
-  let soThanhVien =  JSON.parse(body);
+  let soThanhVien = JSON.parse(body);
   return async dispatch => {
     await callApi(URL_THONG_TIN_THANH_VIEN, 'POST', body).then(async res => {
       dispatch(themSoThanhVien(soThanhVien.soNguoi));

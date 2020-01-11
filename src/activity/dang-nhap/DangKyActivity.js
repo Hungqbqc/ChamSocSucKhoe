@@ -19,31 +19,44 @@ class DangKyActivity extends Component {
   };
 
   state = {
+    name: '',
     email: '',
     password: '',
-    name: '',
     confirmPass: '',
     errorMessage: null,
   };
+
   handleSignUp = () => {
-    const {email, password, name} = this.state;
+    const {email, password, confirmPass, name} = this.state;
     if (email.trim() != '' && password.trim() != '') {
-      this.props
-        .dangKyAsync(DANG_KY, {
-          email,
-          password,
-          name,
-          ngayTao: moment().format(DATE_FORMAT_COMPARE),
-        })
-        .then(success => {
-          if (this.props.trangThaiDangKy) {
-            Alert.alert('Đăng ký thành công!');
-            this.props.navigation.navigate('DangNhapActivity');
-          } else {
-            alert('Đăng ký thất bại!');
-          }
-        });
+      if (!this.validate(email)) {
+        Alert.alert('Email không hợp lệ');
+      } else if (password !== confirmPass) {
+        Alert.alert('Mật khẩu phải trùng nhau');
+      } else {
+        this.props
+          .dangKyAsync(DANG_KY, {
+            email,
+            password,
+            name,
+            ngayTao: moment().format(DATE_FORMAT_COMPARE),
+          })
+          .then(success => {
+            if (this.props.trangThaiDangKy) {
+              Alert.alert('Đăng ký thành công!');
+              this.props.navigation.navigate('DangNhapActivity');
+            } else {
+              alert('Đăng ký thất bại!');
+            }
+          });
+      }
     }
+  };
+
+  validate = email => {
+    const expression = /(?!.*\.{2})^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([\t]*\r\n)?[\t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([\t]*\r\n)?[\t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
+
+    return expression.test(String(email).toLowerCase());
   };
 
   render() {
