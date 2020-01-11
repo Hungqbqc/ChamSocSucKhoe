@@ -41,7 +41,7 @@ export class BaoCaoThangActivity extends Component {
         dataSets: [
           {
             values: [{ y: 0 }, { y: 0 }, { y: 0 }, { y: 0 }, { y: 0 }, { y: 0 }, { y: 0 }],
-            label: '',
+            label: 'Calo đã ăn',
             config: {
               color: processColor('teal'),
             },
@@ -96,6 +96,7 @@ export class BaoCaoThangActivity extends Component {
         valueFormatter: this.state.khoangThoiGianHienThi,
         granularityEnabled: true,
         granularity: 1,
+        textSize: 14,
       },
     });
   }
@@ -160,7 +161,7 @@ export class BaoCaoThangActivity extends Component {
       let tongChatBeo = 0;
       let tongChatBot = 0;
       this.state.Obj.forEach(w => {
-        nangLuongHienTai += Number(w.TongNangLuong) ;
+        nangLuongHienTai += Number(w.Calo) > 0 ? Number(w.TongNangLuong) : 0;
         tongNangLuong +=  Number(w.Calo);
         tongChatDam += Number(w.Dam);
         tongChatBeo += Number(w.Beo);
@@ -187,9 +188,10 @@ export class BaoCaoThangActivity extends Component {
         dataSets: [
           {
             values: this.state.Obj.map(w => Number(w.Calo)),
-            label: '',
+            label: 'Calo đã ăn',
             config: {
               color: processColor('teal'),
+              valueTextSize: 15,
             },
           },
         ],
@@ -354,11 +356,11 @@ export class BaoCaoThangActivity extends Component {
           />
         </View>
         <View >
-          {/* {
+          {
             this.state.isLoading ? <View style={{ flex: 1, justifyContent: "center", alignContent: "center" }}>
               <Loader />
             </View> : null
-          } */}
+          }
         </View>
       </SafeAreaView>
     );
@@ -387,6 +389,7 @@ const styles = StyleSheet.create({
   },
   bieuDo: {
     flex: 9,
+    margin: 8,
   },
   thanhPhanDinhDuong: {
     height: 31,
