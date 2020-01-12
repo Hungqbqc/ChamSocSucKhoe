@@ -31,10 +31,10 @@ import taiKhoan from '../../api/TaiKhoanAPI';
 import thucDon from '../../api/ThucDonAPI';
 import thongTinThanhVien from '../../api/ThongTinThanhVienAPI';
 
-import {AsyncStorage} from 'react-native';
+import { AsyncStorage } from 'react-native';
 
 //#region  Đăng nhập
-export const khoiDongApp = navigation => ({type: KHOI_DONG_APP, navigation});
+export const khoiDongApp = navigation => ({ type: KHOI_DONG_APP, navigation });
 export const dangNhap = (email, password, trangThaiDangNhap, laQuanTri) => ({
   type: DANG_NHAP,
   email,
@@ -99,7 +99,7 @@ export function dangKyAsync(type, data) {
 //#endregion
 
 //#region  Quản lý calo
-export const chonTabThanhVien = index => ({type: CHON_TAB_THANH_VIEN, index});
+export const chonTabThanhVien = index => ({ type: CHON_TAB_THANH_VIEN, index });
 export const layThongTinCaloThanhVien = routes => ({
   type: LAY_THONG_TIN_CALO_THANH_VIEN,
   routes,
@@ -178,7 +178,7 @@ export function xoaThanhVienAsync(body, email) {
   return async dispatch => {
     await callApi(URL_THONG_TIN_THANH_VIEN, 'POST', body).then(async res => {
       dispatch(
-        layThongTinThanhVienAsync(LAY_THONG_TIN_CALO_THANH_VIEN, {email}),
+        layThongTinThanhVienAsync(LAY_THONG_TIN_CALO_THANH_VIEN, { email }),
       );
     });
   };
@@ -188,7 +188,7 @@ export function themThanhVienAsync(body, email) {
   return async dispatch => {
     await callApi(URL_THONG_TIN_THANH_VIEN, 'POST', body).then(async res => {
       dispatch(
-        layThongTinThanhVienAsync(LAY_THONG_TIN_CALO_THANH_VIEN, {email}),
+        layThongTinThanhVienAsync(LAY_THONG_TIN_CALO_THANH_VIEN, { email }),
       );
     });
   };
@@ -198,8 +198,8 @@ export function themThanhVienAsync(body, email) {
 
 //#region Thực đơn
 // Tải lại màn hình thực đơn
-export const taiLaiTrang = isLoading => ({type: LOADING, isLoading});
-export const layThucDon = thucDon => ({type: LAY_THUC_DON, thucDon});
+export const taiLaiTrang = isLoading => ({ type: LOADING, isLoading });
+export const layThucDon = thucDon => ({ type: LAY_THUC_DON, thucDon });
 export function layThucDonAsync(type, data) {
   return async dispatch => {
     await thucDon(type, data).then(async result => {
@@ -212,7 +212,7 @@ export const chonNgayThucDon = ngayChon => ({
   type: CHON_NGAY_THUC_DON,
   ngayChon,
 });
-export const chonBuaAn = buaAn => ({type: CHON_BUA_AN, buaAn});
+export const chonBuaAn = buaAn => ({ type: CHON_BUA_AN, buaAn });
 export function chonBuaAnAsync(buaAn) {
   return async dispatch => {
     await dispatch(chonBuaAn(buaAn));
@@ -247,7 +247,7 @@ export const chonDanhMucMonAn = danhMucDaChon => ({
   danhMucDaChon,
 });
 
-export const layMonAn = monAn => ({type: LAY_MON_AN, monAn});
+export const layMonAn = monAn => ({ type: LAY_MON_AN, monAn });
 export const loadingMonAn = isLoadingMonAn => ({
   type: LOADING_MON_AN,
   isLoadingMonAn,

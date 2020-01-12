@@ -360,11 +360,11 @@ export class BaoCaoTuanActivity extends Component {
           />
         </View>
         <View>
-          {
+          {/* {
             this.state.isLoading ? <View style={{ flex: 1, justifyContent: "center", alignContent: "center" }}>
               <Loader />
             </View> : null
-          }
+          } */}
         </View>
       </SafeAreaView>
     );
@@ -385,7 +385,7 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
   },
   tiLeDinhDuong: {
-    flex: 5,
+    flex: 6,
     borderWidth: 2,
     borderColor: 'black',
     marginBottom: 3,

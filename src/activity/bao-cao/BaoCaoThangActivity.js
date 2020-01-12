@@ -356,11 +356,11 @@ export class BaoCaoThangActivity extends Component {
           />
         </View>
         <View >
-          {
+          {/* {
             this.state.isLoading ? <View style={{ flex: 1, justifyContent: "center", alignContent: "center" }}>
               <Loader />
             </View> : null
-          }
+          } */}
         </View>
       </SafeAreaView>
     );
@@ -380,7 +380,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   tiLeDinhDuong: {
-    flex: 5,
+    flex: 6,
     borderWidth: 2,
     borderColor: 'black',
     marginBottom: 3,
